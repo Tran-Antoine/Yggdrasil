@@ -25,7 +25,7 @@ public class CancelledEventsListener {
     @Listener(order = Order.LAST)
     public void onPlayerDamage(DamageEntityEvent event) {
         if(event.getTargetEntity().getType() == EntityTypes.PLAYER) {
-            event.setCancelled(true);
+            event.setBaseDamage(0);
         }
     }
 
@@ -45,4 +45,6 @@ public class CancelledEventsListener {
                 .forEach(Entity::remove);
 
     }
+
+    // TODO : add hit, craft, use anvils, enchantment tables
 }

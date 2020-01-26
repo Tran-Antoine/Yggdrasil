@@ -1,7 +1,6 @@
-package net.akami.yggdrasil.player;
+package net.akami.yggdrasil.item;
 
-import java.util.List;
-import java.util.UUID;
+import net.akami.yggdrasil.input.UUIDHolder;
 
 public interface InteractiveItemUser extends InteractiveItemHandler, UUIDHolder {
 

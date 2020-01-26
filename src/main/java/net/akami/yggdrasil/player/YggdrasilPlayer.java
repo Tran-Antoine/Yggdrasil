@@ -1,9 +1,16 @@
 package net.akami.yggdrasil.player;
 
-import net.akami.yggdrasil.game.events.GameItemClock;
+import net.akami.yggdrasil.game.task.GameItemClock;
+import net.akami.yggdrasil.item.InteractiveItemUser;
 import net.akami.yggdrasil.item.list.AdvancedMovementItem;
 import net.akami.yggdrasil.item.InteractiveItem;
 import net.akami.yggdrasil.item.list.InstantHealItem;
+import net.akami.yggdrasil.life.LifeComponent;
+import net.akami.yggdrasil.life.LivingUser;
+import net.akami.yggdrasil.life.PlayerLifeComponent;
+import net.akami.yggdrasil.mana.ManaContainer;
+import net.akami.yggdrasil.mana.ManaHolder;
+import net.akami.yggdrasil.mana.PlayerManaContainer;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent.Primary;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent.Secondary;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -15,14 +22,16 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class YggdrasilPlayer implements
-        InteractiveItemUser, LivingUser {
+        InteractiveItemUser, LivingUser, ManaHolder {
 
     private UUID id;
+    private ManaContainer mana;
     private LifeComponent life;
     private List<InteractiveItem> items;
 
     public YggdrasilPlayer(UUID id) {
         this.id = id;
+        this.mana = new PlayerManaContainer(100, 0.5f, this);
         this.life = new PlayerLifeComponent(5, 50, this);
         this.items = new ArrayList<>();
         addDefaultItems();
@@ -60,5 +69,10 @@ public class YggdrasilPlayer implements
     @Override
     public LifeComponent getLife() {
         return life;
+    }
+
+    @Override
+    public ManaContainer getMana() {
+        return mana;
     }
 }

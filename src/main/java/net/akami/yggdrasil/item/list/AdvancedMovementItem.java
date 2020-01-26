@@ -2,7 +2,7 @@ package net.akami.yggdrasil.item.list;
 
 import com.flowpowered.math.vector.Vector3d;
 
-import net.akami.yggdrasil.game.events.GameItemClock;
+import net.akami.yggdrasil.game.task.GameItemClock;
 import net.akami.yggdrasil.item.InteractiveItem;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent;

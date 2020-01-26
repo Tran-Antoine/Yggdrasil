@@ -26,7 +26,8 @@ public class YggdrasilPlayerManager {
     }
 
     public void createNewPlayer(UUID id) {
-        this.players.add(new YggdrasilPlayer(id));
+        YggdrasilPlayer player = new YggdrasilPlayer(id);
+        this.players.add(player);
     }
 
     public List<YggdrasilPlayer> getPlayers() {

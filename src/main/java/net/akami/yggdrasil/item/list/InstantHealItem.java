@@ -1,24 +1,24 @@
 package net.akami.yggdrasil.item.list;
 
-import net.akami.yggdrasil.game.events.GameItemClock;
+import net.akami.yggdrasil.game.task.GameItemClock;
 import net.akami.yggdrasil.item.InteractiveItem;
-import net.akami.yggdrasil.player.LifeComponent;
-import net.akami.yggdrasil.player.LivingUser;
-import net.akami.yggdrasil.player.UUIDHolder;
-import org.spongepowered.api.entity.living.player.Player;
+import net.akami.yggdrasil.life.LifeComponent;
+import net.akami.yggdrasil.life.LivingUser;
+import net.akami.yggdrasil.mana.ManaContainer;
+import net.akami.yggdrasil.mana.ManaHolder;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 
-import java.util.UUID;
-
 public class InstantHealItem implements InteractiveItem {
 
-    private LivingUser user;
+    private LivingUser livingUser;
+    private ManaHolder manaHolder;
     private ItemStack item;
 
-    public InstantHealItem(LivingUser user) {
-        this.user = user;
+    public <T extends LivingUser & ManaHolder> InstantHealItem(T user) {
+        this.livingUser = user;
+        this.manaHolder = user;
         this.item = ItemStack
                 .builder()
                 .itemType(ItemTypes.EXPERIENCE_BOTTLE)
@@ -33,8 +33,10 @@ public class InstantHealItem implements InteractiveItem {
 
     @Override
     public void onLeftClicked(InteractItemEvent event, GameItemClock clock) {
-        LifeComponent component = user.getLife();
-        component.heal(15);
+        LifeComponent component = livingUser.getLife();
+        ManaContainer mana = manaHolder.getMana();
+        int healValue = 5;
+        mana.ifEnoughMana(2 * healValue, () -> component.heal(healValue));
     }
 
     @Override

@@ -1,5 +1,7 @@
-package net.akami.yggdrasil.player;
+package net.akami.yggdrasil.life;
 
+import net.akami.yggdrasil.input.UUIDHolder;
+import net.akami.yggdrasil.life.LifeComponent;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
@@ -13,6 +15,7 @@ public class PlayerLifeComponent extends LifeComponent {
     public PlayerLifeComponent(int lives, int lifeLength, UUIDHolder idHolder) {
         super(lives, lifeLength);
         this.idHolder = idHolder;
+        update();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package net.akami.yggdrasil.game.events;
+package net.akami.yggdrasil.game.task;
 
 import net.akami.yggdrasil.item.InteractiveItem;
 import net.akami.yggdrasil.item.TimedItemData;

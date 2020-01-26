@@ -1,4 +1,4 @@
-package net.akami.yggdrasil.player;
+package net.akami.yggdrasil.life;
 
 public abstract class LifeComponent {
 

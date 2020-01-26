@@ -1,4 +1,4 @@
-package net.akami.yggdrasil.player;
+package net.akami.yggdrasil.input;
 
 import java.util.List;
 import java.util.UUID;

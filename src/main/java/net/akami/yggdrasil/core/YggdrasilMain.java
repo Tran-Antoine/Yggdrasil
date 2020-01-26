@@ -3,8 +3,8 @@ package net.akami.yggdrasil.core;
 import com.google.inject.Inject;
 import net.akami.yggdrasil.game.events.CancelledEventsListener;
 import net.akami.yggdrasil.game.events.DamageEventListener;
-import net.akami.yggdrasil.game.events.GameItemClock;
-import net.akami.yggdrasil.game.events.GameItemClockScheduler;
+import net.akami.yggdrasil.game.task.GameItemClock;
+import net.akami.yggdrasil.game.task.YggdrasilScheduler;
 import net.akami.yggdrasil.input.ItemInteractionsListener;
 import net.akami.yggdrasil.input.PlayerConnectionListener;
 import net.akami.yggdrasil.player.YggdrasilPlayer;
@@ -29,8 +29,8 @@ public class YggdrasilMain {
         logger.info("Plugin successfully initialized");
         YggdrasilPlayerManager playerManager = new YggdrasilPlayerManager();
         List<YggdrasilPlayer> players = playerManager.getPlayers();
-        GameItemClock clock = GameItemClockScheduler.schedule(this);
-
+        GameItemClock clock = YggdrasilScheduler.scheduleItemClock(this);
+        YggdrasilScheduler.scheduleManaRestoring(this, players);
         register(Sponge.getEventManager(),
                 new PlayerConnectionListener(playerManager),
                 new ItemInteractionsListener(players, clock),

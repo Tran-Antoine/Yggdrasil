@@ -1,9 +1,8 @@
 package net.akami.yggdrasil.input;
 
-import net.akami.yggdrasil.game.events.GameItemClock;
-import net.akami.yggdrasil.player.InteractiveItemHandler;
-import net.akami.yggdrasil.player.InteractiveItemUser;
-import net.akami.yggdrasil.player.UUIDHolder;
+import net.akami.yggdrasil.game.task.GameItemClock;
+import net.akami.yggdrasil.item.InteractiveItemHandler;
+import net.akami.yggdrasil.item.InteractiveItemUser;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.Cause;

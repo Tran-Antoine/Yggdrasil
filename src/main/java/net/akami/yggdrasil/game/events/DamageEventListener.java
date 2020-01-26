@@ -1,7 +1,7 @@
 package net.akami.yggdrasil.game.events;
 
-import net.akami.yggdrasil.player.LivingUser;
-import net.akami.yggdrasil.player.UUIDHolder;
+import net.akami.yggdrasil.life.LivingUser;
+import net.akami.yggdrasil.input.UUIDHolder;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.event.Listener;

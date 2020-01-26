@@ -1,10 +1,8 @@
 package net.akami.yggdrasil.input;
 
 import net.akami.yggdrasil.player.YggdrasilPlayerManager;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
-import org.spongepowered.api.text.Text;
 
 import java.util.UUID;
 
