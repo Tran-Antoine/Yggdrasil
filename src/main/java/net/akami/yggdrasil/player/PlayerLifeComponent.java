@@ -20,15 +20,31 @@ public class PlayerLifeComponent extends LifeComponent {
         super.damage(damage);
         Optional<Player> optGamePlayer = Sponge.getServer().getPlayer(idHolder.getUUID());
         if(!optGamePlayer.isPresent()) {
-            System.out.println("Warning : a non yggdrasil idHolder got damaged");
+            System.out.println("Warning : a non yggdrasil player got damaged");
             return;
         }
         Player gamePlayer = optGamePlayer.get();
-        gamePlayer.offer(Keys.EXPERIENCE_LEVEL, lives);
+        float lifePercentage = (float) currentLife / (float) lifeLength;
+        updateLifeBar(gamePlayer);
+        updateExpLevel(gamePlayer, lifePercentage);
+        updateExpBar(gamePlayer, lifePercentage);
+    }
 
+    private void updateExpLevel(Player gamePlayer, float lifePercentage) {
+        gamePlayer.offer(Keys.EXPERIENCE_LEVEL, Math.round(lifePercentage * 100));
+
+    }
+
+    private void updateLifeBar(Player gamePlayer) {
+        double halfHeartValue = gamePlayer.get(Keys.HEALTH_SCALE).orElse(1D);
+        gamePlayer.offer(Keys.HEALTH, 2 * lives * halfHeartValue);
+        gamePlayer.offer(Keys.MAX_HEALTH, gamePlayer.get(Keys.HEALTH).get());
+    }
+
+    private void updateExpBar(Player gamePlayer, float lifePercentage) {
         float barLength = gamePlayer.get(Keys.EXPERIENCE_FROM_START_OF_LEVEL).get();
-        float level = (float) currentLife / (float) lifeLength * barLength;
-        gamePlayer.offer(Keys.EXPERIENCE_SINCE_LEVEL, Math.round(level));
+        float level =  lifePercentage * barLength;
+        gamePlayer.offer(Keys.EXPERIENCE_SINCE_LEVEL, Math.round(level)-1);
     }
 
     @Override

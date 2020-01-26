@@ -1,14 +1,16 @@
 package net.akami.yggdrasil.player;
 
-import net.akami.yggdrasil.item.AdvancedMovementItem;
+import net.akami.yggdrasil.game.events.GameItemClock;
+import net.akami.yggdrasil.item.list.AdvancedMovementItem;
 import net.akami.yggdrasil.item.InteractiveItem;
-import org.spongepowered.api.event.item.inventory.InteractItemEvent;
+import org.spongepowered.api.event.item.inventory.InteractItemEvent.Primary;
+import org.spongepowered.api.event.item.inventory.InteractItemEvent.Secondary;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class YggdrasilPlayer implements
         InteractiveItemUser, LivingUser {
@@ -29,19 +31,19 @@ public class YggdrasilPlayer implements
     }
 
     @Override
-    public void leftClick(ItemStack item, InteractItemEvent.Primary event) {
-        click(item, event, InteractiveItem::onLeftClicked);
+    public void leftClick(ItemStack item, Primary event, GameItemClock clock) {
+        click(item, (interactiveItem) -> interactiveItem.onLeftClicked(event, clock));
     }
 
     @Override
-    public void rightClick(ItemStack item, InteractItemEvent.Secondary event) {
-        click(item, event, InteractiveItem::onRightClicked);
+    public void rightClick(ItemStack item, Secondary event, GameItemClock clock) {
+        click(item, (interactiveItem) -> interactiveItem.onRightClicked(event, clock));
     }
 
-    private void click(ItemStack item, InteractItemEvent event, BiConsumer<InteractiveItem, InteractItemEvent> call) {
+    private void click(ItemStack item, Consumer<InteractiveItem> call) {
         for(InteractiveItem interactiveItem : items) {
             if(interactiveItem.matchingItem().equalTo(item)) {
-                call.accept(interactiveItem, event);
+                call.accept(interactiveItem);
             }
         }
     }

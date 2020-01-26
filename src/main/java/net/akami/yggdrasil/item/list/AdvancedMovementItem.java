@@ -1,7 +1,9 @@
-package net.akami.yggdrasil.item;
+package net.akami.yggdrasil.item.list;
 
 import com.flowpowered.math.vector.Vector3d;
 
+import net.akami.yggdrasil.game.events.GameItemClock;
+import net.akami.yggdrasil.item.InteractiveItem;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent;
 import org.spongepowered.api.item.ItemTypes;
@@ -27,21 +29,28 @@ public class AdvancedMovementItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(InteractItemEvent event) {
-        clickPerformed(event, 1);
+    public void onLeftClicked(InteractItemEvent event, GameItemClock clock) {
+        clickPerformed(event, 1, clock);
     }
 
     @Override
-    public void onRightClicked(InteractItemEvent event) {
-        clickPerformed(event, 1.5);
+    public void onRightClicked(InteractItemEvent event, GameItemClock clock) {
+        clickPerformed(event, 1.5, clock);
     }
 
-    private void clickPerformed(InteractItemEvent event, double factor) {
+    private void clickPerformed(InteractItemEvent event, double factor, GameItemClock clock) {
         Player target = event.getCause().first(Player.class).get();
+
         if (nextDirection == null) {
+            double timeLeft = clock.timeLeft(this);
+            if(timeLeft != 0) {
+                System.out.println("You must wait " + timeLeft + " ticks before using this item again");
+                return;
+            }
             setNextDirection(target.getHeadRotation());
         } else {
             performJump(target, factor);
+            clock.queueItem(this, 40);
         }
     }
 

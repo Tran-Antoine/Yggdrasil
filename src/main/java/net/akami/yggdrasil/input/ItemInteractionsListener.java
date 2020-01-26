@@ -1,5 +1,6 @@
 package net.akami.yggdrasil.input;
 
+import net.akami.yggdrasil.game.events.GameItemClock;
 import net.akami.yggdrasil.player.InteractiveItemHandler;
 import net.akami.yggdrasil.player.InteractiveItemUser;
 import net.akami.yggdrasil.player.UUIDHolder;
@@ -13,25 +14,28 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public class InventoryInteractionsListener {
+public class ItemInteractionsListener {
 
+    private GameItemClock clock;
     private List<? extends InteractiveItemUser> users;
 
-    public InventoryInteractionsListener(List<? extends InteractiveItemUser> users) {
+    public ItemInteractionsListener(List<? extends InteractiveItemUser> users, GameItemClock clock) {
         this.users = users;
+        this.clock = clock;
     }
 
     @Listener
     public void onInteract(InteractItemEvent.Primary event) {
         ItemStack item = event.getItemStack().createStack();
-        getHandler(event).ifPresent((handler) -> handler.leftClick(item, event));
+        getHandler(event).ifPresent((handler) -> handler.leftClick(item, event, clock));
     }
 
     @Listener
     public void onInteract(InteractItemEvent.Secondary event) {
         ItemStack item = event.getItemStack().createStack();
-        getHandler(event).ifPresent((handler) -> handler.rightClick(item, event));
+        getHandler(event).ifPresent((handler) -> handler.rightClick(item, event, clock));
     }
+
 
     private Optional<InteractiveItemHandler> getHandler(InteractItemEvent event) {
         Cause cause = event.getCause();
