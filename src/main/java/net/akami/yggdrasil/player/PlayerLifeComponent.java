@@ -18,6 +18,16 @@ public class PlayerLifeComponent extends LifeComponent {
     @Override
     public void damage(float damage) {
         super.damage(damage);
+        update();
+    }
+
+    @Override
+    public void heal(float heal) {
+        super.heal(heal);
+        update();
+    }
+
+    private void update() {
         Optional<Player> optGamePlayer = Sponge.getServer().getPlayer(idHolder.getUUID());
         if(!optGamePlayer.isPresent()) {
             System.out.println("Warning : a non yggdrasil player got damaged");

@@ -1,16 +1,13 @@
 package net.akami.yggdrasil.item;
 
-import net.akami.yggdrasil.game.events.GameItemClock;
 
 public class TimedItemData implements Comparable<TimedItemData> {
 
     private InteractiveItem item;
-    private double startingTime;
     private double endingTime;
 
     public TimedItemData(InteractiveItem item, double startingTime, double time) {
         this.item = item;
-        this.startingTime = startingTime;
         this.endingTime = startingTime + time;
     }
 

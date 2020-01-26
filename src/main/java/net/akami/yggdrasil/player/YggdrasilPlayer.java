@@ -3,11 +3,13 @@ package net.akami.yggdrasil.player;
 import net.akami.yggdrasil.game.events.GameItemClock;
 import net.akami.yggdrasil.item.list.AdvancedMovementItem;
 import net.akami.yggdrasil.item.InteractiveItem;
+import net.akami.yggdrasil.item.list.InstantHealItem;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent.Primary;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent.Secondary;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -27,7 +29,9 @@ public class YggdrasilPlayer implements
     }
 
     private void addDefaultItems() {
-        this.items.add(new AdvancedMovementItem());
+        this.items.addAll(Arrays.asList(
+                new AdvancedMovementItem(),
+                new InstantHealItem(this)));
     }
 
     @Override
