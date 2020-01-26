@@ -2,6 +2,7 @@ package net.akami.yggdrasil.input;
 
 import net.akami.yggdrasil.player.InteractiveItemHandler;
 import net.akami.yggdrasil.player.InteractiveItemUser;
+import net.akami.yggdrasil.player.UUIDHolder;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.Cause;
@@ -39,7 +40,7 @@ public class InventoryInteractionsListener {
             return Optional.empty();
         }
         UUID playerID = potentialTarget.map(Player::getUniqueId).get();
-        InteractiveItemHandler handler = InteractiveItemUser.getByUUID(users, playerID);
+        InteractiveItemHandler handler = UUIDHolder.getByUUID(users, playerID);
         return Optional.ofNullable(handler);
     }
 }

@@ -10,13 +10,16 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 
-public class YggdrasilPlayer implements InteractiveItemUser {
+public class YggdrasilPlayer implements
+        InteractiveItemUser, LivingUser {
 
     private UUID id;
+    private LifeComponent life;
     private List<InteractiveItem> items;
 
     public YggdrasilPlayer(UUID id) {
         this.id = id;
+        this.life = new PlayerLifeComponent(5, 50, this);
         this.items = new ArrayList<>();
         addDefaultItems();
     }
@@ -46,5 +49,10 @@ public class YggdrasilPlayer implements InteractiveItemUser {
     @Override
     public UUID getUUID() {
         return id;
+    }
+
+    @Override
+    public LifeComponent getLife() {
+        return life;
     }
 }

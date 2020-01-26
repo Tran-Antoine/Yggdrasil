@@ -1,15 +1,11 @@
 package net.akami.yggdrasil.item;
 
 import com.flowpowered.math.vector.Vector3d;
-import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.data.manipulator.DataManipulator;
+
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent;
-import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.util.Direction;
 
 public class AdvancedMovementItem implements InteractiveItem {
 
