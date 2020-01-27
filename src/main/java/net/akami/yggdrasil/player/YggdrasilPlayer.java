@@ -11,6 +11,11 @@ import net.akami.yggdrasil.life.PlayerLifeComponent;
 import net.akami.yggdrasil.mana.ManaContainer;
 import net.akami.yggdrasil.mana.ManaHolder;
 import net.akami.yggdrasil.mana.PlayerManaContainer;
+import net.akami.yggdrasil.spell.Element;
+import net.akami.yggdrasil.spell.SimpleFireballThrow;
+import net.akami.yggdrasil.spell.MagicUser;
+import net.akami.yggdrasil.spell.SpellCaster;
+import net.akami.yggdrasil.utils.YggdrasilMath;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent.Primary;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent.Secondary;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -21,26 +26,38 @@ import java.util.List;
 import java.util.UUID;
 import java.util.function.Consumer;
 
+// TODO : Find a way for this not to become a god class
 public class YggdrasilPlayer implements
-        InteractiveItemUser, LivingUser, ManaHolder {
+        InteractiveItemUser, LivingUser, ManaHolder, MagicUser {
 
     private UUID id;
     private ManaContainer mana;
     private LifeComponent life;
+    private List<SpellCaster> spells;
     private List<InteractiveItem> items;
 
     public YggdrasilPlayer(UUID id) {
         this.id = id;
         this.mana = new PlayerManaContainer(100, 0.5f, this);
         this.life = new PlayerLifeComponent(5, 50, this);
+        this.spells = new ArrayList<>();
         this.items = new ArrayList<>();
         addDefaultItems();
+        addDefaultSpells();
     }
 
     private void addDefaultItems() {
-        this.items.addAll(Arrays.asList(
+        items.addAll(Arrays.asList(
                 new AdvancedMovementItem(),
                 new InstantHealItem(this)));
+    }
+
+    private void addDefaultSpells() {
+        spells.add(new SpellCaster.Builder()
+                .withGenerator(SimpleFireballThrow::new)
+                .withManaUsage(YggdrasilMath.instantCostFunction(10))
+                .withSequence(Element.FIRE, Element.EARTH)
+                .build());
     }
 
     @Override
@@ -74,5 +91,18 @@ public class YggdrasilPlayer implements
     @Override
     public ManaContainer getMana() {
         return mana;
+    }
+
+    @Override
+    public List<SpellCaster> getSpells() {
+        return spells;
+    }
+
+    // TODO : Return a non constant sequence
+    @Override
+    public List<Element> currentSequence() {
+        return Arrays.asList(
+                Element.FIRE,
+                Element.EARTH);
     }
 }

@@ -4,6 +4,7 @@ import com.flowpowered.math.vector.Vector3d;
 
 import net.akami.yggdrasil.game.task.GameItemClock;
 import net.akami.yggdrasil.item.InteractiveItem;
+import net.akami.yggdrasil.utils.YggdrasilMath;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent;
 import org.spongepowered.api.item.ItemTypes;
@@ -47,21 +48,13 @@ public class AdvancedMovementItem implements InteractiveItem {
                 System.out.println("You must wait " + timeLeft + " ticks before using this item again");
                 return;
             }
-            setNextDirection(target.getHeadRotation());
+            this.nextDirection = YggdrasilMath.headRotationToDirection(target.getHeadRotation());
         } else {
             performJump(target, factor);
             clock.queueItem(this, 40);
         }
     }
 
-    private void setNextDirection(Vector3d headDir) {
-        double pitch = Math.toRadians(-headDir.getX());
-        double yaw = Math.toRadians(-headDir.getY());
-        double x = Math.sin(yaw)*Math.cos(pitch);
-        double z = Math.cos(yaw)*Math.cos(pitch);
-        double y = Math.sin(pitch);
-        this.nextDirection = new Vector3d(x, y/1.5, z);
-    }
 
     private void performJump(Player target, double factor) {
         Vector3d targetVelocity = target.getVelocity().div(3);
