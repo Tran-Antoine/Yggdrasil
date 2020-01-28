@@ -24,7 +24,7 @@ public class PlayerManaContainer extends ManaContainer {
 
     private ServerBossBar loadIndicator() {
         return ServerBossBar.builder()
-                .color(BossBarColors.GREEN)
+                .color(BossBarColors.PURPLE)
                 .name(Text.of("Current mana state"))
                 .overlay(BossBarOverlays.PROGRESS)
                 .percent(1f)
@@ -53,6 +53,14 @@ public class PlayerManaContainer extends ManaContainer {
         if(!indicator.getPlayers().contains(gamePlayer)) {
             indicator.addPlayer(gamePlayer);
         }
-        indicator.setPercent(currentMana / maxMana);
+        float percentage = currentMana / maxMana;
+        indicator.setPercent(percentage);
+        if(percentage < 0.15) {
+            indicator.setColor(BossBarColors.RED);
+        } else if(percentage < 0.40) {
+            indicator.setColor(BossBarColors.PINK);
+        } else {
+            indicator.setColor(BossBarColors.PURPLE);
+        }
     }
 }

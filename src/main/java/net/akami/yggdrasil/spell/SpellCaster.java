@@ -23,8 +23,12 @@ public class SpellCaster {
         return other.equals(sequence);
     }
 
-    public boolean canBeCasted(float currentMana) {
+    public boolean canCreateSpell(float currentMana) {
         return currentMana >= manaUsage.apply(0f);
+    }
+
+    public float getCastingCost() {
+        return manaUsage.apply(0f);
     }
 
     public Spell createSpell() {

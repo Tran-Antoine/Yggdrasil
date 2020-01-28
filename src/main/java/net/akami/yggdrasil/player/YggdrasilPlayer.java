@@ -5,6 +5,7 @@ import net.akami.yggdrasil.item.InteractiveItemUser;
 import net.akami.yggdrasil.item.list.AdvancedMovementItem;
 import net.akami.yggdrasil.item.InteractiveItem;
 import net.akami.yggdrasil.item.list.InstantHealItem;
+import net.akami.yggdrasil.item.list.SpellTrigerItem;
 import net.akami.yggdrasil.life.LifeComponent;
 import net.akami.yggdrasil.life.LivingUser;
 import net.akami.yggdrasil.life.PlayerLifeComponent;
@@ -28,7 +29,7 @@ import java.util.function.Consumer;
 
 // TODO : Find a way for this not to become a god class
 public class YggdrasilPlayer implements
-        InteractiveItemUser, LivingUser, ManaHolder, MagicUser {
+        InteractiveItemUser, LivingUser, MagicUser {
 
     private UUID id;
     private ManaContainer mana;
@@ -38,7 +39,8 @@ public class YggdrasilPlayer implements
 
     public YggdrasilPlayer(UUID id) {
         this.id = id;
-        this.mana = new PlayerManaContainer(100, 0.5f, this);
+        // this.mana = new PlayerManaContainer(100, 0.5f, this); // this is a regular mana container
+        this.mana = new PlayerManaContainer(1000, 10, this); // for testing
         this.life = new PlayerLifeComponent(5, 50, this);
         this.spells = new ArrayList<>();
         this.items = new ArrayList<>();
@@ -49,7 +51,8 @@ public class YggdrasilPlayer implements
     private void addDefaultItems() {
         items.addAll(Arrays.asList(
                 new AdvancedMovementItem(),
-                new InstantHealItem(this)));
+                new InstantHealItem(this),
+                new SpellTrigerItem(this)));
     }
 
     private void addDefaultSpells() {
