@@ -9,10 +9,10 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.cause.Cause;
-import org.spongepowered.api.event.data.ChangeDataHolderEvent;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.event.entity.SpawnEntityEvent;
+import org.spongepowered.api.event.item.inventory.DropItemEvent;
 
 public class CancelledEventsListener {
 
@@ -46,5 +46,16 @@ public class CancelledEventsListener {
 
     }
 
+    @Listener(order = Order.LAST)
+    public void onDropItem(DropItemEvent event) {
+        event.setCancelled(true);
+    }
+
+    @Listener(order = Order.LAST)
+    public void onItemSpawned(SpawnEntityEvent event) {
+        event.
+                filterEntities(entity -> entity.getType() != EntityTypes.ITEM)
+                .forEach(Entity::remove);
+    }
     // TODO : add hit, craft, use anvils, enchantment tables
 }

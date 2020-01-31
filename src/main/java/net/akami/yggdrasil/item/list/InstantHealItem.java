@@ -6,7 +6,7 @@ import net.akami.yggdrasil.life.LifeComponent;
 import net.akami.yggdrasil.life.LivingUser;
 import net.akami.yggdrasil.mana.ManaContainer;
 import net.akami.yggdrasil.mana.ManaHolder;
-import org.spongepowered.api.event.item.inventory.InteractItemEvent;
+import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 
@@ -32,7 +32,7 @@ public class InstantHealItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(InteractItemEvent event, GameItemClock clock) {
+    public void onLeftClicked(InteractEvent event, GameItemClock clock) {
         LifeComponent component = livingUser.getLife();
         ManaContainer mana = manaHolder.getMana();
         int healValue = 5;
@@ -40,7 +40,7 @@ public class InstantHealItem implements InteractiveItem {
     }
 
     @Override
-    public void onRightClicked(InteractItemEvent event, GameItemClock clock) {
+    public void onRightClicked(InteractEvent event, GameItemClock clock) {
         event.setCancelled(true);
     }
 }

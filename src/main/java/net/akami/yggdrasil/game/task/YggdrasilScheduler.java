@@ -1,5 +1,6 @@
 package net.akami.yggdrasil.game.task;
 
+import net.akami.yggdrasil.input.UUIDHolder;
 import net.akami.yggdrasil.mana.ManaHolder;
 import org.spongepowered.api.scheduler.Task;
 
@@ -26,6 +27,16 @@ public final class YggdrasilScheduler {
         Task
                 .builder()
                 .interval((int) deltaTime, TimeUnit.MILLISECONDS)
+                .execute(task)
+                .submit(plugin);
+        return task;
+    }
+
+    public static FoodRestoringTask scheduleFoodRestoring(Object plugin, List<? extends UUIDHolder> users) {
+        FoodRestoringTask task = new FoodRestoringTask(users);
+        Task
+                .builder()
+                .interval(30, TimeUnit.SECONDS)
                 .execute(task)
                 .submit(plugin);
         return task;

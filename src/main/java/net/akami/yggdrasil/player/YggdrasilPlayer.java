@@ -2,29 +2,25 @@ package net.akami.yggdrasil.player;
 
 import net.akami.yggdrasil.game.task.GameItemClock;
 import net.akami.yggdrasil.item.InteractiveItemUser;
-import net.akami.yggdrasil.item.list.AdvancedMovementItem;
+import net.akami.yggdrasil.item.list.*;
 import net.akami.yggdrasil.item.InteractiveItem;
-import net.akami.yggdrasil.item.list.InstantHealItem;
-import net.akami.yggdrasil.item.list.SpellTrigerItem;
 import net.akami.yggdrasil.life.LifeComponent;
 import net.akami.yggdrasil.life.LivingUser;
 import net.akami.yggdrasil.life.PlayerLifeComponent;
 import net.akami.yggdrasil.mana.ManaContainer;
-import net.akami.yggdrasil.mana.ManaHolder;
 import net.akami.yggdrasil.mana.PlayerManaContainer;
-import net.akami.yggdrasil.spell.Element;
+import net.akami.yggdrasil.spell.ElementType;
 import net.akami.yggdrasil.spell.SimpleFireballThrow;
 import net.akami.yggdrasil.spell.MagicUser;
 import net.akami.yggdrasil.spell.SpellCaster;
 import net.akami.yggdrasil.utils.YggdrasilMath;
-import org.spongepowered.api.event.item.inventory.InteractItemEvent.Primary;
-import org.spongepowered.api.event.item.inventory.InteractItemEvent.Secondary;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.Slot;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Consumer;
 
 // TODO : Find a way for this not to become a god class
@@ -34,17 +30,20 @@ public class YggdrasilPlayer implements
     private UUID id;
     private ManaContainer mana;
     private LifeComponent life;
+    private List<ElementType> sequence;
     private List<SpellCaster> spells;
     private List<InteractiveItem> items;
 
     public YggdrasilPlayer(UUID id) {
         this.id = id;
+        this.sequence = new ArrayList<>();
         // this.mana = new PlayerManaContainer(100, 0.5f, this); // this is a regular mana container
         this.mana = new PlayerManaContainer(1000, 10, this); // for testing
-        this.life = new PlayerLifeComponent(5, 50, this);
+        this.life = new PlayerLifeComponent(3, 50, this);
         this.spells = new ArrayList<>();
         this.items = new ArrayList<>();
         addDefaultItems();
+        addItemsToInventory();
         addDefaultSpells();
     }
 
@@ -52,24 +51,53 @@ public class YggdrasilPlayer implements
         items.addAll(Arrays.asList(
                 new AdvancedMovementItem(),
                 new InstantHealItem(this),
-                new SpellTrigerItem(this)));
+                new SpellTriggerItem(this),
+                new FireElementItem(this),
+                new WindElementItem(this),
+                new EarthElementItem(this),
+                new WaterElementItem(this)));
+    }
+
+    private void addItemsToInventory() {
+        Optional<Player> optPlayer = Sponge.getServer().getPlayer(id);
+        optPlayer.ifPresent(this::fill);
+    }
+
+    private void fill(Player target) {
+        target.getInventory().clear();
+        Iterator<Slot> slots = target.getInventory().<Slot>slots().iterator();
+        for(InteractiveItem interactiveItem : items) {
+            ItemStack item = interactiveItem.matchingItem();
+            Optional<Slot> freeSlot = findSlot(slots, item);
+            freeSlot.ifPresent((slot) -> slot.set(item));
+        }
+    }
+
+    private Optional<Slot> findSlot(Iterator<Slot> slots, ItemStack item) {
+        while (slots.hasNext()) {
+            Slot current = slots.next();
+            if (current.canFit(item)) {
+                return Optional.of(current);
+            }
+        }
+        return Optional.empty();
     }
 
     private void addDefaultSpells() {
         spells.add(new SpellCaster.Builder()
                 .withGenerator(SimpleFireballThrow::new)
-                .withManaUsage(YggdrasilMath.instantCostFunction(10))
-                .withSequence(Element.FIRE, Element.EARTH)
+                .withManaUsage(YggdrasilMath.instantCostFunction(8))
+                .withSequence(ElementType.FIRE, ElementType.EARTH)
                 .build());
     }
 
     @Override
-    public void leftClick(ItemStack item, Primary event, GameItemClock clock) {
+    public void leftClick(ItemStack item, InteractEvent event, GameItemClock clock) {
         click(item, (interactiveItem) -> interactiveItem.onLeftClicked(event, clock));
     }
 
     @Override
-    public void rightClick(ItemStack item, Secondary event, GameItemClock clock) {
+    public void rightClick(ItemStack item, InteractEvent event, GameItemClock clock) {
         click(item, (interactiveItem) -> interactiveItem.onRightClicked(event, clock));
     }
 
@@ -103,9 +131,7 @@ public class YggdrasilPlayer implements
 
     // TODO : Return a non constant sequence
     @Override
-    public List<Element> currentSequence() {
-        return Arrays.asList(
-                Element.FIRE,
-                Element.EARTH);
+    public List<ElementType> currentSequence() {
+        return sequence;
     }
 }

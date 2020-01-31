@@ -1,7 +1,6 @@
 package net.akami.yggdrasil.life;
 
 import net.akami.yggdrasil.input.UUIDHolder;
-import net.akami.yggdrasil.life.LifeComponent;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
@@ -49,9 +48,12 @@ public class PlayerLifeComponent extends LifeComponent {
     }
 
     private void updateLifeBar(Player gamePlayer) {
+        if(lives == 0) {
+            gamePlayer.offer(Keys.HEALTH, 0D);
+            return;
+        }
         double halfHeartValue = gamePlayer.get(Keys.HEALTH_SCALE).orElse(1D);
-        gamePlayer.offer(Keys.HEALTH, 2 * lives * halfHeartValue);
-        gamePlayer.offer(Keys.MAX_HEALTH, gamePlayer.get(Keys.HEALTH).get());
+        gamePlayer.offer(Keys.MAX_HEALTH, 2 * lives * halfHeartValue);
     }
 
     private void updateExpBar(Player gamePlayer, float lifePercentage) {

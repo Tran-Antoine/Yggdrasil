@@ -5,10 +5,18 @@ import com.flowpowered.math.vector.Vector3d;
 import net.akami.yggdrasil.game.task.GameItemClock;
 import net.akami.yggdrasil.item.InteractiveItem;
 import net.akami.yggdrasil.utils.YggdrasilMath;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.type.DyeColors;
+import org.spongepowered.api.effect.potion.PotionEffect;
+import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.event.item.inventory.InteractItemEvent;
+import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.util.Color;
+
+import java.util.Collections;
+import java.util.List;
 
 public class AdvancedMovementItem implements InteractiveItem {
 
@@ -16,12 +24,16 @@ public class AdvancedMovementItem implements InteractiveItem {
     private ItemStack item;
 
     public AdvancedMovementItem() {
+        List<PotionEffect> effects = Collections.singletonList(
+                PotionEffect.of(PotionEffectTypes.SPEED, 1, 11 * 20)
+        );
         this.item = ItemStack
                 .builder()
-                .itemType(ItemTypes.ARROW)
+                .itemType(ItemTypes.TIPPED_ARROW)
+                .add(Keys.POTION_EFFECTS, effects)
+                .add(Keys.COLOR, Color.GREEN)
                 .quantity(1)
                 .build();
-        //this.item.offer(Keys.DISPLAY_NAME, Text.of("Advanced movements"));
     }
 
     @Override
@@ -30,22 +42,21 @@ public class AdvancedMovementItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(InteractItemEvent event, GameItemClock clock) {
+    public void onLeftClicked(InteractEvent event, GameItemClock clock) {
         clickPerformed(event, 1, clock);
     }
 
     @Override
-    public void onRightClicked(InteractItemEvent event, GameItemClock clock) {
+    public void onRightClicked(InteractEvent event, GameItemClock clock) {
         clickPerformed(event, 1.5, clock);
     }
 
-    private void clickPerformed(InteractItemEvent event, double factor, GameItemClock clock) {
+    private void clickPerformed(InteractEvent event, double factor, GameItemClock clock) {
         Player target = event.getCause().first(Player.class).get();
 
         if (nextDirection == null) {
             double timeLeft = clock.timeLeft(this);
             if(timeLeft != 0) {
-                System.out.println("You must wait " + timeLeft + " ticks before using this item again");
                 return;
             }
             this.nextDirection = YggdrasilMath.headRotationToDirection(target.getHeadRotation());

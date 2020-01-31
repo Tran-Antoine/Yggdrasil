@@ -9,17 +9,17 @@ public class SpellCaster {
 
     private Supplier<Spell> generator;
     private Function<Float, Float> manaUsage;
-    private List<Element> sequence;
+    private List<ElementType> sequence;
 
     private SpellCaster() {}
 
-    public SpellCaster(Supplier<Spell> generator, Function<Float, Float> manaUsage, List<Element> sequence) {
+    public SpellCaster(Supplier<Spell> generator, Function<Float, Float> manaUsage, List<ElementType> sequence) {
         this.generator = generator;
         this.manaUsage = manaUsage;
         this.sequence = sequence;
     }
 
-    public boolean matches(List<Element> other) {
+    public boolean matches(List<ElementType> other) {
         return other.equals(sequence);
     }
 
@@ -53,11 +53,11 @@ public class SpellCaster {
             return this;
         }
 
-        public Builder withSequence(Element... sequence) {
+        public Builder withSequence(ElementType... sequence) {
             return withSequence(Arrays.asList(sequence));
         }
 
-        public Builder withSequence(List<Element> sequence) {
+        public Builder withSequence(List<ElementType> sequence) {
             caster.sequence = sequence;
             return this;
         }

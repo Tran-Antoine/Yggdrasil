@@ -3,8 +3,13 @@ package net.akami.yggdrasil.input;
 import net.akami.yggdrasil.game.task.GameItemClock;
 import net.akami.yggdrasil.item.InteractiveItemHandler;
 import net.akami.yggdrasil.item.InteractiveItemUser;
+import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.action.InteractEvent;
+import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -35,8 +40,40 @@ public class ItemInteractionsListener {
         getHandler(event).ifPresent((handler) -> handler.rightClick(item, event, clock));
     }
 
+    @Listener
+    public void onInteract(InteractBlockEvent.Primary event) {
+        if(event.getTargetBlock().getState().getType() == BlockTypes.AIR) {
+            return;
+        }
+        Optional<ItemStack> optItem = getItem(event);
+        optItem.ifPresent((item) ->
+                getHandler(event).ifPresent((handler) -> handler.leftClick(item, event, clock)));
+    }
 
-    private Optional<InteractiveItemHandler> getHandler(InteractItemEvent event) {
+    @Listener
+    public void onInteract(InteractBlockEvent.Secondary event) {
+        Optional<ItemStack> optItem = getItem(event);
+        if(!optItem.isPresent()) {
+            return;
+        }
+        ItemStack item = optItem.get();
+        if(!item.get(Keys.ITEM_BLOCKSTATE).isPresent()) {
+            return;
+        }
+        getHandler(event).ifPresent((handler) -> handler.rightClick(item, event, clock));
+    }
+
+    private Optional<ItemStack> getItem(InteractBlockEvent event) {
+        Cause cause = event.getCause();
+        Optional<Player> optPlayer = cause.first(Player.class);
+        if(!optPlayer.isPresent()) {
+            return Optional.empty();
+        }
+        Player player = optPlayer.get();
+        return player.getItemInHand(HandTypes.MAIN_HAND);
+    }
+
+    private Optional<InteractiveItemHandler> getHandler(InteractEvent event) {
         Cause cause = event.getCause();
         Optional<Player> potentialTarget = cause.first(Player.class);
         if(!potentialTarget.isPresent()) {

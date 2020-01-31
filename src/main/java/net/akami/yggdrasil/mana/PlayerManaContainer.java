@@ -46,7 +46,6 @@ public class PlayerManaContainer extends ManaContainer {
     private void update() {
         Optional<Player> optGamePlayer = Sponge.getServer().getPlayer(idHolder.getUUID());
         if(!optGamePlayer.isPresent()) {
-            System.out.println("Warning : a non yggdrasil player used mana");
             return;
         }
         Player gamePlayer = optGamePlayer.get();

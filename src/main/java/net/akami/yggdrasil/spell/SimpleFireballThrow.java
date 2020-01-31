@@ -21,5 +21,7 @@ public class SimpleFireballThrow implements Spell {
         currentWorld.spawnEntity(fireBall);
         fireBall.offer(Keys.VELOCITY, dir.mul(1.3));
         fireBall.offer(Keys.ACCELERATION, dir.mul(0.05));
+        System.out.println(fireBall.get(Keys.EXPLOSION_RADIUS));
+        fireBall.offer(Keys.ATTACK_DAMAGE, 3D);
     }
 }

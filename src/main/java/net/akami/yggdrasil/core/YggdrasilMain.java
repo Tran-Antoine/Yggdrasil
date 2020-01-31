@@ -14,6 +14,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.game.state.GameStartedServerEvent;
+import org.spongepowered.api.event.game.state.GameStoppedServerEvent;
 import org.spongepowered.api.plugin.Plugin;
 
 import java.util.List;
@@ -29,8 +30,11 @@ public class YggdrasilMain {
         logger.info("Plugin successfully initialized");
         YggdrasilPlayerManager playerManager = new YggdrasilPlayerManager();
         List<YggdrasilPlayer> players = playerManager.getPlayers();
+
         GameItemClock clock = YggdrasilScheduler.scheduleItemClock(this);
         YggdrasilScheduler.scheduleManaRestoring(this, players);
+        YggdrasilScheduler.scheduleFoodRestoring(this, players);
+
         register(Sponge.getEventManager(),
                 new PlayerConnectionListener(playerManager),
                 new ItemInteractionsListener(players, clock),
@@ -42,5 +46,10 @@ public class YggdrasilMain {
         for(Object listener : listeners) {
             manager.registerListeners(this, listener);
         }
+    }
+
+    @Listener
+    public void onServerStop(GameStoppedServerEvent event) {
+        logger.info("Plugin successfully stopped");
     }
 }
