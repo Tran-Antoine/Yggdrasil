@@ -41,7 +41,7 @@ public class InstantHealItem implements InteractiveItem {
         LifeComponent component = livingUser.getLife();
         ManaContainer mana = manaHolder.getMana();
         int healValue = 5;
-        mana.ifEnoughMana(3.5f * healValue, () -> {
+        mana.ifEnoughMana(9f * healValue, () -> {
             component.heal(healValue);
             Player player = Sponge.getServer().getPlayer(livingUser.getUUID()).get();
             ParticleEffect effect = ParticleEffect.builder()

@@ -18,7 +18,7 @@ public class SimpleFireballThrow implements Spell {
         World currentWorld = caster.getWorld();
         Vector3d ballLocation = caster.getPosition()
                 .add(0, 0.7, 0)
-                .add(dir.mul(2));
+                .add(dir.mul(3));
         Entity fireBall = currentWorld.createEntity(EntityTypes.FIREBALL, ballLocation);
         currentWorld.spawnEntity(fireBall);
         fireBall.offer(Keys.VELOCITY, dir.mul(1.3));

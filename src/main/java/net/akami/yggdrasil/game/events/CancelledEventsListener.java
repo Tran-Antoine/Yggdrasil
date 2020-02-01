@@ -17,9 +17,13 @@ import org.spongepowered.api.event.item.inventory.DropItemEvent;
 public class CancelledEventsListener {
 
     @Listener(order = Order.LAST)
-    public void onBreak(ChangeBlockEvent event) {
+    public void onBlockChange(ChangeBlockEvent event) {
         Cause cause = event.getCause();
-        cause.first(Player.class).ifPresent((player) -> event.setCancelled(true));
+        cause.first(Player.class).ifPresent((player) -> {
+            if(player.gameMode().get() != GameModes.CREATIVE) {
+                event.setCancelled(true);
+            }
+        });
     }
 
     @Listener(order = Order.LAST)

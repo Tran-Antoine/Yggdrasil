@@ -30,8 +30,8 @@ public class EarthElevatorSpell implements Spell {
 
         Task
                 .builder()
-                .delay(50, TimeUnit.SECONDS)
-                .interval(3500, TimeUnit.MILLISECONDS)
+                .delay(90, TimeUnit.SECONDS)
+                .interval(8500, TimeUnit.MILLISECONDS)
                 .execute((currentTask) -> run(currentTask, pos, world, this::reset))
                 .submit(plugin);
 
@@ -46,7 +46,7 @@ public class EarthElevatorSpell implements Spell {
             }
         }
         currentY += 1;
-        if(currentY >= 10) {
+        if(currentY >= 10 || loc.getFloorY() + currentY > 250) {
             task.cancel();
             currentY = 0;
         }

@@ -103,6 +103,13 @@ public class YggdrasilPlayer implements
                         ElementType.EARTH, ElementType.EARTH, ElementType.EARTH,
                         ElementType.WIND)
                 .build());
+        spells.add(new SpellCaster.Builder()
+                .withGenerator(GravitySpell::new)
+                .withManaUsage(YggdrasilMath.instantCostFunction(50))
+                .withSequence(
+                        ElementType.EARTH, ElementType.EARTH,
+                        ElementType.WIND, ElementType.WIND)
+                .build());
     }
 
     @Override
