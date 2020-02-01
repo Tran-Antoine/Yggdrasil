@@ -9,10 +9,7 @@ import net.akami.yggdrasil.life.LivingUser;
 import net.akami.yggdrasil.life.PlayerLifeComponent;
 import net.akami.yggdrasil.mana.ManaContainer;
 import net.akami.yggdrasil.mana.PlayerManaContainer;
-import net.akami.yggdrasil.spell.ElementType;
-import net.akami.yggdrasil.spell.SimpleFireballThrow;
-import net.akami.yggdrasil.spell.MagicUser;
-import net.akami.yggdrasil.spell.SpellCaster;
+import net.akami.yggdrasil.spell.*;
 import net.akami.yggdrasil.utils.YggdrasilMath;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
@@ -37,8 +34,8 @@ public class YggdrasilPlayer implements
     public YggdrasilPlayer(UUID id) {
         this.id = id;
         this.sequence = new ArrayList<>();
-        // this.mana = new PlayerManaContainer(100, 0.5f, this); // this is a regular mana container
-        this.mana = new PlayerManaContainer(1000, 10, this); // for testing
+        this.mana = new PlayerManaContainer(300, 1.5f, this); // this is a regular mana container
+        //this.mana = new PlayerManaContainer(1000, 10, this); // for testing
         this.life = new PlayerLifeComponent(3, 50, this);
         this.spells = new ArrayList<>();
         this.items = new ArrayList<>();
@@ -83,11 +80,28 @@ public class YggdrasilPlayer implements
         return Optional.empty();
     }
 
+    // TODO : Don't hardcode values
     private void addDefaultSpells() {
         spells.add(new SpellCaster.Builder()
                 .withGenerator(SimpleFireballThrow::new)
                 .withManaUsage(YggdrasilMath.instantCostFunction(8))
                 .withSequence(ElementType.FIRE, ElementType.EARTH)
+                .build());
+        spells.add(new SpellCaster.Builder()
+                .withGenerator(WindOfFireSpell::new)
+                .withManaUsage(YggdrasilMath.instantCostFunction(120))
+                .withSequence(
+                        ElementType.FIRE, ElementType.FIRE, ElementType.FIRE,
+                        ElementType.EARTH,
+                        ElementType.WIND,
+                        ElementType.EARTH)
+                .build());
+        spells.add(new SpellCaster.Builder()
+                .withGenerator(EarthElevatorSpell::new)
+                .withManaUsage(YggdrasilMath.instantCostFunction(40))
+                .withSequence(
+                        ElementType.EARTH, ElementType.EARTH, ElementType.EARTH,
+                        ElementType.WIND)
                 .build());
     }
 

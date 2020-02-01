@@ -8,6 +8,8 @@ import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.world.World;
 
+import java.util.Optional;
+
 public class SimpleFireballThrow implements Spell {
 
     @Override
@@ -21,7 +23,7 @@ public class SimpleFireballThrow implements Spell {
         currentWorld.spawnEntity(fireBall);
         fireBall.offer(Keys.VELOCITY, dir.mul(1.3));
         fireBall.offer(Keys.ACCELERATION, dir.mul(0.05));
-        System.out.println(fireBall.get(Keys.EXPLOSION_RADIUS));
+        fireBall.offer(Keys.EXPLOSION_RADIUS, Optional.of(2));
         fireBall.offer(Keys.ATTACK_DAMAGE, 3D);
     }
 }
