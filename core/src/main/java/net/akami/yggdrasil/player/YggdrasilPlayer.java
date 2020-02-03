@@ -33,7 +33,7 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
     public YggdrasilPlayer(UUID id) {
         this.id = id;
         this.sequence = new ArrayList<>();
-        this.mana = new PlayerManaContainer(500, 4f, this); // this is a regular mana container
+        this.mana = new PlayerManaContainer(100, 4f, this); // this is a regular mana container
         //this.mana = new PlayerManaContainer(1000, 10, this); // for testing
         this.life = new PlayerLifeComponent(3, 50, this);
         this.spells = new ArrayList<>();
@@ -87,7 +87,7 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
 
         spells.add(new SpellCaster.Builder()
                 .withGenerator(() -> new FireballSpell(this))
-                .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(8))
+                .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(15))
                 .withSequence(ElementType.FIRE, ElementType.EARTH)
                 .build());
         spells.add(new SpellCaster.Builder()
