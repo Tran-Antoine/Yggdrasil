@@ -37,7 +37,7 @@ public class InstantHealItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(InteractEvent event, GameItemClock clock) {
+    public void onLeftClicked(ItemStack item, InteractEvent event, GameItemClock clock) {
         LifeComponent component = livingUser.getLife();
         ManaContainer mana = manaHolder.getMana();
         int healValue = 5;
@@ -54,7 +54,7 @@ public class InstantHealItem implements InteractiveItem {
     }
 
     @Override
-    public void onRightClicked(InteractEvent event, GameItemClock clock) {
+    public void onRightClicked(ItemStack item, InteractEvent event, GameItemClock clock) {
         event.setCancelled(true);
     }
 }

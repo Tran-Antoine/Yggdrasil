@@ -1,19 +1,18 @@
 package net.akami.yggdrasil.api.spell;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class SpellCaster {
 
     private Supplier<Spell> generator;
     private BiFunction<Float, Integer, Float> manaUsage;
     private List<ElementType> baseSequence;
-    private int currentMaxTier;
+    private int currentMaxTier = 7;
 
     private SpellCaster() {}
 
@@ -22,7 +21,6 @@ public class SpellCaster {
         this.generator = generator;
         this.manaUsage = manaUsage;
         this.baseSequence = sequence;
-        this.currentMaxTier = 1;
     }
 
     public void enhance() {
@@ -31,27 +29,26 @@ public class SpellCaster {
         }
     }
 
-    /**
-     * @return 0 if the sequence doesn't match any tier of the caster
-     */
-    public int matchingTier(List<ElementType> playerSequence) {
-        List<ElementType> testSequence = Stream
-                .of(baseSequence, baseSequence, baseSequence)
-                .flatMap(Collection::stream)
-                .collect(Collectors.toList());
+    public Optional<Integer> matchingTier(List<ElementType> playerSequence) {
+        return findTier(playerSequence, 3, 5, 7);
+    }
 
-        switch (currentMaxTier) {
-            case 7:
-            case 6:
-                if(playerSequence.equals(testSequence)) return currentMaxTier;
-            case 5:
-            case 4:
-                testSequence.removeAll(baseSequence);
-                if(playerSequence.equals(testSequence)) return currentMaxTier;
-            default:
-                testSequence.removeAll(baseSequence);
-                return playerSequence.equals(baseSequence) ? currentMaxTier : 0;
+    private Optional<Integer> findTier(List<ElementType> playerSequence, int... endSequenceTiers) {
+        List<ElementType> testSequence = new ArrayList<>(baseSequence);
+        int previous = 0;
+        for(int level : endSequenceTiers) {
+            /*System.out.println("Currently looking for tier max " + level);
+            System.out.println("Test sequence : "+testSequence);
+            System.out.println("Player sequence : " + playerSequence);
+            System.out.println("Current max tier : " + currentMaxTier);
+            System.out.println("Minimal level : " + (previous + 1));*/
+            if(testSequence.equals(playerSequence) && currentMaxTier > previous) {
+                return Optional.of(Math.min(currentMaxTier, level));
+            }
+            previous = level;
+            testSequence.addAll(baseSequence);
         }
+        return Optional.empty();
     }
 
     public boolean canCreateSpell(float currentMana, int tier) {

@@ -11,7 +11,15 @@ import org.spongepowered.api.world.World;
 
 import java.util.Optional;
 
-public class SimpleFireballFirstTier implements SpellTier {
+public class FireballDamageTier implements SpellTier {
+
+    private int radius;
+    private double damage;
+
+    public FireballDamageTier(int radius, double damage) {
+        this.radius = radius;
+        this.damage = damage;
+    }
 
     @Override
     public void cast(Player caster) {
@@ -24,7 +32,8 @@ public class SimpleFireballFirstTier implements SpellTier {
         currentWorld.spawnEntity(fireBall);
         fireBall.offer(Keys.VELOCITY, dir.mul(1.3));
         fireBall.offer(Keys.ACCELERATION, dir.mul(0.05));
-        fireBall.offer(Keys.EXPLOSION_RADIUS, Optional.of(2));
-        fireBall.offer(Keys.ATTACK_DAMAGE, 3D);
+        fireBall.offer(Keys.EXPLOSION_RADIUS, Optional.of(radius));
+        fireBall.offer(Keys.ATTACK_DAMAGE, damage);
+        System.out.println("Explosion happened with radius and damage : " + radius + ", " + damage);
     }
 }

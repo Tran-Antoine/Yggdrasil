@@ -8,7 +8,9 @@ public interface InteractiveItem {
 
     ItemStack matchingItem();
 
-    void onLeftClicked(InteractEvent event, GameItemClock clock);
-    void onRightClicked(InteractEvent event, GameItemClock clock);
+    void onLeftClicked(ItemStack item, InteractEvent event, GameItemClock clock);
+    void onRightClicked(ItemStack item, InteractEvent event, GameItemClock clock);
+
+    default boolean isDestroyed() { return false; }
     default void onReady(){}
 }

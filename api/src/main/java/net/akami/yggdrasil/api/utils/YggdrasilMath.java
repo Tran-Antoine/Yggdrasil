@@ -23,7 +23,7 @@ public class YggdrasilMath {
     }
 
     public static Function<Integer, Float> standardPolynomialFunction(float initial) {
-        return (tier) -> initial + (float) Math.pow(tier-1, 1.3) - 1;
+        return (tier) -> initial + (float) Math.pow(2*tier - 1, 1.3) - 1;
     }
 
     public static BiFunction<Float, Integer, Float> instantStandardPolynomialFunction(float initial) {

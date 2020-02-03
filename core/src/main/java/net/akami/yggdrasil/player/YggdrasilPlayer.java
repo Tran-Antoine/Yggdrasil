@@ -1,27 +1,25 @@
 package net.akami.yggdrasil.player;
 
-import net.akami.yggdrasil.api.life.LifeComponent;
-import net.akami.yggdrasil.life.PlayerLifeComponent;
-import net.akami.yggdrasil.api.game.task.GameItemClock;
-import net.akami.yggdrasil.api.player.AbstractYggdrasilPlayer;
-import net.akami.yggdrasil.api.spell.*;
 import net.akami.yggdrasil.api.item.InteractiveItem;
+import net.akami.yggdrasil.api.life.LifeComponent;
 import net.akami.yggdrasil.api.mana.ManaContainer;
-import net.akami.yggdrasil.mana.PlayerManaContainer;
+import net.akami.yggdrasil.api.player.AbstractYggdrasilPlayer;
+import net.akami.yggdrasil.api.spell.ElementType;
+import net.akami.yggdrasil.api.spell.SpellCaster;
 import net.akami.yggdrasil.api.utils.YggdrasilMath;
 import net.akami.yggdrasil.item.*;
+import net.akami.yggdrasil.life.PlayerLifeComponent;
+import net.akami.yggdrasil.mana.PlayerManaContainer;
 import net.akami.yggdrasil.spell.EarthTowerSpell;
+import net.akami.yggdrasil.spell.FireballSpell;
 import net.akami.yggdrasil.spell.GravitySpell;
-import net.akami.yggdrasil.spell.SimpleFireballThrow;
 import net.akami.yggdrasil.spell.WindOfFireSpell;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.Slot;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
 
@@ -49,6 +47,7 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
         items.addAll(Arrays.asList(
                 new AdvancedMovementItem(),
                 new InstantHealItem(this),
+
                 new SpellTriggerItem(this),
                 new FireElementItem(this),
                 new WindElementItem(this),
@@ -85,8 +84,9 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
     // TODO : Don't hardcode values
     @Override
     public void addDefaultSpells() {
+
         spells.add(new SpellCaster.Builder()
-                .withGenerator(SimpleFireballThrow::new)
+                .withGenerator(() -> new FireballSpell(this))
                 .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(8))
                 .withSequence(ElementType.FIRE, ElementType.EARTH)
                 .build());
@@ -116,24 +116,6 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
     }
 
     @Override
-    public void leftClick(ItemStack item, InteractEvent event, GameItemClock clock) {
-        click(item, (interactiveItem) -> interactiveItem.onLeftClicked(event, clock));
-    }
-
-    @Override
-    public void rightClick(ItemStack item, InteractEvent event, GameItemClock clock) {
-        click(item, (interactiveItem) -> interactiveItem.onRightClicked(event, clock));
-    }
-
-    private void click(ItemStack item, Consumer<InteractiveItem> call) {
-        for(InteractiveItem interactiveItem : items) {
-            if(interactiveItem.matchingItem().equalTo(item)) {
-                call.accept(interactiveItem);
-            }
-        }
-    }
-
-    @Override
     public UUID getUUID() {
         return id;
     }
@@ -153,7 +135,11 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
         return spells;
     }
 
-    // TODO : Return a non constant sequence
+    @Override
+    public List<InteractiveItem> getItems() {
+        return items;
+    }
+
     @Override
     public List<ElementType> currentSequence() {
         return sequence;

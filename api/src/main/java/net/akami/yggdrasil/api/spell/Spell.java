@@ -1,7 +1,5 @@
 package net.akami.yggdrasil.api.spell;
 
-import org.spongepowered.api.entity.living.player.Player;
-
 import java.util.List;
 
 public interface Spell {

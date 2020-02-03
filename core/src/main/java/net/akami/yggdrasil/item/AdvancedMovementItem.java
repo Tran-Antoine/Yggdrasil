@@ -6,7 +6,6 @@ import net.akami.yggdrasil.api.item.InteractiveItem;
 import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.utils.YggdrasilMath;
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.data.type.DyeColors;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.player.Player;
@@ -42,12 +41,12 @@ public class AdvancedMovementItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(InteractEvent event, GameItemClock clock) {
+    public void onLeftClicked(ItemStack item, InteractEvent event, GameItemClock clock) {
         clickPerformed(event, 1, clock);
     }
 
     @Override
-    public void onRightClicked(InteractEvent event, GameItemClock clock) {
+    public void onRightClicked(ItemStack item, InteractEvent event, GameItemClock clock) {
         clickPerformed(event, 1.5, clock);
     }
 

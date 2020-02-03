@@ -2,9 +2,7 @@ package net.akami.yggdrasil.item;
 
 import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.item.InteractiveItem;
-import net.akami.yggdrasil.api.spell.MagicUser;
-import net.akami.yggdrasil.api.spell.Spell;
-import net.akami.yggdrasil.api.spell.SpellCaster;
+import net.akami.yggdrasil.api.spell.*;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.item.ItemTypes;
@@ -32,22 +30,25 @@ public class SpellTriggerItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(InteractEvent event, GameItemClock clock) {
-
-    }
+    public void onLeftClicked(ItemStack item, InteractEvent event, GameItemClock clock) { }
 
     @Override
-    public void onRightClicked(InteractEvent event, GameItemClock clock) {
-        Optional<SpellCaster> optCaster = user.findBySequence();
+    public void onRightClicked(ItemStack item, InteractEvent event, GameItemClock clock) {
+        Optional<SpellCastResult> optResult = user.findBySequence();
         user.clearSequence();
-        if(!optCaster.isPresent()) {
+        if(!optResult.isPresent()) {
             System.out.println("Unable to launch spell from current sequence");
             return;
         }
-        SpellCaster caster = optCaster.get();
-        user.getMana().ifEnoughMana(caster.getCastingCost(), () -> {
-            Spell spell = caster.createSpell();
+
+        SpellCastResult result = optResult.get();
+        SpellCaster caster = result.getCaster();
+        int tier = result.getChosenTier();
+
+        user.getMana().ifEnoughMana(caster.getCastingCost(tier), () -> {
+            SpellTier spell = caster.createSpell(tier);
             spell.cast(event.getCause().first(Player.class).get());
         });
     }
+
 }
