@@ -2,6 +2,7 @@ package net.akami.yggdrasil.api.utils;
 
 import com.flowpowered.math.vector.Vector3d;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class YggdrasilMath {
@@ -17,7 +18,15 @@ public class YggdrasilMath {
         return new Vector3d(x, y/1.5, z);
     }
 
-    public static Function<Float, Float> instantCostFunction(float cost) {
-        return (time) -> time == 0 ? cost : 0;
+    public static BiFunction<Float, Integer, Float> instantCostFunction(Function<Integer, Float> costPerTier) {
+        return (time, tier) -> time == 0 ? costPerTier.apply(tier) : 0f;
+    }
+
+    public static Function<Integer, Float> standardPolynomialFunction(float initial) {
+        return (tier) -> initial + (float) Math.pow(tier-1, 1.3) - 1;
+    }
+
+    public static BiFunction<Float, Integer, Float> instantStandardPolynomialFunction(float initial) {
+        return instantCostFunction(standardPolynomialFunction(initial));
     }
 }

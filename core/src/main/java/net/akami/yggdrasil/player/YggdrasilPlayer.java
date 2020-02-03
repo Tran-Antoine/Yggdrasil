@@ -35,7 +35,7 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
     public YggdrasilPlayer(UUID id) {
         this.id = id;
         this.sequence = new ArrayList<>();
-        this.mana = new PlayerManaContainer(300, 1.5f, this); // this is a regular mana container
+        this.mana = new PlayerManaContainer(500, 4f, this); // this is a regular mana container
         //this.mana = new PlayerManaContainer(1000, 10, this); // for testing
         this.life = new PlayerLifeComponent(3, 50, this);
         this.spells = new ArrayList<>();
@@ -87,12 +87,12 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
     public void addDefaultSpells() {
         spells.add(new SpellCaster.Builder()
                 .withGenerator(SimpleFireballThrow::new)
-                .withManaUsage(YggdrasilMath.instantCostFunction(8))
+                .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(8))
                 .withSequence(ElementType.FIRE, ElementType.EARTH)
                 .build());
         spells.add(new SpellCaster.Builder()
                 .withGenerator(WindOfFireSpell::new)
-                .withManaUsage(YggdrasilMath.instantCostFunction(120))
+                .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(120))
                 .withSequence(
                         ElementType.FIRE, ElementType.FIRE, ElementType.FIRE,
                         ElementType.EARTH,
@@ -101,14 +101,14 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
                 .build());
         spells.add(new SpellCaster.Builder()
                 .withGenerator(EarthTowerSpell::new)
-                .withManaUsage(YggdrasilMath.instantCostFunction(40))
+                .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(40))
                 .withSequence(
                         ElementType.EARTH, ElementType.EARTH, ElementType.EARTH,
                         ElementType.WIND)
                 .build());
         spells.add(new SpellCaster.Builder()
                 .withGenerator(GravitySpell::new)
-                .withManaUsage(YggdrasilMath.instantCostFunction(50))
+                .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(80))
                 .withSequence(
                         ElementType.EARTH, ElementType.EARTH,
                         ElementType.WIND, ElementType.WIND)

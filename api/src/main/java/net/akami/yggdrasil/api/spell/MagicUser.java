@@ -14,7 +14,7 @@ public interface MagicUser extends ManaHolder, UUIDHolder {
     default Optional<SpellCaster> findBySequence() {
         return getSpells()
                 .stream()
-                .filter((caster) -> caster.matches(currentSequence()))
+                .filter((caster) -> caster.matchingTier(currentSequence()))
                 .findAny();
     }
 

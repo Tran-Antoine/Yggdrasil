@@ -1,38 +1,71 @@
 package net.akami.yggdrasil.api.spell;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class SpellCaster {
 
     private Supplier<Spell> generator;
-    private Function<Float, Float> manaUsage;
-    private List<ElementType> sequence;
+    private BiFunction<Float, Integer, Float> manaUsage;
+    private List<ElementType> baseSequence;
+    private int currentMaxTier;
 
     private SpellCaster() {}
 
-    public SpellCaster(Supplier<Spell> generator, Function<Float, Float> manaUsage, List<ElementType> sequence) {
+    public SpellCaster(Supplier<Spell> generator, BiFunction<Float, Integer, Float> manaUsage,
+                       List<ElementType> sequence) {
         this.generator = generator;
         this.manaUsage = manaUsage;
-        this.sequence = sequence;
+        this.baseSequence = sequence;
+        this.currentMaxTier = 1;
     }
 
-    public boolean matches(List<ElementType> other) {
-        return other.equals(sequence);
+    public void enhance() {
+        if (currentMaxTier < 7) {
+            currentMaxTier++;
+        }
     }
 
-    public boolean canCreateSpell(float currentMana) {
-        return currentMana >= manaUsage.apply(0f);
+    /**
+     * @return 0 if the sequence doesn't match any tier of the caster
+     */
+    public int matchingTier(List<ElementType> playerSequence) {
+        List<ElementType> testSequence = Stream
+                .of(baseSequence, baseSequence, baseSequence)
+                .flatMap(Collection::stream)
+                .collect(Collectors.toList());
+
+        switch (currentMaxTier) {
+            case 7:
+            case 6:
+                if(playerSequence.equals(testSequence)) return currentMaxTier;
+            case 5:
+            case 4:
+                testSequence.removeAll(baseSequence);
+                if(playerSequence.equals(testSequence)) return currentMaxTier;
+            default:
+                testSequence.removeAll(baseSequence);
+                return playerSequence.equals(baseSequence) ? currentMaxTier : 0;
+        }
     }
 
-    public float getCastingCost() {
-        return manaUsage.apply(0f);
+    public boolean canCreateSpell(float currentMana, int tier) {
+        return currentMana >= manaUsage.apply(0f, tier);
     }
 
-    public Spell createSpell() {
-        return generator.get();
+    public float getCastingCost(int tier) {
+        return manaUsage.apply(0f, tier);
+    }
+
+    public SpellTier createSpell(int tier) {
+        return generator
+                .get()
+                .getTier(tier);
     }
 
     public static class Builder {
@@ -48,7 +81,7 @@ public class SpellCaster {
             return this;
         }
 
-        public Builder withManaUsage(Function<Float, Float> manaUsage) {
+        public Builder withManaUsage(BiFunction<Float, Integer, Float> manaUsage) {
             caster.manaUsage = manaUsage;
             return this;
         }
@@ -58,7 +91,7 @@ public class SpellCaster {
         }
 
         public Builder withSequence(List<ElementType> sequence) {
-            caster.sequence = sequence;
+            caster.baseSequence = sequence;
             return this;
         }
 
