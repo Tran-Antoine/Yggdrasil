@@ -1,7 +1,8 @@
 package net.akami.yggdrasil.api.item;
 
 import net.akami.yggdrasil.api.game.task.GameItemClock;
-import net.akami.yggdrasil.api.spell.SpellTier;
+import net.akami.yggdrasil.api.spell.SpellCreationData;
+import net.akami.yggdrasil.api.spell.SpellLauncher;
 import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
@@ -10,16 +11,17 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.ItemStackComparators;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
-public class SpellTierItem implements InteractiveItem {
+public class LaunchableSpellItem implements InteractiveItem {
 
     private ItemStack item;
-    private Supplier<SpellTier> generator;
+    private SpellCreationData finalData;
+    private SpellLauncher launcher;
 
-    public SpellTierItem(ItemStack item, Supplier<SpellTier> generator) {
+    public LaunchableSpellItem(ItemStack item, SpellCreationData finalData, SpellLauncher launcher) {
         this.item = item;
-        this.generator = generator;
+        this.finalData = finalData;
+        this.launcher = launcher;
     }
 
     @Override
@@ -41,7 +43,7 @@ public class SpellTierItem implements InteractiveItem {
                 ? HandTypes.MAIN_HAND
                 : HandTypes.OFF_HAND;
         player.setItemInHand(chosen, this.item);
-        generator.get().cast(player);
+        launcher.launch(finalData, player);
     }
 
     @Override

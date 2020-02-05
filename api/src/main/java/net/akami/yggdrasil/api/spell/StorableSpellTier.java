@@ -1,46 +1,34 @@
 package net.akami.yggdrasil.api.spell;
 
-import net.akami.yggdrasil.api.item.InteractiveItem;
 import net.akami.yggdrasil.api.item.InteractiveItemHandler;
-import net.akami.yggdrasil.api.item.SpellTierItem;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.item.inventory.Slot;
-
-import java.util.Objects;
-import java.util.function.Supplier;
 
 public class StorableSpellTier implements SpellTier {
 
-    private InteractiveItem interactiveItem;
+    private ItemStack itemToProvide;
     private InteractiveItemHandler handler;
+    private int quantity;
 
-    public StorableSpellTier(ItemStack itemToProvide, Supplier<SpellTier> previous, InteractiveItemHandler handler,
-                             int quantity) {
-        this(ItemStack.builder()
-                .from(itemToProvide)
-                .quantity(quantity)
-                .build(), previous, handler);
+    public StorableSpellTier(int quantity) {
+        this(null, null, quantity);
     }
 
-    public StorableSpellTier(ItemStack itemToProvide, Supplier<SpellTier> previous, InteractiveItemHandler handler) {
-        this.handler = Objects.requireNonNull(handler, "InteractiveItemHandler cannot be null if one ore more tiers are storable");
-        this.interactiveItem = new SpellTierItem(itemToProvide, previous);
+    public StorableSpellTier(ItemStack itemToProvide, InteractiveItemHandler handler, int quantity) {
+        this.itemToProvide = itemToProvide;
+        this.handler = handler;
+        this.quantity = quantity;
     }
-
 
     @Override
-    public void cast(Player caster) {
-
-        ItemStack itemToProvide = interactiveItem.matchingItem();
-
-        for(Slot slot : caster.getInventory().<Slot>slots()) {
-            if(slot.canFit(itemToProvide)) {
-                handler.addItem(interactiveItem);
-                slot.set(itemToProvide);
-                return;
-            }
+    public void definePreLaunchProperties(Player caster, SpellCreationData data) {
+        data.setStorable(true);
+        if(itemToProvide != null && handler != null) {
+            data.setItem(ItemStack.builder()
+                    .fromItemStack(itemToProvide)
+                    .quantity(quantity)
+                    .build());
+            data.setHandler(handler);
         }
-        System.out.println("Failed to add spell to inventory");
     }
 }

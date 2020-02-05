@@ -3,7 +3,7 @@ package net.akami.yggdrasil.spell;
 import net.akami.yggdrasil.api.spell.Spell;
 import net.akami.yggdrasil.api.spell.SpellTier;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class EarthTowerSpell implements Spell {
@@ -11,7 +11,10 @@ public class EarthTowerSpell implements Spell {
     private List<SpellTier> tiers;
 
     public EarthTowerSpell() {
-        this.tiers = Collections.singletonList(new EarthTowerTestTier());
+        this.tiers = Arrays.asList(
+                new EarthTowerTestTier(),
+                new EarthTowerTestTier(),
+                new EarthTowerTestTier());
     }
 
     @Override

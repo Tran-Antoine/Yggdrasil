@@ -3,7 +3,7 @@ package net.akami.yggdrasil.spell;
 import net.akami.yggdrasil.api.spell.Spell;
 import net.akami.yggdrasil.api.spell.SpellTier;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class WindOfFireSpell implements Spell {
@@ -11,7 +11,10 @@ public class WindOfFireSpell implements Spell {
     private List<SpellTier> tiers;
 
     public WindOfFireSpell() {
-        this.tiers = Collections.singletonList(new WindOfFireTestTier());
+        this.tiers = Arrays.asList(
+                new WindOfFireTestTier(),
+                new WindOfFireTestTier(),
+                new WindOfFireTestTier());
     }
 
     @Override

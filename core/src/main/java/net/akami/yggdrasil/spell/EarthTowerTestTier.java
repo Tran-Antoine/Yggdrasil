@@ -17,7 +17,7 @@ public class EarthTowerTestTier implements SpellTier {
     private int currentY = 0;
 
     @Override
-    public void cast(Player caster) {
+    public void apply(Player caster) {
         Vector3d pos = caster.getPosition();
         World world = caster.getWorld();
         Object plugin = Sponge.getPluginManager().getPlugin("yggdrasil").get();

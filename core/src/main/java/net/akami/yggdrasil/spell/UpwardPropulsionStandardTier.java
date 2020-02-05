@@ -2,26 +2,44 @@ package net.akami.yggdrasil.spell;
 
 import com.flowpowered.math.vector.Vector3d;
 import net.akami.yggdrasil.api.spell.SpellTier;
-import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.scheduler.Task;
+
+import java.util.concurrent.TimeUnit;
 
 public class UpwardPropulsionStandardTier implements SpellTier {
 
-    private Vector3d upwardVelocity;
-    private double boost;
+    private final Vector3d upwardVelocity;
+    private static final double DELTA_HEIGHT = 20;
 
-    public UpwardPropulsionStandardTier(float yVelocity, double boost) {
+    public UpwardPropulsionStandardTier(double yVelocity) {
         this.upwardVelocity = new Vector3d(0, yVelocity, 0);
-        this.boost = boost;
     }
 
     @Override
-    public void cast(Player caster) {
+    public void apply(Player caster) {
         Vector3d playerV = caster.getVelocity();
-        double regularA = (...);
-        double ySpeed = upwardVelocity.getY();
-        double modifiedA = regularA * Math.pow(ySpeed + boost, 2) / Math.pow(ySpeed, 2);
-        caster.setVelocity(playerV.add(upwardVelocity).add(new Vector3d(0, boost, 0)));
-        caster.offer(Keys.ACCELERATION, new Vector3d(0, modifiedA, 0));
+        if(!caster.isOnGround()) {
+            System.out.println("Player must be on the ground to definePreLaunchProperties this spell");
+            return;
+        }
+
+        double finalHeight = caster.getPosition().getY() + DELTA_HEIGHT;
+        caster.setVelocity(playerV.add(upwardVelocity));
+        Task.builder()
+                .delay(500, TimeUnit.MILLISECONDS)
+                .interval(250, TimeUnit.MILLISECONDS)
+                .execute(task -> run(task, caster, finalHeight))
+                .submit(Sponge.getPluginManager().getPlugin("yggdrasil").get());
+    }
+
+    private void run(Task task, Player player, double finalHeight) {
+        if(player.getPosition().getY() >= finalHeight) {
+            task.cancel();
+        }
+        if(player.getVelocity().getY() < 0.1) {
+            task.cancel();
+        }
     }
 }

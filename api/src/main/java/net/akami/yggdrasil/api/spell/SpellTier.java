@@ -4,5 +4,5 @@ import org.spongepowered.api.entity.living.player.Player;
 
 public interface SpellTier {
 
-    void cast(Player caster);
+    void definePreLaunchProperties(Player caster, SpellCreationData data);
 }

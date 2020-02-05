@@ -21,7 +21,7 @@ public class GravityTestTier implements SpellTier {
     private int blockSpawnedCount = 0;
 
     @Override
-    public void cast(Player caster) {
+    public void apply(Player caster) {
         Vector3d loc = caster.getPosition();
         World world = caster.getWorld();
         Object plugin = Sponge.getPluginManager().getPlugin("yggdrasil").get();

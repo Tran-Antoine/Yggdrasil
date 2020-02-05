@@ -37,7 +37,7 @@ public class SpellTriggerItem implements InteractiveItem {
         Optional<SpellCastResult> optResult = user.findBySequence();
         user.clearSequence();
         if(!optResult.isPresent()) {
-            System.out.println("Unable to launch spell from current sequence");
+            System.out.println("Unable to commonLaunch spell from current sequence");
             return;
         }
 
@@ -46,8 +46,9 @@ public class SpellTriggerItem implements InteractiveItem {
         int tier = result.getChosenTier();
 
         user.getMana().ifEnoughMana(caster.getCastingCost(tier), () -> {
-            SpellTier spell = caster.createSpell(tier);
-            spell.cast(event.getCause().first(Player.class).get());
+            Spell spell = caster.createSpell();
+            Player wizard = event.getCause().first(Player.class).get();
+            spell.cast(wizard, tier);
         });
     }
 

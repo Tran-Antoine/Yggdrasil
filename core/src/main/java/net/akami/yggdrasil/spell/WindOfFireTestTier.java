@@ -14,7 +14,7 @@ import java.util.Optional;
 public class WindOfFireTestTier implements SpellTier {
 
     @Override
-    public void cast(Player caster) {
+    public void apply(Player caster) {
         Vector3d dir = YggdrasilMath.headRotationToDirection(caster.getHeadRotation());
         World currentWorld = caster.getWorld();
         Vector3d ballLocation = caster.getPosition()

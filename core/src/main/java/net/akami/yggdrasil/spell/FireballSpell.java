@@ -1,6 +1,7 @@
 package net.akami.yggdrasil.spell;
 
 import net.akami.yggdrasil.api.item.InteractiveItemHandler;
+import net.akami.yggdrasil.api.spell.SpellLauncher;
 import net.akami.yggdrasil.api.spell.SpellTier;
 import net.akami.yggdrasil.api.spell.Spell;
 import net.akami.yggdrasil.api.spell.StorableSpellTier;
@@ -27,22 +28,19 @@ public class FireballSpell implements Spell {
                 new FireballDamageTier(1, 3),
                 new FireballDamageTier(2, 3),
                 new FireballDamageTier(2, 4),
-                storableSpellTier(2, 4),
-                storableSpellTier(3, 3.5),
-                storableSpellTier(2, 5, 2),
-                storableSpellTier(2, 5, 3));
-    }
-
-    private SpellTier storableSpellTier(int radius, double damage) {
-        return new StorableSpellTier(fireBall, () -> new FireballDamageTier(radius, damage), handler);
-    }
-
-    private SpellTier storableSpellTier(int radius, double damage, int quantity) {
-        return new StorableSpellTier(fireBall, () -> new FireballDamageTier(radius, damage), handler, quantity);
+                new StorableSpellTier(fireBall, handler, 1),
+                new FireballDamageTier(2, 4),
+                new StorableSpellTier(2),
+                new StorableSpellTier(3));
     }
 
     @Override
     public List<SpellTier> getTiers() {
         return tiers;
+    }
+
+    @Override
+    public SpellLauncher getLauncher() {
+        return new FireballSpellLauncher();
     }
 }

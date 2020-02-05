@@ -68,7 +68,7 @@ public class AdvancedMovementItem implements InteractiveItem {
 
     private void performJump(Player target, double factor) {
         Vector3d targetVelocity = target.getVelocity().div(1.2);
-        target.setVelocity(this.nextDirection.mul(factor).add(targetVelocity));
+        target.setVelocity(this.nextDirection.mul(factor).add(targetVelocity).div(1, 1.7, 1));
         double yVelocity = - target.getVelocity().getY();
         if(!target.isOnGround()) {
             target.offer(Keys.FALL_DISTANCE, (float) Math.max(2.8 * Math.exp(1.298 * yVelocity) - 3, 0));

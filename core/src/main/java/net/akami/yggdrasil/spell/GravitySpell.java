@@ -4,7 +4,7 @@ package net.akami.yggdrasil.spell;
 import net.akami.yggdrasil.api.spell.Spell;
 import net.akami.yggdrasil.api.spell.SpellTier;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 public class GravitySpell implements Spell {
@@ -12,7 +12,10 @@ public class GravitySpell implements Spell {
     private List<SpellTier> tiers;
 
     public GravitySpell() {
-        this.tiers = Collections.singletonList(new GravityTestTier());
+        this.tiers = Arrays.asList(
+                new GravityTestTier(),
+                new GravityTestTier(),
+                new GravityTestTier());
     }
 
     @Override

@@ -54,10 +54,8 @@ public class SpellCaster {
         return manaUsage.apply(0f, tier);
     }
 
-    public SpellTier createSpell(int tier) {
-        return generator
-                .get()
-                .getTier(tier);
+    public Spell createSpell() {
+        return generator.get();
     }
 
     public static class Builder {
