@@ -10,10 +10,7 @@ import net.akami.yggdrasil.api.utils.YggdrasilMath;
 import net.akami.yggdrasil.item.*;
 import net.akami.yggdrasil.life.PlayerLifeComponent;
 import net.akami.yggdrasil.mana.PlayerManaContainer;
-import net.akami.yggdrasil.spell.EarthTowerSpell;
-import net.akami.yggdrasil.spell.FireballSpell;
-import net.akami.yggdrasil.spell.GravitySpell;
-import net.akami.yggdrasil.spell.WindOfFireSpell;
+import net.akami.yggdrasil.spell.*;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -85,11 +82,7 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
     @Override
     public void addDefaultSpells() {
 
-        spells.add(new SpellCaster.Builder()
-                .withGenerator(() -> new FireballSpell(this))
-                .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(15))
-                .withSequence(ElementType.FIRE, ElementType.EARTH)
-                .build());
+        spells.add(new FireballCaster(this));
         spells.add(new SpellCaster.Builder()
                 .withGenerator(WindOfFireSpell::new)
                 .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(120))

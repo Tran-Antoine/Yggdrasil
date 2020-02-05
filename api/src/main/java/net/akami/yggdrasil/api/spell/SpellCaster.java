@@ -9,12 +9,12 @@ import java.util.function.Supplier;
 
 public class SpellCaster {
 
-    private Supplier<Spell> generator;
-    private BiFunction<Float, Integer, Float> manaUsage;
-    private List<ElementType> baseSequence;
+    protected Supplier<Spell> generator;
+    protected BiFunction<Float, Integer, Float> manaUsage;
+    protected List<ElementType> baseSequence;
     private int currentMaxTier = 7;
 
-    private SpellCaster() {}
+    protected SpellCaster() {}
 
     public SpellCaster(Supplier<Spell> generator, BiFunction<Float, Integer, Float> manaUsage,
                        List<ElementType> sequence) {
@@ -37,11 +37,6 @@ public class SpellCaster {
         List<ElementType> testSequence = new ArrayList<>(baseSequence);
         int previous = 0;
         for(int level : endSequenceTiers) {
-            /*System.out.println("Currently looking for tier max " + level);
-            System.out.println("Test sequence : "+testSequence);
-            System.out.println("Player sequence : " + playerSequence);
-            System.out.println("Current max tier : " + currentMaxTier);
-            System.out.println("Minimal level : " + (previous + 1));*/
             if(testSequence.equals(playerSequence) && currentMaxTier > previous) {
                 return Optional.of(Math.min(currentMaxTier, level));
             }
