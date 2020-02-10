@@ -1,36 +1,35 @@
 package net.akami.yggdrasil.item;
 
 import com.flowpowered.math.vector.Vector3d;
-
-import net.akami.yggdrasil.api.item.InteractiveItem;
 import net.akami.yggdrasil.api.game.task.GameItemClock;
+import net.akami.yggdrasil.api.item.InteractiveItem;
+import net.akami.yggdrasil.api.item.InteractiveItemUser;
+import net.akami.yggdrasil.api.utils.ItemUtils;
 import net.akami.yggdrasil.api.utils.YggdrasilMath;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.effect.potion.PotionEffect;
-import org.spongepowered.api.effect.potion.PotionEffectTypes;
+import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.util.Color;
+import org.spongepowered.api.item.potion.PotionType;
+import org.spongepowered.api.item.potion.PotionTypes;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.Optional;
 
 public class AdvancedMovementItem implements InteractiveItem {
 
     private Vector3d nextDirection;
     private ItemStack item;
+    private InteractiveItemUser user;
 
-    public AdvancedMovementItem() {
-        List<PotionEffect> effects = Collections.singletonList(
-                PotionEffect.of(PotionEffectTypes.SPEED, 1, 11 * 20)
-        );
+    public AdvancedMovementItem(InteractiveItemUser user) {
+        this.user = user;
         this.item = ItemStack
                 .builder()
                 .itemType(ItemTypes.TIPPED_ARROW)
-                .add(Keys.POTION_EFFECTS, effects)
-                .add(Keys.COLOR, Color.GREEN)
+                .add(Keys.POTION_TYPE, PotionTypes.LEAPING)
                 .quantity(1)
                 .build();
     }
@@ -41,38 +40,53 @@ public class AdvancedMovementItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(ItemStack item, InteractEvent event, GameItemClock clock) {
+    public void onLeftClicked(InteractEvent event, GameItemClock clock) {
         clickPerformed(event, 1, clock);
     }
 
     @Override
-    public void onRightClicked(ItemStack item, InteractEvent event, GameItemClock clock) {
+    public void onRightClicked(InteractEvent event, GameItemClock clock) {
         clickPerformed(event, 1.5, clock);
     }
 
     private void clickPerformed(InteractEvent event, double factor, GameItemClock clock) {
         Player target = event.getCause().first(Player.class).get();
-
+        double timeLeft = clock.timeLeft(this);
+        if(timeLeft != 0) {
+            return;
+        }
         if (nextDirection == null) {
-            double timeLeft = clock.timeLeft(this);
-            if(timeLeft != 0) {
-                return;
-            }
             this.nextDirection = YggdrasilMath.headRotationToDirection(target.getHeadRotation());
         } else {
             performJump(target, factor);
-            clock.queueItem(this, 40);
+            changeItemColor(target, PotionTypes.SLOWNESS);
+            clock.queueItem(this, 60);
         }
     }
 
-
     private void performJump(Player target, double factor) {
         Vector3d targetVelocity = target.getVelocity().div(1.2);
-        target.setVelocity(this.nextDirection.mul(factor).add(targetVelocity).div(1, 1.7, 1));
+        target.setVelocity(this.nextDirection.mul(factor).add(targetVelocity).div(1, 1.4, 1));
         double yVelocity = - target.getVelocity().getY();
         if(!target.isOnGround()) {
             target.offer(Keys.FALL_DISTANCE, (float) Math.max(2.8 * Math.exp(1.298 * yVelocity) - 3, 0));
         }
         this.nextDirection = null;
+    }
+
+
+    @Override
+    public void onReady() {
+        if(!user.hasItem(this)) {
+            return;
+        }
+        Optional<Player> optPlayer = Sponge.getServer().getPlayer(user.getUUID());
+        optPlayer.ifPresent(player -> changeItemColor(player, PotionTypes.LEAPING));
+    }
+
+    private void changeItemColor(Player target, PotionType type) {
+        HandType hand = ItemUtils.getMatchingHand(target, item);
+        item.offer(Keys.POTION_TYPE, type);
+        target.setItemInHand(hand, item);
     }
 }

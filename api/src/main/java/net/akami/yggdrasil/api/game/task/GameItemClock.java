@@ -29,6 +29,7 @@ public class GameItemClock {
         if (gameTime >= headEndTime) {
             currentHead.getItem().onReady();
             currentHead = null;
+            queue.remove();
         }
     }
 
@@ -39,7 +40,7 @@ public class GameItemClock {
         if(queue.isEmpty()) {
             return false;
         }
-        this.currentHead = queue.poll();
+        this.currentHead = queue.element();
         return true;
     }
 

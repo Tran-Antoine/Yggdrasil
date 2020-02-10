@@ -44,13 +44,13 @@ public abstract class ElementItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(ItemStack item, InteractEvent event, GameItemClock clock) {
+    public void onLeftClicked(InteractEvent event, GameItemClock clock) {
         click();
         event.setCancelled(true);
     }
 
     @Override
-    public void onRightClicked(ItemStack item, InteractEvent event, GameItemClock clock) {
+    public void onRightClicked(InteractEvent event, GameItemClock clock) {
 
     }
 

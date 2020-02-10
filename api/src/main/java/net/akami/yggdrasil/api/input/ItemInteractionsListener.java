@@ -1,10 +1,8 @@
 package net.akami.yggdrasil.api.input;
 
 import net.akami.yggdrasil.api.game.task.GameItemClock;
-import net.akami.yggdrasil.api.game.task.TestAccelerationTask;
 import net.akami.yggdrasil.api.item.InteractiveItemHandler;
 import net.akami.yggdrasil.api.item.InteractiveItemUser;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
@@ -13,14 +11,13 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.entity.projectile.LaunchProjectileEvent;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.scheduler.Task;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class ItemInteractionsListener {
 
@@ -33,12 +30,12 @@ public class ItemInteractionsListener {
     }
 
     @Listener
+    public void onLaunch(LaunchProjectileEvent event) {
+        System.out.println("Projectile launched");
+    }
+
+    @Listener
     public void onInteract(InteractItemEvent.Primary event) {
-        Task
-                .builder()
-                .execute(new TestAccelerationTask(event.getCause().first(Player.class).get()))
-                .interval(100, TimeUnit.MILLISECONDS)
-                .submit(Sponge.getPluginManager().getPlugin("yggdrasil").get());
         ItemStack item = event.getItemStack().createStack();
         getHandler(event).ifPresent((handler) -> handler.leftClick(item, event, clock));
     }
@@ -52,6 +49,7 @@ public class ItemInteractionsListener {
     @Listener
     public void onInteract(InteractBlockEvent.Primary event) {
         if(event.getTargetBlock().getState().getType() == BlockTypes.AIR) {
+            // Meaning that InteractItemEvent.Primary is already being fired
             return;
         }
         Optional<ItemStack> optItem = getItem(event);

@@ -4,11 +4,16 @@ import net.akami.yggdrasil.api.item.InteractiveItem;
 import net.akami.yggdrasil.api.item.InteractiveItemHandler;
 import net.akami.yggdrasil.api.item.InteractiveItemUser;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.type.HandType;
+import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.ItemStackComparators;
 import org.spongepowered.api.item.inventory.Slot;
 
-public class InteractiveItemUtils {
+import java.util.Optional;
+
+public class ItemUtils {
 
     public static void fitItem(InteractiveItemUser user, InteractiveItem item) {
         Player player = Sponge.getServer().getPlayer(user.getUUID()).orElseThrow(IllegalStateException::new);
@@ -27,5 +32,12 @@ public class InteractiveItemUtils {
                 return;
             }
         }
+    }
+
+    public static HandType getMatchingHand(Player target, ItemStack item) {
+        Optional<ItemStack> optItem = target.getItemInHand(HandTypes.MAIN_HAND);
+        return optItem.isPresent() && ItemStackComparators.IGNORE_SIZE.compare(optItem.get(), item) == 0
+                ? HandTypes.MAIN_HAND
+                : HandTypes.OFF_HAND;
     }
 }

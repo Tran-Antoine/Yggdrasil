@@ -1,6 +1,7 @@
 package net.akami.yggdrasil.spell;
 
 import com.flowpowered.math.vector.Vector3d;
+import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellTier;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
@@ -18,7 +19,7 @@ public class UpwardPropulsionStandardTier implements SpellTier {
     }
 
     @Override
-    public void apply(Player caster) {
+    public void definePreLaunchProperties(Player caster, SpellCreationData data) {
         Vector3d playerV = caster.getVelocity();
         if(!caster.isOnGround()) {
             System.out.println("Player must be on the ground to definePreLaunchProperties this spell");

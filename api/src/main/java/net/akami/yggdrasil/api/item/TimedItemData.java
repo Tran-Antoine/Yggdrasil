@@ -11,6 +11,7 @@ public class TimedItemData implements Comparable<TimedItemData> {
         this.endingTime = startingTime + time;
     }
 
+
     @Override
     public int compareTo(TimedItemData other) {
         return (int) (endingTime - other.endingTime);

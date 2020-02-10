@@ -10,7 +10,10 @@ import net.akami.yggdrasil.api.utils.YggdrasilMath;
 import net.akami.yggdrasil.item.*;
 import net.akami.yggdrasil.life.PlayerLifeComponent;
 import net.akami.yggdrasil.mana.PlayerManaContainer;
-import net.akami.yggdrasil.spell.*;
+import net.akami.yggdrasil.spell.EarthTowerSpell;
+import net.akami.yggdrasil.spell.FireballCaster;
+import net.akami.yggdrasil.spell.GravitySpell;
+import net.akami.yggdrasil.spell.WindOfFireSpell;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -42,7 +45,7 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
     @Override
     public void addDefaultItems() {
         items.addAll(Arrays.asList(
-                new AdvancedMovementItem(),
+                new AdvancedMovementItem(this),
                 new InstantHealItem(this),
 
                 new SpellTriggerItem(this),

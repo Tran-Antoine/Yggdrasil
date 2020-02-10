@@ -2,6 +2,7 @@ package net.akami.yggdrasil.spell;
 
 import net.akami.yggdrasil.api.item.InteractiveItemHandler;
 import net.akami.yggdrasil.api.spell.Spell;
+import net.akami.yggdrasil.api.spell.SpellLauncher;
 import net.akami.yggdrasil.api.spell.SpellTier;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -15,14 +16,18 @@ public class UpwardPropulsionSpell implements Spell {
     private ItemStack item;
     private InteractiveItemHandler handler;
 
+    @Override
+    public SpellLauncher getLauncher() {
+        return null;
+    }
+
     public UpwardPropulsionSpell(InteractiveItemHandler handler) {
         this.item = ItemStack.of(ItemTypes.SLIME_BALL);
         this.handler = handler;
         this.tiers = Arrays.asList(
                 new UpwardPropulsionStandardTier(2.5),
                 new UpwardPropulsionStandardTier(4.0),
-                new UpwardPropulsionFallDamageTier(4.0),
-                new UpwardPropulsionFallDamageTier(4.0).asConstantStorable(item, handler)
+                new UpwardPropulsionFallDamageTier(4.0)
         );
     }
 

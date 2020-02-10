@@ -3,6 +3,7 @@ package net.akami.yggdrasil.item;
 import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.item.InteractiveItem;
 import net.akami.yggdrasil.api.spell.*;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.item.ItemTypes;
@@ -19,7 +20,8 @@ public class SpellTriggerItem implements InteractiveItem {
         this.user = user;
         this.item = ItemStack
                 .builder()
-                .itemType(ItemTypes.BARRIER)
+                .itemType(ItemTypes.BOW)
+                .add(Keys.UNBREAKABLE, true)
                 .quantity(1)
                 .build();
     }
@@ -30,10 +32,10 @@ public class SpellTriggerItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(ItemStack item, InteractEvent event, GameItemClock clock) { }
+    public void onLeftClicked(InteractEvent event, GameItemClock clock) { }
 
     @Override
-    public void onRightClicked(ItemStack item, InteractEvent event, GameItemClock clock) {
+    public void onRightClicked(InteractEvent event, GameItemClock clock) {
         Optional<SpellCastResult> optResult = user.findBySequence();
         user.clearSequence();
         if(!optResult.isPresent()) {
@@ -51,5 +53,4 @@ public class SpellTriggerItem implements InteractiveItem {
             spell.cast(wizard, tier);
         });
     }
-
 }

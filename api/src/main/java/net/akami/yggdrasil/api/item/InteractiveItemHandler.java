@@ -13,11 +13,11 @@ public interface InteractiveItemHandler {
     List<InteractiveItem> getItems();
 
     default void leftClick(ItemStack item, InteractEvent event, GameItemClock clock) {
-        click(item, (interactiveItem) -> interactiveItem.onLeftClicked(item, event, clock));
+        click(item, (interactiveItem) -> interactiveItem.onLeftClicked(event, clock));
     }
 
     default void rightClick(ItemStack item, InteractEvent event, GameItemClock clock) {
-        click(item, (interactiveItem) -> interactiveItem.onRightClicked(item, event, clock));
+        click(item, (interactiveItem) -> interactiveItem.onRightClicked(event, clock));
     }
 
     default void addItem(InteractiveItem item) {
@@ -40,5 +40,9 @@ public interface InteractiveItemHandler {
                 getItems().remove(result);
             }
         }
+    }
+
+    default boolean hasItem(InteractiveItem item) {
+        return getItems().contains(item);
     }
 }

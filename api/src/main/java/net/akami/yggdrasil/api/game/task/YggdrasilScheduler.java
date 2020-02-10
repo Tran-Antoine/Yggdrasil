@@ -15,7 +15,7 @@ public final class YggdrasilScheduler {
         GameItemClock clock = new GameItemClock();
         Task
                 .builder()
-                .interval(100, TimeUnit.MILLISECONDS)
+                .interval(10, TimeUnit.MILLISECONDS)
                 .execute(clock::update)
                 .submit(plugin);
         return clock;

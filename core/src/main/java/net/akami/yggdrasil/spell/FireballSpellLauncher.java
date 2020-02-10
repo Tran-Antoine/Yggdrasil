@@ -19,8 +19,8 @@ public class FireballSpellLauncher implements SpellLauncher {
 
         Entity fireBall = createBaseEntity(caster);
 
-        int radius = data.getProperty("radius", int.class);
-        double damage = data.getProperty("damage", double.class);
+        int radius = data.getProperty("radius", Integer.class);
+        double damage = data.getProperty("damage", Double.class);
         fireBall.offer(Keys.EXPLOSION_RADIUS, Optional.of(radius));
         fireBall.offer(Keys.ATTACK_DAMAGE, damage);
     }
@@ -35,6 +35,7 @@ public class FireballSpellLauncher implements SpellLauncher {
         Entity fireBall = currentWorld.createEntity(EntityTypes.FIREBALL, ballLocation);
         fireBall.offer(Keys.VELOCITY, dir.mul(1.3));
         fireBall.offer(Keys.ACCELERATION, dir.mul(0.05));
+        currentWorld.spawnEntity(fireBall);
         return fireBall;
     }
 }

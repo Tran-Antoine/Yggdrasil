@@ -8,7 +8,6 @@ import net.akami.yggdrasil.api.game.task.YggdrasilScheduler;
 import net.akami.yggdrasil.api.input.ItemInteractionsListener;
 import net.akami.yggdrasil.api.input.PlayerConnectionListener;
 import net.akami.yggdrasil.api.player.AbstractYggdrasilPlayer;
-import net.akami.yggdrasil.player.YggdrasilPlayer;
 import net.akami.yggdrasil.api.player.AbstractYggdrasilPlayerManager;
 import net.akami.yggdrasil.player.YggdrasilPlayerManager;
 import org.slf4j.Logger;
@@ -29,6 +28,7 @@ public class YggdrasilMain {
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
+
         logger.info("Plugin successfully initialized");
         AbstractYggdrasilPlayerManager playerManager = new YggdrasilPlayerManager();
         List<AbstractYggdrasilPlayer> players = playerManager.getPlayers();

@@ -1,6 +1,7 @@
 package net.akami.yggdrasil.spell;
 
 import com.flowpowered.math.vector.Vector3d;
+import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellTier;
 import net.akami.yggdrasil.api.utils.YggdrasilMath;
 import org.spongepowered.api.data.key.Keys;
@@ -14,7 +15,7 @@ import java.util.Optional;
 public class WindOfFireTestTier implements SpellTier {
 
     @Override
-    public void apply(Player caster) {
+    public void definePreLaunchProperties(Player caster, SpellCreationData data) {
         Vector3d dir = YggdrasilMath.headRotationToDirection(caster.getHeadRotation());
         World currentWorld = caster.getWorld();
         Vector3d ballLocation = caster.getPosition()

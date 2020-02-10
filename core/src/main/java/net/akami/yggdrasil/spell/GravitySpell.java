@@ -2,6 +2,7 @@ package net.akami.yggdrasil.spell;
 
 
 import net.akami.yggdrasil.api.spell.Spell;
+import net.akami.yggdrasil.api.spell.SpellLauncher;
 import net.akami.yggdrasil.api.spell.SpellTier;
 
 import java.util.Arrays;
@@ -21,5 +22,10 @@ public class GravitySpell implements Spell {
     @Override
     public List<SpellTier> getTiers() {
         return tiers;
+    }
+
+    @Override
+    public SpellLauncher getLauncher() {
+        return null;
     }
 }

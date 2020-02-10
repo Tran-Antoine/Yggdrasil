@@ -1,6 +1,7 @@
 package net.akami.yggdrasil.spell;
 
 import com.flowpowered.math.vector.Vector3d;
+import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellTier;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockTypes;
@@ -17,7 +18,7 @@ public class EarthTowerTestTier implements SpellTier {
     private int currentY = 0;
 
     @Override
-    public void apply(Player caster) {
+    public void definePreLaunchProperties(Player caster, SpellCreationData data) {
         Vector3d pos = caster.getPosition();
         World world = caster.getWorld();
         Object plugin = Sponge.getPluginManager().getPlugin("yggdrasil").get();

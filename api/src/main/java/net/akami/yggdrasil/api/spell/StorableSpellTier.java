@@ -23,12 +23,10 @@ public class StorableSpellTier implements SpellTier {
     @Override
     public void definePreLaunchProperties(Player caster, SpellCreationData data) {
         data.setStorable(true);
-        if(itemToProvide != null && handler != null) {
-            data.setItem(ItemStack.builder()
-                    .fromItemStack(itemToProvide)
-                    .quantity(quantity)
-                    .build());
+        if (itemToProvide != null && handler != null) {
+            data.setItem(itemToProvide);
             data.setHandler(handler);
         }
+        data.getItem().setQuantity(quantity);
     }
 }

@@ -27,7 +27,7 @@ public class SpellCreationData {
 
     public <T> T getProperty(String name, Class<T> type) {
         Object result = properties.get(name);
-        if(result != null && result.getClass().equals(type)) {
+        if(result != null && type.isAssignableFrom(result.getClass())) {
             return (T) result;
         }
         return null;
