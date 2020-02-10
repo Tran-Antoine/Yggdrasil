@@ -34,7 +34,7 @@ public class EarthElementItem extends ElementItem {
     protected Text getName() {
         return Text
                 .builder()
-                .color(TextColors.DARK_GRAY)
+                .color(TextColors.BLACK)
                 .append(Text.of("Earth"))
                 .build();
     }

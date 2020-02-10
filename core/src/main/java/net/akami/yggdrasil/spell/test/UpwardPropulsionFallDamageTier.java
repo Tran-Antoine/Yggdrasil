@@ -1,4 +1,4 @@
-package net.akami.yggdrasil.spell;
+package net.akami.yggdrasil.spell.test;
 
 public class UpwardPropulsionFallDamageTier extends UpwardPropulsionStandardTier {
 

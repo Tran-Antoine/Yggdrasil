@@ -1,4 +1,4 @@
-package net.akami.yggdrasil.spell;
+package net.akami.yggdrasil.spell.test;
 
 import net.akami.yggdrasil.api.item.InteractiveItemHandler;
 import net.akami.yggdrasil.api.spell.Spell;

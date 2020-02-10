@@ -1,4 +1,4 @@
-package net.akami.yggdrasil.spell;
+package net.akami.yggdrasil.spell.test;
 
 import com.flowpowered.math.vector.Vector3d;
 import net.akami.yggdrasil.api.spell.SpellCreationData;

@@ -21,7 +21,6 @@ public class RebirthCommand implements CommandExecutor {
             return CommandResult.empty();
         }
         Player target = (Player) src;
-        target.clearTitle();
         manager.createNewPlayer(target.getUniqueId());
         return CommandResult.success();
     }
