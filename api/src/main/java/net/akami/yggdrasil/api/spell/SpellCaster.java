@@ -1,9 +1,6 @@
 package net.akami.yggdrasil.api.spell;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -12,9 +9,10 @@ public class SpellCaster {
     protected Supplier<Spell> generator;
     protected BiFunction<Float, Integer, Float> manaUsage;
     protected List<ElementType> baseSequence;
+    private List<Integer> locationRequiredTiers = Collections.emptyList();
     private int currentMaxTier = 7;
 
-    protected SpellCaster() {}
+    protected SpellCaster() { }
 
     public SpellCaster(Supplier<Spell> generator, BiFunction<Float, Integer, Float> manaUsage,
                        List<ElementType> sequence) {
@@ -50,6 +48,10 @@ public class SpellCaster {
         return currentMana >= manaUsage.apply(0f, tier);
     }
 
+    public boolean requiresLocation(int tier) {
+        return locationRequiredTiers.contains(tier);
+    }
+
     public float getCastingCost(int tier) {
         return manaUsage.apply(0f, tier);
     }
@@ -82,6 +84,11 @@ public class SpellCaster {
 
         public Builder withSequence(List<ElementType> sequence) {
             caster.baseSequence = sequence;
+            return this;
+        }
+
+        public Builder withLocationRequiredTiers(Integer... tiers) {
+            caster.locationRequiredTiers = Arrays.asList(tiers);
             return this;
         }
 

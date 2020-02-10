@@ -33,6 +33,11 @@ public class PlayerManaContainer extends ManaContainer {
     }
 
     @Override
+    public void remove() {
+        Sponge.getServer().getPlayer(idHolder.getUUID()).ifPresent(indicator::removePlayer);
+    }
+
+    @Override
     public void use(float used) {
         super.use(used);
         update();

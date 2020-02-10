@@ -17,6 +17,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.text.Text;
 
 public abstract class ElementItem implements InteractiveItem {
 
@@ -28,15 +29,17 @@ public abstract class ElementItem implements InteractiveItem {
         this.item = ItemStack
                 .builder()
                 .itemType(ItemTypes.DYE)
+                .add(Keys.DISPLAY_NAME, getName())
                 .add(Keys.DYE_COLOR, getColor())
                 .quantity(1)
                 .build();
     }
 
     protected abstract ElementType getType();
+    protected abstract Text getName();
     protected abstract DyeColor getColor();
     protected abstract ParticleType getParticleType();
-    protected int getQuantity() { return 70; }
+    protected int getParticleQuantity() { return 70; }
 
     @Override
     public ItemStack matchingItem() {
@@ -65,7 +68,7 @@ public abstract class ElementItem implements InteractiveItem {
         ParticleEffect effect = ParticleEffect.builder()
                 .type(getParticleType())
                 .option(ParticleOptions.BLOCK_STATE, blockState)
-                .quantity(getQuantity())
+                .quantity(getParticleQuantity())
                 .offset(new Vector3d(0.8, 0.8, 0.8))
                 .build();
         player.spawnParticles(effect, player.getPosition().add(0, 1, 0));

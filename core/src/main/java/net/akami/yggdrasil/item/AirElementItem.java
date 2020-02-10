@@ -6,16 +6,18 @@ import org.spongepowered.api.data.type.DyeColor;
 import org.spongepowered.api.data.type.DyeColors;
 import org.spongepowered.api.effect.particle.ParticleType;
 import org.spongepowered.api.effect.particle.ParticleTypes;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
-public class WindElementItem extends ElementItem {
+public class AirElementItem extends ElementItem {
 
-    public WindElementItem(MagicUser user) {
+    public AirElementItem(MagicUser user) {
         super(user);
     }
 
     @Override
     protected ElementType getType() {
-        return ElementType.WIND;
+        return ElementType.AIR;
     }
 
     @Override
@@ -26,5 +28,14 @@ public class WindElementItem extends ElementItem {
     @Override
     protected DyeColor getColor() {
         return DyeColors.GRAY;
+    }
+
+    @Override
+    protected Text getName() {
+        return Text
+                .builder()
+                .color(TextColors.GRAY)
+                .append(Text.of("Air"))
+                .build();
     }
 }

@@ -11,11 +11,13 @@ public interface MagicUser extends ManaHolder, UUIDHolder {
     List<SpellCaster> getSpells();
     List<ElementType> currentSequence();
 
-    default Optional<SpellCastResult> findBySequence() {
+    default Optional<SpellCastContext> findBySequence() {
         for(SpellCaster caster : getSpells()) {
             Optional<Integer> tierChosen = caster.matchingTier(currentSequence());
             if(tierChosen.isPresent()) {
-                return Optional.of(new SpellCastResult(caster, tierChosen.get()));
+                int tier = tierChosen.get();
+                boolean requiresLocation = caster.requiresLocation(tier);
+                return Optional.of(new SpellCastContext(caster, tier, requiresLocation));
             }
         }
         return Optional.empty();

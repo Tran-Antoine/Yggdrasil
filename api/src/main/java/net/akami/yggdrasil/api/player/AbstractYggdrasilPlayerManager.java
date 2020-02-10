@@ -12,7 +12,7 @@ public abstract class AbstractYggdrasilPlayerManager {
         this.players = new ArrayList<>();
     }
 
-    private AbstractYggdrasilPlayer getById(UUID id) {
+    protected AbstractYggdrasilPlayer getById(UUID id) {
         for(AbstractYggdrasilPlayer player : players) {
             if(player.getUUID().equals(id)) {
                 return player;
@@ -26,8 +26,10 @@ public abstract class AbstractYggdrasilPlayerManager {
     }
 
     public abstract void createNewPlayer(UUID id);
+    public abstract void removeExistingPlayer(UUID uniqueId);
 
     public List<AbstractYggdrasilPlayer> getPlayers() {
         return players;
     }
+
 }

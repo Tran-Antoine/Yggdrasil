@@ -6,6 +6,8 @@ import org.spongepowered.api.data.type.DyeColor;
 import org.spongepowered.api.data.type.DyeColors;
 import org.spongepowered.api.effect.particle.ParticleType;
 import org.spongepowered.api.effect.particle.ParticleTypes;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 public class WaterElementItem extends ElementItem {
 
@@ -24,12 +26,21 @@ public class WaterElementItem extends ElementItem {
     }
 
     @Override
-    protected int getQuantity() {
+    protected int getParticleQuantity() {
         return 150;
     }
 
     @Override
     protected DyeColor getColor() {
         return DyeColors.BLUE;
+    }
+
+    @Override
+    protected Text getName() {
+        return Text
+                .builder()
+                .color(TextColors.DARK_BLUE)
+                .append(Text.of("Water"))
+                .build();
     }
 }

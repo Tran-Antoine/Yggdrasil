@@ -20,6 +20,8 @@ public class ManaContainer {
         currentMana -= used;
     }
 
+    public void remove() {}
+
     public void ifEnoughMana(float cost, Runnable action) {
         if(hasEnoughMana(cost)) {
             use(cost);

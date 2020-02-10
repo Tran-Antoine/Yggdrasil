@@ -12,6 +12,7 @@ import org.spongepowered.api.entity.projectile.source.ProjectileSource;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.CollideEvent;
 import org.spongepowered.api.event.action.InteractEvent;
+import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.event.entity.SpawnEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.world.World;
@@ -22,9 +23,10 @@ import java.util.UUID;
 public abstract class InteractiveAimingItem implements InteractiveItem {
 
     private World world;
-    protected UUIDHolder holder;
-    private UUID arrowShooter;
     private UUID arrowID;
+
+    protected UUIDHolder holder;
+    protected boolean ready = true;
 
     public InteractiveAimingItem(UUIDHolder holder) {
         this.holder = holder;
@@ -32,10 +34,14 @@ public abstract class InteractiveAimingItem implements InteractiveItem {
         Sponge.getEventManager().registerListeners(plugin, this);
     }
 
-    protected abstract void applyEffect(Vector3d location);
+    protected abstract void applyEffect(Vector3d location, World world);
 
     @Listener
     public void onProjectileLaunched(SpawnEntityEvent event) {
+        if(event.getEntities().size() == 0) {
+            return;
+        }
+
         Entity entity = event.getEntities().get(0);
         if(entity.getType() != EntityTypes.TIPPED_ARROW) {
             return;
@@ -47,37 +53,41 @@ public abstract class InteractiveAimingItem implements InteractiveItem {
         }
         Entity entityShooter = (Entity) shooter;
         if(entityShooter.getUniqueId().equals(holder.getUUID()) && arrowID == null) {
-            this.world = projectile.getWorld();
-            this.arrowID = projectile.getUniqueId();
-            this.arrowShooter = entityShooter.getUniqueId();
+            launched(projectile, entityShooter);
         }
+    }
+
+    private void launched(Projectile projectile, Entity shooter) {
+        this.world = projectile.getWorld();
+        this.arrowID = projectile.getUniqueId();
+        ready = false;
     }
 
     @Listener
     public void onProjectileLanded(CollideEvent.Impact event, @First Arrow arrow) {
-        if(arrow == null || world == null || arrowShooter == null
-                || !arrow.getUniqueId().equals(arrowID)) {
+        if(arrow == null || world == null || !arrow.getUniqueId().equals(arrowID)) {
             return;
         }
         Vector3d loc = event.getImpactPoint().getPosition();
-        System.out.println("Impact location : " + loc);
         event.setCancelled(true);
         arrow.remove();
 
-        reset();
-        applyEffect(loc);
+        apply(loc, arrow.getWorld());
     }
 
-    @Override
-    public void onLeftClicked(InteractEvent event, GameItemClock clock) { }
+    @Listener
+    public void onProjectileKilled(DestructEntityEvent event) {
+        if(arrowID != null && event.getTargetEntity().getUniqueId().equals(arrowID)) {
+            reset();
+        }
+    }
 
     @Override
     public void onRightClicked(InteractEvent event, GameItemClock clock) {
 
-        if(arrowID == null || world == null || arrowShooter == null) {
+        if(arrowID == null || world == null) {
             return;
         }
-        System.out.println("Stopping arrow's trajectory");
         Optional<Entity> optEntity = world.getEntity(arrowID);
         if(!optEntity.isPresent()) {
             return;
@@ -86,13 +96,20 @@ public abstract class InteractiveAimingItem implements InteractiveItem {
         Vector3d position = arrow.getLocation().getPosition();
         arrow.remove();
 
+        apply(position, arrow.getWorld());
+    }
+
+    private void apply(Vector3d position, World world) {
         reset();
-        applyEffect(position);
+        applyEffect(position, world);
     }
 
     private void reset() {
         this.arrowID = null;
         this.world = null;
-        this.arrowShooter = null;
+        ready = true;
     }
+
+    @Override
+    public void onLeftClicked(InteractEvent event, GameItemClock clock) { }
 }

@@ -6,14 +6,10 @@ import net.akami.yggdrasil.api.mana.ManaContainer;
 import net.akami.yggdrasil.api.player.AbstractYggdrasilPlayer;
 import net.akami.yggdrasil.api.spell.ElementType;
 import net.akami.yggdrasil.api.spell.SpellCaster;
-import net.akami.yggdrasil.api.utils.YggdrasilMath;
 import net.akami.yggdrasil.item.*;
 import net.akami.yggdrasil.life.PlayerLifeComponent;
 import net.akami.yggdrasil.mana.PlayerManaContainer;
-import net.akami.yggdrasil.spell.EarthTowerSpell;
 import net.akami.yggdrasil.spell.FireballCaster;
-import net.akami.yggdrasil.spell.GravitySpell;
-import net.akami.yggdrasil.spell.WindOfFireSpell;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -33,8 +29,7 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
     public YggdrasilPlayer(UUID id) {
         this.id = id;
         this.sequence = new ArrayList<>();
-        this.mana = new PlayerManaContainer(100, 4f, this); // this is a regular mana container
-        //this.mana = new PlayerManaContainer(1000, 10, this); // for testing
+        this.mana = new PlayerManaContainer(100, 4f, this);
         this.life = new PlayerLifeComponent(3, 50, this);
         this.spells = new ArrayList<>();
         this.items = new ArrayList<>();
@@ -50,7 +45,7 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
 
                 new SpellTriggerItem(this),
                 new FireElementItem(this),
-                new WindElementItem(this),
+                new AirElementItem(this),
                 new EarthElementItem(this),
                 new WaterElementItem(this)));
         addItemsToInventory();
@@ -86,13 +81,13 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
     public void addDefaultSpells() {
 
         spells.add(new FireballCaster(this));
-        spells.add(new SpellCaster.Builder()
+        /*spells.add(new SpellCaster.Builder()
                 .withGenerator(WindOfFireSpell::new)
                 .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(120))
                 .withSequence(
                         ElementType.FIRE, ElementType.FIRE, ElementType.FIRE,
                         ElementType.EARTH,
-                        ElementType.WIND,
+                        ElementType.AIR,
                         ElementType.EARTH)
                 .build());
         spells.add(new SpellCaster.Builder()
@@ -100,15 +95,15 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
                 .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(40))
                 .withSequence(
                         ElementType.EARTH, ElementType.EARTH, ElementType.EARTH,
-                        ElementType.WIND)
+                        ElementType.AIR)
                 .build());
         spells.add(new SpellCaster.Builder()
                 .withGenerator(GravitySpell::new)
                 .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(80))
                 .withSequence(
                         ElementType.EARTH, ElementType.EARTH,
-                        ElementType.WIND, ElementType.WIND)
-                .build());
+                        ElementType.AIR, ElementType.AIR)
+                .build());*/
     }
 
     @Override
@@ -139,5 +134,10 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
     @Override
     public List<ElementType> currentSequence() {
         return sequence;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof YggdrasilPlayer && id.equals(((YggdrasilPlayer) obj).id);
     }
 }

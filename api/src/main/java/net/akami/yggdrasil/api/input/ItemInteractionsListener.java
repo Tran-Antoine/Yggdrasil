@@ -11,7 +11,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.cause.Cause;
-import org.spongepowered.api.event.entity.projectile.LaunchProjectileEvent;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
 
@@ -27,11 +26,6 @@ public class ItemInteractionsListener {
     public ItemInteractionsListener(List<? extends InteractiveItemUser> users, GameItemClock clock) {
         this.users = users;
         this.clock = clock;
-    }
-
-    @Listener
-    public void onLaunch(LaunchProjectileEvent event) {
-        System.out.println("Projectile launched");
     }
 
     @Listener

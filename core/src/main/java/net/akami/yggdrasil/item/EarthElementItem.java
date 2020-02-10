@@ -6,6 +6,8 @@ import org.spongepowered.api.data.type.DyeColor;
 import org.spongepowered.api.data.type.DyeColors;
 import org.spongepowered.api.effect.particle.ParticleType;
 import org.spongepowered.api.effect.particle.ParticleTypes;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
 public class EarthElementItem extends ElementItem {
 
@@ -26,5 +28,14 @@ public class EarthElementItem extends ElementItem {
     @Override
     protected DyeColor getColor() {
         return DyeColors.BROWN;
+    }
+
+    @Override
+    protected Text getName() {
+        return Text
+                .builder()
+                .color(TextColors.DARK_GRAY)
+                .append(Text.of("Earth"))
+                .build();
     }
 }

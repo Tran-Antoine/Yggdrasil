@@ -4,18 +4,20 @@ import com.flowpowered.math.vector.Vector3d;
 import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.item.InteractiveItem;
 import net.akami.yggdrasil.api.item.InteractiveItemUser;
-import net.akami.yggdrasil.api.utils.ItemUtils;
 import net.akami.yggdrasil.api.utils.YggdrasilMath;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.Slot;
 import org.spongepowered.api.item.potion.PotionType;
 import org.spongepowered.api.item.potion.PotionTypes;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.format.TextColors;
 
+import java.util.Iterator;
 import java.util.Optional;
 
 public class AdvancedMovementItem implements InteractiveItem {
@@ -26,9 +28,14 @@ public class AdvancedMovementItem implements InteractiveItem {
 
     public AdvancedMovementItem(InteractiveItemUser user) {
         this.user = user;
+        Text name = Text.builder()
+                .color(TextColors.GREEN)
+                .append(Text.of("Advanced Movement"))
+                .build();
         this.item = ItemStack
                 .builder()
                 .itemType(ItemTypes.TIPPED_ARROW)
+                .add(Keys.DISPLAY_NAME, name)
                 .add(Keys.POTION_TYPE, PotionTypes.LEAPING)
                 .quantity(1)
                 .build();
@@ -69,7 +76,7 @@ public class AdvancedMovementItem implements InteractiveItem {
         target.setVelocity(this.nextDirection.mul(factor).add(targetVelocity).div(1, 1.4, 1));
         double yVelocity = - target.getVelocity().getY();
         if(!target.isOnGround()) {
-            target.offer(Keys.FALL_DISTANCE, (float) Math.max(2.8 * Math.exp(1.298 * yVelocity) - 3, 0));
+            target.offer(Keys.FALL_DISTANCE, (float) Math.max(2.8 * Math.exp(1.298 * yVelocity) - 5, 0));
         }
         this.nextDirection = null;
     }
@@ -85,8 +92,12 @@ public class AdvancedMovementItem implements InteractiveItem {
     }
 
     private void changeItemColor(Player target, PotionType type) {
-        HandType hand = ItemUtils.getMatchingHand(target, item);
-        item.offer(Keys.POTION_TYPE, type);
-        target.setItemInHand(hand, item);
+        Iterator<Slot> slots = target.getInventory().<Slot>slots().iterator();
+        slots.forEachRemaining(slot -> {
+            if(slot.contains(item)) {
+                item.offer(Keys.POTION_TYPE, type);
+                slot.set(item);
+            }
+        });
     }
 }
