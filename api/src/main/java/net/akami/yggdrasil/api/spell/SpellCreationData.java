@@ -38,7 +38,7 @@ public class SpellCreationData<T extends SpellLauncher> {
             if(result != null && type.isAssignableFrom(result.getClass())) {
                 return (R) result;
             }
-            throw new IllegalArgumentException("Property not found");
+            return null;
         }
 
         public <R> R getPropertyOrElse(String name, Class<R> type, R orElse) {

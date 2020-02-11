@@ -26,7 +26,8 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
     @Override
     public void definePreLaunchProperties(Player caster, SpellCreationData<PhoenixArrowLauncher> data) {
         data.addAction(this::followEnemy);
-        data.setProperty("velocity_factor", 0.2);
+        data.setProperty("velocity_factor", 0.9);
+        data.setProperty("arrowsCount", 2);
     }
 
     private void followEnemy(Player player, PhoenixArrowLauncher launcher) {
@@ -70,7 +71,7 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
                 .map(Optional::get)
                 .collect(Collectors.toList());
         count++;
-        if (count >= 20 || arrows.isEmpty()) {
+        if (count >= 200 || arrows.isEmpty()) {
             task.cancel();
         }
         Optional<Entity> optPlayer = world.getEntity(playerTarget);
@@ -86,16 +87,20 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
     }
 
     private void redirect(Vector3d targetLocation, Entity arrow) {
-        System.out.println("Redirecting to aim : " + targetLocation);
+
         Vector3d arrowLocation = arrow.getLocation().getPosition();
         Vector3d currentVelocity = arrow.get(Keys.VELOCITY).orElse(Vector3d.ZERO);
+
+        double currentLength = currentVelocity.length();
+
         Vector3d direction = targetLocation
                 .sub(arrowLocation)
                 .normalize()
-                .mul(2)
-                ;//.add(currentVelocity.div(2));
+                .add(currentVelocity.normalize().mul(1.7))
+                .normalize()
+                .mul(currentLength);
 
         arrow.offer(Keys.VELOCITY, direction);
-        arrow.offer(Keys.ACCELERATION, direction.mul(0.0005));
+        arrow.offer(Keys.ACCELERATION, direction.mul(0.005));
     }
 }
