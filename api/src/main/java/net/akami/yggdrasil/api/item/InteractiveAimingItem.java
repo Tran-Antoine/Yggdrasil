@@ -53,11 +53,11 @@ public abstract class InteractiveAimingItem implements InteractiveItem {
         }
         Entity entityShooter = (Entity) shooter;
         if(entityShooter.getUniqueId().equals(holder.getUUID()) && arrowID == null) {
-            launched(projectile, entityShooter);
+            launched(projectile);
         }
     }
 
-    private void launched(Projectile projectile, Entity shooter) {
+    private void launched(Projectile projectile) {
         this.world = projectile.getWorld();
         this.arrowID = projectile.getUniqueId();
         ready = false;
