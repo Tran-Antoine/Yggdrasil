@@ -4,7 +4,9 @@ import com.flowpowered.math.vector.Vector3d;
 import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellTier;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.World;
@@ -24,6 +26,7 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
     @Override
     public void definePreLaunchProperties(Player caster, SpellCreationData<PhoenixArrowLauncher> data) {
         data.addAction(this::followEnemy);
+        data.setProperty("velocity_factor", 0.2);
     }
 
     private void followEnemy(Player player, PhoenixArrowLauncher launcher) {
@@ -32,18 +35,19 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
         this.playerTarget = findClosestPlayer(player);
         Object plugin = Sponge.getPluginManager().getPlugin("yggdrasil").get();
         Task.builder()
-                .interval(500, TimeUnit.MILLISECONDS)
+                .delay(500, TimeUnit.MILLISECONDS)
+                .interval(100, TimeUnit.MILLISECONDS)
                 .execute(this::run)
                 .submit(plugin);
     }
 
     private UUID findClosestPlayer(Player player) {
 
-        Collection<Player> worldPlayers = player.getWorld().getPlayers();
-        Map<Player, Double> distanceMap = new HashMap<>();
+        Collection<Entity> worldPlayers = player.getWorld().getEntities(e -> e.getType() == EntityTypes.PIG);
+        Map<Entity, Double> distanceMap = new HashMap<>();
 
         worldPlayers.forEach(entity -> distanceMap.put(entity, distance(entity, player)));
-        List<Entry<Player, Double>> orderedDistances = new ArrayList<>(distanceMap.entrySet());
+        List<Entry<Entity, Double>> orderedDistances = new ArrayList<>(distanceMap.entrySet());
         orderedDistances.sort(Entry.comparingByValue());
         return orderedDistances
                 .get(0)
@@ -66,17 +70,32 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
                 .map(Optional::get)
                 .collect(Collectors.toList());
         count++;
-        if(count >= 20 || arrows.isEmpty()) {
+        if (count >= 20 || arrows.isEmpty()) {
             task.cancel();
         }
-        Optional<Player> optPlayer = Sponge.getServer().getPlayer(playerTarget);
-        if(!optPlayer.isPresent()) {
+        Optional<Entity> optPlayer = world.getEntity(playerTarget);
+        if (!optPlayer.isPresent()) {
             return;
         }
 
-        Player target = optPlayer.get();
-        for(Entity arrow : arrows) {
-            redirect(target, arrow);
+        Entity target = optPlayer.get();
+        Vector3d targetLocation = target.getLocation().getPosition();
+        for (Entity arrow : arrows) {
+            redirect(targetLocation, arrow);
         }
+    }
+
+    private void redirect(Vector3d targetLocation, Entity arrow) {
+        System.out.println("Redirecting to aim : " + targetLocation);
+        Vector3d arrowLocation = arrow.getLocation().getPosition();
+        Vector3d currentVelocity = arrow.get(Keys.VELOCITY).orElse(Vector3d.ZERO);
+        Vector3d direction = targetLocation
+                .sub(arrowLocation)
+                .normalize()
+                .mul(2)
+                ;//.add(currentVelocity.div(2));
+
+        arrow.offer(Keys.VELOCITY, direction);
+        arrow.offer(Keys.ACCELERATION, direction.mul(0.0005));
     }
 }

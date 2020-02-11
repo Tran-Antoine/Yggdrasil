@@ -36,8 +36,12 @@ public class ItemUtils {
 
     public static HandType getMatchingHand(Player target, ItemStack item) {
         Optional<ItemStack> optItem = target.getItemInHand(HandTypes.MAIN_HAND);
+        if(optItem.isPresent() && ItemStackComparators.IGNORE_SIZE.compare(optItem.get(), item) == 0) {
+            return HandTypes.MAIN_HAND;
+        }
+        optItem = target.getItemInHand(HandTypes.OFF_HAND);
         return optItem.isPresent() && ItemStackComparators.IGNORE_SIZE.compare(optItem.get(), item) == 0
-                ? HandTypes.MAIN_HAND
-                : HandTypes.OFF_HAND;
+                ? HandTypes.OFF_HAND
+                : null;
     }
 }

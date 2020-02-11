@@ -73,23 +73,29 @@ public class PhoenixArrowLauncher implements SpellLauncher<PhoenixArrowLauncher>
         this.arrowsCount = map.getPropertyOrElse("arrowsCount", Integer.class, 1);
         Task.builder()
                 .interval(300, TimeUnit.MILLISECONDS)
-                .execute(task -> summonArrow(task, data, caster))
+                .execute(task -> summonArrow(task, map, caster))
                 .submit(plugin);
 
     }
 
-    private void summonArrow(Task task, SpellCreationData data, Player caster) {
+    private void summonArrow(Task task, PropertyMap map, Player caster) {
 
         Vector3d dir = YggdrasilMath.headRotationToDirection(caster.getHeadRotation());
-        Vector3d arrowPosition = caster.getPosition().add(dir.mul(2));
+        Vector3d arrowPosition = caster.getPosition()
+                .add(dir.mul(2))
+                .add(0, 1, 0);
         World world = caster.getWorld();
         Entity arrow = world.createEntity(EntityTypes.TIPPED_ARROW, arrowPosition);
-        arrow.offer(Keys.VELOCITY, dir.mul(2));
-        arrow.offer(Keys.ACCELERATION, dir.mul(0.05));
+        arrow.offer(Keys.HAS_GRAVITY, false);
+
+        double velocityFactor = map.getPropertyOrElse("velocity_factor", Double.class, 1d);
+        arrow.offer(Keys.VELOCITY, dir.mul(2 * velocityFactor));
+        arrow.offer(Keys.ACCELERATION, dir.mul(0.005));
         arrow.offer(Keys.FIRE_TICKS, 100000);
-        arrow.offer(Keys.ATTACK_DAMAGE, data.getPropertyMap().getProperty("damage", Double.class));
+        arrow.offer(Keys.ATTACK_DAMAGE, map.getProperty("damage", Double.class));
         world.spawnEntity(arrow);
         this.arrows.add(arrow.getUniqueId());
+        System.out.println("Added arrow : " + this.arrows);
 
         arrowsSummoned++;
         if(arrowsSummoned >= arrowsCount) {

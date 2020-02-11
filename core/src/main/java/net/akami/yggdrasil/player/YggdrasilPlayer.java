@@ -10,6 +10,7 @@ import net.akami.yggdrasil.item.*;
 import net.akami.yggdrasil.life.PlayerLifeComponent;
 import net.akami.yggdrasil.mana.PlayerManaContainer;
 import net.akami.yggdrasil.spell.FireballCaster;
+import net.akami.yggdrasil.spell.PhoenixArrowCaster;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -81,6 +82,7 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
     public void addDefaultSpells() {
 
         spells.add(new FireballCaster(this));
+        spells.add(new PhoenixArrowCaster());
         /*spells.add(new SpellCaster.Builder()
                 .withGenerator(WindOfFireSpell::new)
                 .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(120))
