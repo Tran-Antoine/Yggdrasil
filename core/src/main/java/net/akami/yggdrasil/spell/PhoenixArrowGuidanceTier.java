@@ -26,7 +26,6 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
     @Override
     public void definePreLaunchProperties(Player caster, SpellCreationData<PhoenixArrowLauncher> data) {
         data.addAction(this::followEnemy);
-        data.setProperty("velocity_factor", 0.9);
         data.setProperty("arrowsCount", 2);
     }
 
@@ -37,7 +36,7 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
         Object plugin = Sponge.getPluginManager().getPlugin("yggdrasil").get();
         Task.builder()
                 .delay(500, TimeUnit.MILLISECONDS)
-                .interval(100, TimeUnit.MILLISECONDS)
+                .interval(200, TimeUnit.MILLISECONDS)
                 .execute(this::run)
                 .submit(plugin);
     }
@@ -71,11 +70,12 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
                 .map(Optional::get)
                 .collect(Collectors.toList());
         count++;
-        if (count >= 200 || arrows.isEmpty()) {
+        if (count >= 500 || arrows.isEmpty()) {
             task.cancel();
         }
         Optional<Entity> optPlayer = world.getEntity(playerTarget);
         if (!optPlayer.isPresent()) {
+            task.cancel();
             return;
         }
 
@@ -91,16 +91,14 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
         Vector3d arrowLocation = arrow.getLocation().getPosition();
         Vector3d currentVelocity = arrow.get(Keys.VELOCITY).orElse(Vector3d.ZERO);
 
-        double currentLength = currentVelocity.length();
-
         Vector3d direction = targetLocation
                 .sub(arrowLocation)
                 .normalize()
                 .add(currentVelocity.normalize().mul(1.7))
                 .normalize()
-                .mul(currentLength);
+                .mul(0.6);
 
         arrow.offer(Keys.VELOCITY, direction);
-        arrow.offer(Keys.ACCELERATION, direction.mul(0.005));
+        arrow.offer(Keys.ACCELERATION, direction.mul(0.0001));
     }
 }

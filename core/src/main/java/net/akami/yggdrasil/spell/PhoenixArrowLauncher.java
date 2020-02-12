@@ -88,11 +88,11 @@ public class PhoenixArrowLauncher implements SpellLauncher<PhoenixArrowLauncher>
         Entity arrow = world.createEntity(EntityTypes.TIPPED_ARROW, arrowPosition);
         arrow.offer(Keys.HAS_GRAVITY, false);
 
-        double velocityFactor = map.getPropertyOrElse("velocity_factor", Double.class, 1.3d);
+        double velocityFactor = 1.3;
         Vector3d arrowDirection = dir.mul(velocityFactor);
 
         arrow.offer(Keys.VELOCITY, arrowDirection);
-        arrow.offer(Keys.ACCELERATION, arrowDirection.mul(0.0001));
+        arrow.offer(Keys.ACCELERATION, arrowDirection.mul(0.1));
         arrow.offer(Keys.FIRE_TICKS, 100000);
         arrow.offer(Keys.ATTACK_DAMAGE, map.getProperty("damage", Double.class));
         world.spawnEntity(arrow);
