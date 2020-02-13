@@ -21,14 +21,16 @@ import org.spongepowered.api.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class PhoenixArrowLauncher implements SpellLauncher<PhoenixArrowLauncher> {
 
     private int arrowsCount;
     private int arrowsSummoned = 0;
-    List<UUID> arrows;
+    private List<UUID> arrows;
 
     public PhoenixArrowLauncher() {
         this.arrows = new ArrayList<>();
@@ -102,5 +104,14 @@ public class PhoenixArrowLauncher implements SpellLauncher<PhoenixArrowLauncher>
         if(arrowsSummoned >= arrowsCount) {
             task.cancel();
         }
+    }
+
+    List<Entity> getAsEntities(World world) {
+        return arrows
+                .stream()
+                .map(world::getEntity)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toList());
     }
 }

@@ -14,7 +14,6 @@ import org.spongepowered.api.world.World;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher> {
 
@@ -63,12 +62,7 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
 
 
     private void run(Task task) {
-        List<Entity> arrows = launcher.arrows
-                .stream()
-                .map(world::getEntity)
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .collect(Collectors.toList());
+        List<Entity> arrows = launcher.getAsEntities(world);
         count++;
         if (count >= 500 || arrows.isEmpty()) {
             task.cancel();

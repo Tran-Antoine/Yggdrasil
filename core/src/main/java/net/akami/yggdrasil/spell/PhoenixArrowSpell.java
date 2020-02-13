@@ -10,7 +10,7 @@ public class PhoenixArrowSpell implements Spell<PhoenixArrowLauncher> {
     @Override
     public List<SpellTier<PhoenixArrowLauncher>> getTiers() {
         return Arrays.asList(
-                new PhoenixArrowDamageTier(2),
+                new PhoenixArrowBaseTier(),
                 new PhoenixArrowDamageTier(3),
                 new PhoenixArrowCountTier(2),
                 new PhoenixArrowExplosiveTier(),
