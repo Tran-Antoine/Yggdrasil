@@ -1,16 +1,37 @@
 package net.akami.yggdrasil.spell;
 
+import net.akami.yggdrasil.api.item.InteractiveItemHandler;
 import net.akami.yggdrasil.api.spell.Spell;
 import net.akami.yggdrasil.api.spell.SpellLauncher;
 import net.akami.yggdrasil.api.spell.SpellTier;
+import net.akami.yggdrasil.api.spell.StorableSpellTier;
+import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class CounterVelocitySpell implements Spell {
 
+    private InteractiveItemHandler handler;
+    private ItemStack item;
+
+    public CounterVelocitySpell(InteractiveItemHandler handler) {
+        this.handler = handler;
+        this.item = ItemStack.of(ItemTypes.FEATHER);
+    }
+
     @Override
     public List<SpellTier> getTiers() {
-        return null;
+        return Arrays.asList(
+                new CounterVelocityMaxTier(2),
+                new CounterVelocityMaxTier(2.5),
+                new CounterVelocityMaxTier(3),
+                new StorableSpellTier(item, handler, 1),
+                new CounterVelocityMaxTier(3.5),
+                new CounterVelocityPushBackTier(),
+                new StorableSpellTier(2)
+        );
     }
 
     @Override

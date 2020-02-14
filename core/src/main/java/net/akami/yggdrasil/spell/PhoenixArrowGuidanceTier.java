@@ -32,6 +32,11 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
         this.launcher = launcher;
         this.world = player.getWorld();
         this.playerTarget = findClosestPlayer(player);
+
+        if(playerTarget == null) {
+            return;
+        }
+
         Object plugin = Sponge.getPluginManager().getPlugin("yggdrasil").get();
         Task.builder()
                 .delay(500, TimeUnit.MILLISECONDS)
@@ -47,6 +52,9 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
 
         worldPlayers.forEach(entity -> distanceMap.put(entity, distance(entity, player)));
         List<Entry<Entity, Double>> orderedDistances = new ArrayList<>(distanceMap.entrySet());
+        if(orderedDistances.size() == 0) {
+            return null;
+        }
         orderedDistances.sort(Entry.comparingByValue());
         return orderedDistances
                 .get(0)

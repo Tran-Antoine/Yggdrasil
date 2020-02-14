@@ -9,6 +9,7 @@ import net.akami.yggdrasil.api.spell.SpellCaster;
 import net.akami.yggdrasil.item.*;
 import net.akami.yggdrasil.life.PlayerLifeComponent;
 import net.akami.yggdrasil.mana.PlayerManaContainer;
+import net.akami.yggdrasil.spell.CounterVelocityCaster;
 import net.akami.yggdrasil.spell.FireballCaster;
 import net.akami.yggdrasil.spell.IncendiaCaster;
 import net.akami.yggdrasil.spell.PhoenixArrowCaster;
@@ -80,10 +81,12 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
 
     @Override
     public void addDefaultSpells() {
-
-        spells.add(new FireballCaster(this));
-        spells.add(new PhoenixArrowCaster());
-        spells.add(new IncendiaCaster());
+        spells.addAll(Arrays.asList(
+                new FireballCaster(this),
+                new PhoenixArrowCaster(),
+                new IncendiaCaster(),
+                new CounterVelocityCaster(this)
+        ));
     }
 
     @Override
