@@ -78,36 +78,12 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
         return Optional.empty();
     }
 
-    // TODO : Don't hardcode values
     @Override
     public void addDefaultSpells() {
 
         spells.add(new FireballCaster(this));
         spells.add(new PhoenixArrowCaster());
         spells.add(new IncendiaCaster());
-        /*spells.add(new SpellCaster.Builder()
-                .withGenerator(WindOfFireSpell::new)
-                .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(120))
-                .withSequence(
-                        ElementType.FIRE, ElementType.FIRE, ElementType.FIRE,
-                        ElementType.EARTH,
-                        ElementType.AIR,
-                        ElementType.EARTH)
-                .build());
-        spells.add(new SpellCaster.Builder()
-                .withGenerator(EarthTowerSpell::new)
-                .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(40))
-                .withSequence(
-                        ElementType.EARTH, ElementType.EARTH, ElementType.EARTH,
-                        ElementType.AIR)
-                .build());
-        spells.add(new SpellCaster.Builder()
-                .withGenerator(GravitySpell::new)
-                .withManaUsage(YggdrasilMath.instantStandardPolynomialFunction(80))
-                .withSequence(
-                        ElementType.EARTH, ElementType.EARTH,
-                        ElementType.AIR, ElementType.AIR)
-                .build());*/
     }
 
     @Override

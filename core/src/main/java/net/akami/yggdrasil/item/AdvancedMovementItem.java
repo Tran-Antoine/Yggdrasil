@@ -67,7 +67,7 @@ public class AdvancedMovementItem implements InteractiveItem {
         } else {
             performJump(target, factor);
             changeItemColor(target, PotionTypes.SLOWNESS);
-            clock.queueItem(this, 60);
+            clock.queueItem(this, 300);
         }
     }
 
