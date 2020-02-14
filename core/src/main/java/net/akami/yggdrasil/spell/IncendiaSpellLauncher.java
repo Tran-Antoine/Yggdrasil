@@ -33,20 +33,20 @@ public class IncendiaSpellLauncher implements SpellLauncher {
             createExplosion(world, explosionRadius, center);
         }
         Task.builder()
-                .delay(700, TimeUnit.MILLISECONDS)
+                .delay(250, TimeUnit.MILLISECONDS)
                 .execute(() -> createFireArea(world, fireRadius, center))
                 .submit(Sponge.getPluginManager().getPlugin("yggdrasil").get());
     }
 
     private void createFireArea(World world, int radius, Vector3d center) {
         Random random = new Random();
-        for(int x = -radius; x <= radius; x++) {
-            for(int y = -5; y <= 5; y++) {
-                for (int z = -radius; z <= radius; z++) {
+        for(int dx = -radius; dx <= radius; dx++) {
+            for(int dy = -10; dy <= 5; dy++) {
+                for (int dz = -radius; dz <= radius; dz++) {
                     Vector3i fireLoc = new Vector3i(
-                            center.getFloorX() + x,
-                            center.getFloorY() + y,
-                            center.getFloorZ() + z);
+                            center.getFloorX() + dx,
+                            center.getFloorY() + dy,
+                            center.getFloorZ() + dz);
                     if(world.getBlockType(fireLoc) == BlockTypes.AIR && random.nextFloat() < 0.6) {
                         world.setBlockType(fireLoc, BlockTypes.FIRE);
                     }

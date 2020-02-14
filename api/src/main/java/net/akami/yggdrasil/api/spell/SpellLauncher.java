@@ -7,7 +7,8 @@ public interface SpellLauncher<SELF extends SpellLauncher<SELF>> {
     void commonLaunch(SpellCreationData<SELF> data, Player caster);
 
     default void launch(SpellCreationData<SELF> data, Player caster) {
+        data.performPreActions(caster, (SELF) this);
         commonLaunch(data, caster);
-        data.performActions(caster, (SELF) this);
+        data.performPostActions(caster, (SELF) this);
     }
 }

@@ -24,7 +24,7 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
 
     @Override
     public void definePreLaunchProperties(Player caster, SpellCreationData<PhoenixArrowLauncher> data) {
-        data.addAction(this::followEnemy);
+        data.addPostAction(this::followEnemy);
         data.setProperty("arrowsCount", 2);
     }
 

@@ -12,7 +12,8 @@ import java.util.function.BiConsumer;
 
 public class SpellCreationData<T extends SpellLauncher> {
 
-    private List<BiConsumer<Player, T>> actions;
+    private List<BiConsumer<Player, T>> preActions;
+    private List<BiConsumer<Player, T>> postActions;
     private PropertyMap propertyMap;
 
     private boolean isStorable;
@@ -20,7 +21,8 @@ public class SpellCreationData<T extends SpellLauncher> {
     private InteractiveItemHandler handler;
 
     public SpellCreationData() {
-        this.actions = new ArrayList<>();
+        this.preActions = new ArrayList<>();
+        this.postActions = new ArrayList<>();
         this.propertyMap = new PropertyMap();
         this.isStorable = false;
     }
@@ -63,8 +65,12 @@ public class SpellCreationData<T extends SpellLauncher> {
         propertyMap.properties.put(name, value);
     }
 
-    public void addAction(BiConsumer<Player, T> action) {
-        actions.add(action);
+    public void addPreAction(BiConsumer<Player, T> action) {
+        preActions.add(action);
+    }
+
+    public void addPostAction(BiConsumer<Player, T> action) {
+        postActions.add(action);
     }
 
     public boolean isStorable() {
@@ -75,8 +81,16 @@ public class SpellCreationData<T extends SpellLauncher> {
         isStorable = storable;
     }
 
-    public void performActions(Player caster, T launcher) {
-        for(BiConsumer<Player, T> consumer : actions) {
+    public void performPreActions(Player caster, T launcher) {
+        performActions(caster, launcher, preActions);
+    }
+
+    public void performPostActions(Player caster, T launcher) {
+        performActions(caster, launcher, postActions);
+    }
+
+    private void performActions(Player caster, T launcher, Iterable<BiConsumer<Player, T>> sequence) {
+        for(BiConsumer<Player, T> consumer : sequence) {
             consumer.accept(caster, launcher);
         }
     }
