@@ -8,37 +8,69 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
-public class SpellCreationData {
+public class SpellCreationData<T extends SpellLauncher> {
 
-    private List<Consumer<Player>> actions;
-    private Map<String, Object> properties;
+    private List<BiConsumer<Player, T>> preActions;
+    private List<BiConsumer<Player, T>> postActions;
+    private PropertyMap propertyMap;
 
     private boolean isStorable;
     private ItemStack item;
     private InteractiveItemHandler handler;
 
     public SpellCreationData() {
-        this.actions = new ArrayList<>();
-        this.properties = new HashMap<>();
+        this.preActions = new ArrayList<>();
+        this.postActions = new ArrayList<>();
+        this.propertyMap = new PropertyMap();
         this.isStorable = false;
     }
 
-    public <T> T getProperty(String name, Class<T> type) {
-        Object result = properties.get(name);
-        if(result != null && type.isAssignableFrom(result.getClass())) {
-            return (T) result;
+    public static class PropertyMap {
+
+        private Map<String, Object> properties;
+
+        private PropertyMap() {
+            this.properties = new HashMap<>();
         }
-        return null;
+
+        public <R> R getProperty(String name, Class<R> type) {
+            Object result = properties.get(name);
+            if(result != null && type.isAssignableFrom(result.getClass())) {
+                return (R) result;
+            }
+            return null;
+        }
+
+        public <R> R getPropertyOrElse(String name, Class<R> type, R orElse) {
+            R result = getProperty(name, type);
+            return result != null ? result : orElse;
+        }
+    }
+
+    public PropertyMap getPropertyMap() {
+        return propertyMap;
+    }
+
+    public boolean hasProperty(String name) {
+        return propertyMap.properties.containsKey(name);
+    }
+
+    public void addProperty(String name) {
+        setProperty(name, null);
     }
 
     public void setProperty(String name, Object value) {
-        properties.put(name, value);
+        propertyMap.properties.put(name, value);
     }
 
-    public void addAction(Consumer<Player> action) {
-        actions.add(action);
+    public void addPreAction(BiConsumer<Player, T> action) {
+        preActions.add(action);
+    }
+
+    public void addPostAction(BiConsumer<Player, T> action) {
+        postActions.add(action);
     }
 
     public boolean isStorable() {
@@ -49,9 +81,17 @@ public class SpellCreationData {
         isStorable = storable;
     }
 
-    public void performActions(Player caster) {
-        for(Consumer<Player> consumer : actions) {
-            consumer.accept(caster);
+    public void performPreActions(Player caster, T launcher) {
+        performActions(caster, launcher, preActions);
+    }
+
+    public void performPostActions(Player caster, T launcher) {
+        performActions(caster, launcher, postActions);
+    }
+
+    private void performActions(Player caster, T launcher, Iterable<BiConsumer<Player, T>> sequence) {
+        for(BiConsumer<Player, T> consumer : sequence) {
+            consumer.accept(caster, launcher);
         }
     }
 

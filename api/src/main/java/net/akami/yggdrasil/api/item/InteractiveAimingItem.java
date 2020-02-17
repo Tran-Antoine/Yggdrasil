@@ -3,9 +3,12 @@ package net.akami.yggdrasil.api.item;
 import com.flowpowered.math.vector.Vector3d;
 import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.input.UUIDHolder;
+import net.akami.yggdrasil.api.utils.ItemUtils;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.projectile.Projectile;
 import org.spongepowered.api.entity.projectile.arrow.Arrow;
 import org.spongepowered.api.entity.projectile.source.ProjectileSource;
@@ -48,16 +51,17 @@ public abstract class InteractiveAimingItem implements InteractiveItem {
         }
         Projectile projectile = (Projectile) entity;
         ProjectileSource shooter = projectile.getShooter();
-        if(!(shooter instanceof Entity)) {
+        if(!(shooter instanceof Player)) {
             return;
         }
-        Entity entityShooter = (Entity) shooter;
-        if(entityShooter.getUniqueId().equals(holder.getUUID()) && arrowID == null) {
-            launched(projectile, entityShooter);
+        Player entityShooter = (Player) shooter;
+        HandType hand = ItemUtils.getMatchingHand(entityShooter, matchingItem());
+        if(hand != null && entityShooter.getUniqueId().equals(holder.getUUID()) && arrowID == null) {
+            launched(projectile);
         }
     }
 
-    private void launched(Projectile projectile, Entity shooter) {
+    private void launched(Projectile projectile) {
         this.world = projectile.getWorld();
         this.arrowID = projectile.getUniqueId();
         ready = false;

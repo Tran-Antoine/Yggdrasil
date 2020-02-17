@@ -9,7 +9,7 @@ public class SpellCaster {
     protected Supplier<Spell> generator;
     protected BiFunction<Float, Integer, Float> manaUsage;
     protected List<ElementType> baseSequence;
-    private List<Integer> locationRequiredTiers = Collections.emptyList();
+    protected List<Integer> locationRequiredTiers = Collections.emptyList();
     private int currentMaxTier = 7;
 
     protected SpellCaster() { }

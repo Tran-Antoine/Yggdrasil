@@ -18,6 +18,10 @@ public class YggdrasilMath {
         return new Vector3d(x, y/1.5, z);
     }
 
+    public static double velocityToFallingDistance(double yVelocity) {
+        return Math.max(2.8 * Math.exp(1.298 * Math.abs(yVelocity)) - 5, 0);
+    }
+
     public static BiFunction<Float, Integer, Float> instantCostFunction(Function<Integer, Float> costPerTier) {
         return (time, tier) -> time == 0 ? costPerTier.apply(tier) : 0f;
     }
