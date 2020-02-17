@@ -22,7 +22,7 @@ public class PhoenixArrowCaster extends AbstractSpellCaster {
         return Arrays.asList(
                 ElementType.FIRE,
                 ElementType.AIR,
-                ElementType.EARTH
+                ElementType.AIR
         );
     }
 

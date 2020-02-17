@@ -29,7 +29,7 @@ public class FireballSpell implements Spell {
                 new FireballDamageTier(2, 3),
                 new FireballDamageTier(2, 4),
                 new StorableSpellTier(fireBall, handler, 1),
-                new FireballDamageTier(2, 4),
+                new FireballDamageTier(2, 4.5),
                 new StorableSpellTier(2),
                 new StorableSpellTier(3));
     }

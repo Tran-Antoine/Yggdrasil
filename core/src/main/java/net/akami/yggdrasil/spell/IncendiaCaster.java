@@ -21,7 +21,8 @@ public class IncendiaCaster extends AbstractSpellCaster {
     protected List<ElementType> loadSequence() {
         return Arrays.asList(
                 ElementType.FIRE,
-                ElementType.FIRE
+                ElementType.FIRE,
+                ElementType.AIR
         );
     }
 

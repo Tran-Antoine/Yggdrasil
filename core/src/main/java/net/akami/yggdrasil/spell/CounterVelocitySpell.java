@@ -24,13 +24,13 @@ public class CounterVelocitySpell implements Spell {
     @Override
     public List<SpellTier> getTiers() {
         return Arrays.asList(
-                new CounterVelocityMaxTier(2),
-                new CounterVelocityMaxTier(2.5),
-                new CounterVelocityMaxTier(3),
-                new StorableSpellTier(item, handler, 1),
-                new CounterVelocityMaxTier(3.5),
+                new CounterVelocityMaxTier(1),
+                new CounterVelocityMaxTier(1.6),
+                new CounterVelocityMaxTier(2.2),
                 new CounterVelocityPushBackTier(),
-                new StorableSpellTier(2)
+                new CounterVelocityMaxTier(2.6),
+                new StorableSpellTier(item, handler, 2),
+                new StorableSpellTier(3)
         );
     }
 

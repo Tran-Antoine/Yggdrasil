@@ -6,6 +6,7 @@ import net.akami.yggdrasil.api.mana.ManaContainer;
 import net.akami.yggdrasil.api.player.AbstractYggdrasilPlayer;
 import net.akami.yggdrasil.api.spell.ElementType;
 import net.akami.yggdrasil.api.spell.SpellCaster;
+import net.akami.yggdrasil.api.utils.ItemUtils;
 import net.akami.yggdrasil.item.*;
 import net.akami.yggdrasil.life.PlayerLifeComponent;
 import net.akami.yggdrasil.mana.PlayerManaContainer;
@@ -15,8 +16,6 @@ import net.akami.yggdrasil.spell.IncendiaCaster;
 import net.akami.yggdrasil.spell.PhoenixArrowCaster;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.item.inventory.ItemStack;
-import org.spongepowered.api.item.inventory.Slot;
 
 import java.util.*;
 
@@ -61,22 +60,9 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
 
     private void fill(Player target) {
         target.getInventory().clear();
-        Iterator<Slot> slots = target.getInventory().<Slot>slots().iterator();
-        for(InteractiveItem interactiveItem : items) {
-            ItemStack item = interactiveItem.matchingItem();
-            Optional<Slot> freeSlot = findSlot(slots, item);
-            freeSlot.ifPresent((slot) -> slot.set(item));
+        for(InteractiveItem item : items) {
+            ItemUtils.fitItemInInventory(target, item);
         }
-    }
-
-    private Optional<Slot> findSlot(Iterator<Slot> slots, ItemStack item) {
-        while (slots.hasNext()) {
-            Slot current = slots.next();
-            if (current.canFit(item)) {
-                return Optional.of(current);
-            }
-        }
-        return Optional.empty();
     }
 
     @Override
