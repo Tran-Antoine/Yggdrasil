@@ -13,7 +13,7 @@ public class CounterVelocityLauncher implements SpellLauncher {
     private Vector3d counteredVelocity;
 
     @Override
-    public void commonLaunch(SpellCreationData data, Player caster) {
+    public LaunchResult commonLaunch(SpellCreationData data, Player caster) {
         Vector3d currentVelocity = caster.getVelocity();
         PropertyMap map = data.getPropertyMap();
         double maxVelocityCountered = map.getProperty("max_velocity_countered", Double.class);
@@ -24,6 +24,7 @@ public class CounterVelocityLauncher implements SpellLauncher {
         caster.setVelocity(currentVelocity.sub(counteredVelocity));
         float fakeFallingDistance = (float) YggdrasilMath.velocityToFallingDistance(caster.getVelocity().getY());
         caster.offer(Keys.FALL_DISTANCE, fakeFallingDistance);
+        return LaunchResult.SUCCESS;
     }
 
     public Vector3d getCounteredVelocity() {

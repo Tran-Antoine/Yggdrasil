@@ -13,10 +13,12 @@ public abstract class AbstractSpellCaster extends SpellCaster {
         super.baseSequence = loadSequence();
         super.manaUsage = loadManaUsage();
         super.locationRequiredTiers = loadLocationRequiredTiers();
+        super.spellType = loadSpellType();
     }
 
     protected abstract Supplier<Spell> loadGenerator();
     protected abstract List<ElementType> loadSequence();
     protected abstract BiFunction<Float, Integer, Float> loadManaUsage();
     protected List<Integer> loadLocationRequiredTiers() { return Collections.emptyList(); }
+    protected SpellType loadSpellType() { return SpellType.UNDEFINED; }
 }

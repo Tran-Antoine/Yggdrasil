@@ -1,6 +1,7 @@
 package net.akami.yggdrasil.api.spell;
 
 import net.akami.yggdrasil.api.item.InteractiveItemHandler;
+import net.akami.yggdrasil.api.spell.SpellCaster.SpellType;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.Predicate;
 
 public class SpellCreationData<T extends SpellLauncher> {
 
@@ -43,8 +45,8 @@ public class SpellCreationData<T extends SpellLauncher> {
             return null;
         }
 
-        public <R> R getPropertyOrElse(String name, Class<R> type, R orElse) {
-            R result = getProperty(name, type);
+        public <R> R getPropertyOrElse(String name, R orElse) {
+            R result = (R) getProperty(name, orElse.getClass());
             return result != null ? result : orElse;
         }
     }
@@ -93,6 +95,14 @@ public class SpellCreationData<T extends SpellLauncher> {
         for(BiConsumer<Player, T> consumer : sequence) {
             consumer.accept(caster, launcher);
         }
+    }
+
+    public void excludeTargetSpells(MagicUser user) {
+        PropertyMap map = getPropertyMap();
+        ExcludedSpellHandler spellHandler = user.getExclusionHandler();
+        SpellType excluded = map.getPropertyOrElse("excluded_type", SpellType.NONE);
+        Predicate<MagicUser> condition = map.getPropertyOrElse("exclusion_condition", (m) -> false);
+        spellHandler.removeExcludingType(excluded, condition);
     }
 
     public ItemStack getItem() {

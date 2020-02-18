@@ -21,12 +21,12 @@ import java.util.concurrent.TimeUnit;
 public class IncendiaSpellLauncher implements SpellLauncher {
 
     @Override
-    public void commonLaunch(SpellCreationData data, Player caster) {
+    public LaunchResult commonLaunch(SpellCreationData data, Player caster) {
 
         PropertyMap map = data.getPropertyMap();
         Vector3d center = map.getProperty("location", Vector3d.class);
         int fireRadius = map.getProperty("radius", Integer.class);
-        int explosionRadius = map.getPropertyOrElse("explosion_radius", Integer.class, 0);
+        int explosionRadius = map.getPropertyOrElse("explosion_radius", 0);
         World world = caster.getWorld();
 
         if(explosionRadius != 0) {
@@ -36,6 +36,7 @@ public class IncendiaSpellLauncher implements SpellLauncher {
                 .delay(250, TimeUnit.MILLISECONDS)
                 .execute(() -> createFireArea(world, fireRadius, center))
                 .submit(Sponge.getPluginManager().getPlugin("yggdrasil").get());
+        return LaunchResult.SUCCESS;
     }
 
     private void createFireArea(World world, int radius, Vector3d center) {
