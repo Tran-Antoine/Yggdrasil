@@ -10,7 +10,7 @@ public interface SpellLauncher<SELF extends SpellLauncher<SELF>> {
         data.performPreActions(caster, (SELF) this);
         LaunchResult result = commonLaunch(data, caster);
         if(result == LaunchResult.SUCCESS) {
-            data.excludeTargetSpells(user);
+            data.excludeTargetSpells(user, (SELF) this);
             data.performPostActions(caster, (SELF) this);
         }
     }

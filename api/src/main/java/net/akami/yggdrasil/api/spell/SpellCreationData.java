@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.function.Predicate;
+import java.util.function.BiPredicate;
 
 public class SpellCreationData<T extends SpellLauncher> {
 
@@ -97,12 +97,12 @@ public class SpellCreationData<T extends SpellLauncher> {
         }
     }
 
-    public void excludeTargetSpells(MagicUser user) {
+    public void excludeTargetSpells(MagicUser user, T launcher) {
         PropertyMap map = getPropertyMap();
         ExcludedSpellHandler spellHandler = user.getExclusionHandler();
         SpellType excluded = map.getPropertyOrElse("excluded_type", SpellType.NONE);
-        Predicate<MagicUser> condition = map.getPropertyOrElse("exclusion_condition", (m) -> false);
-        spellHandler.removeExcludingType(excluded, condition);
+        BiPredicate<T, MagicUser> condition = map.getPropertyOrElse("exclusion_condition", (t,m) -> false);
+        spellHandler.addExcludingType(excluded, launcher, condition);
     }
 
     public ItemStack getItem() {
