@@ -6,27 +6,28 @@ import org.spongepowered.api.effect.sound.SoundType;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.schematic.Schematic;
 
-import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class StructureBuilder implements Consumer<Task> {
 
-    private List<List<List<BlockState>>> blocks;
+    private Schematic schematic;
     private Location<World> startLocation;
     private int speed;
-    private int currentX, currentY, currentZ = 0;
+    private int currentX, currentY, currentZ;
     private Function<BlockState, SoundType> soundFunction;
 
-    public StructureBuilder(List<List<List<BlockState>>> blocks, Location<World> startLocation, int speed, Function<BlockState, SoundType> soundFunction) {
-        this.blocks = blocks;
+    public StructureBuilder(Schematic blocks, Location<World> startLocation, int speed, Function<BlockState, SoundType> soundFunction) {
+        this.schematic = blocks;
         this.startLocation = startLocation;
         this.speed = speed;
         this.soundFunction = soundFunction;
+        reset();
     }
 
-    public StructureBuilder(List<List<List<BlockState>>> blocks, Location<World> startLocation, int speed) {
+    public StructureBuilder(Schematic blocks, Location<World> startLocation, int speed) {
         this(blocks, startLocation, speed, SOUND_PLACE);
     }
 
@@ -34,30 +35,37 @@ public class StructureBuilder implements Consumer<Task> {
     public void accept(Task task) {
         for(int i = 0; i < speed; i++) {
 
-            if(currentZ == blocks.get(currentX).get(currentY).size()) {
-                currentZ = 0;
-                currentY++;
-                if(currentY == blocks.get(currentX).size()) {
-                    currentY = 0;
-                    currentX++;
-                    if(currentX == blocks.size()) {
+            if(currentZ >= schematic.getBlockMax().getZ()) {
+                currentZ = schematic.getBlockMin().getZ();
+                currentX++;
+                if(currentX >= schematic.getBlockMax().getX()) {
+                    currentX = schematic.getBlockMin().getX();
+                    currentY++;
+                    if(currentY >= schematic.getBlockMax().getY()) {
                         task.cancel();
                         return;
                     }
                 }
             }
-            BlockState blockState = blocks.get(currentX).get(currentY).get(currentZ);
+            BlockState blockState = schematic.getBlock(currentX, currentY, currentZ);
             currentZ++;
             if(blockState.getType() == BlockTypes.AIR) continue;
-            startLocation.copy()
+            Location<World> newLocation = startLocation.copy()
                     .add(currentX, currentY, currentZ)
-                    .setBlock(blockState);
-            startLocation.getExtent().playSound(blockState.getType().getSoundGroup().getPlaceSound(), startLocation.getPosition(), 1);
+                    .sub(schematic.getBlockMin())
+                    .sub(schematic.getBlockSize().getX() / 2.0, 0, schematic.getBlockSize().getZ() / 2.0);
+            newLocation.setBlock(blockState);
+            onBlockPlace(newLocation, blockState);
+            startLocation.getExtent().playSound(soundFunction.apply(blockState), startLocation.getPosition(), 1);
         }
     }
 
-    public List<List<List<BlockState>>> getBlocks() {
-        return blocks;
+    public void onBlockPlace(Location<World> location, BlockState blockState) {
+
+    }
+
+    public Schematic getSchematic() {
+        return schematic;
     }
 
     public int getSpeed() {
@@ -89,7 +97,9 @@ public class StructureBuilder implements Consumer<Task> {
     }
 
     public void reset() {
-        currentX = currentY = currentZ = 0;
+        this.currentX = schematic.getBlockMin().getX();
+        this.currentY = schematic.getBlockMin().getY();
+        this.currentZ = schematic.getBlockMin().getZ();
     }
 
     public static final Function<BlockState, SoundType> SOUND_PLACE = blockState -> blockState.getType().getSoundGroup().getPlaceSound();
