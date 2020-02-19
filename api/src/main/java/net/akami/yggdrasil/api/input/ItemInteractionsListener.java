@@ -4,11 +4,12 @@ import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.item.InteractiveItemHandler;
 import net.akami.yggdrasil.api.item.InteractiveItemUser;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.gamemode.GameModes;
+import org.spongepowered.api.event.Event;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.action.InteractEvent;
+import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent;
@@ -31,13 +32,13 @@ public class ItemInteractionsListener {
     @Listener
     public void onInteract(InteractItemEvent.Primary event) {
         ItemStack item = event.getItemStack().createStack();
-        getHandler(event).ifPresent((handler) -> handler.leftClick(item, event, clock));
+        getHandler(event).ifPresent((handler) -> handler.leftClick(item, CancellableEvent.of(event), clock));
     }
 
     @Listener
     public void onInteract(InteractItemEvent.Secondary event) {
         ItemStack item = event.getItemStack().createStack();
-        getHandler(event).ifPresent((handler) -> handler.rightClick(item, event, clock));
+        getHandler(event).ifPresent((handler) -> handler.rightClick(item, CancellableEvent.of(event), clock));
     }
 
     @Listener
@@ -48,23 +49,20 @@ public class ItemInteractionsListener {
         }
         Optional<ItemStack> optItem = getItem(event);
         optItem.ifPresent((item) ->
-                getHandler(event).ifPresent((handler) -> handler.leftClick(item, event, clock)));
+                getHandler(event).ifPresent((handler) -> handler.leftClick(item, CancellableEvent.of(event), clock)));
     }
 
     @Listener
-    public void onInteract(InteractBlockEvent.Secondary event) {
-        Optional<ItemStack> optItem = getItem(event);
-        if(!optItem.isPresent()) {
-            return;
-        }
-        ItemStack item = optItem.get();
-        if(!item.get(Keys.ITEM_BLOCKSTATE).isPresent()) {
-            return;
-        }
-        getHandler(event).ifPresent((handler) -> handler.rightClick(item, event, clock));
+    public void onChangeBlock(ChangeBlockEvent.Place event) {
+        getItem(event).ifPresent(item -> getHandler(event).ifPresent(handler -> {
+            handler.rightClick(item, CancellableEvent.of(event), clock);
+            if(event.getCause().first(Player.class).map(player -> player.gameMode().get() != GameModes.CREATIVE).orElse(false)) {
+                event.getTransactions().forEach(transaction -> transaction.setValid(false));
+            }
+        }));
     }
 
-    private Optional<ItemStack> getItem(InteractBlockEvent event) {
+    private Optional<ItemStack> getItem(Event event) {
         Cause cause = event.getCause();
         Optional<Player> optPlayer = cause.first(Player.class);
         if(!optPlayer.isPresent()) {
@@ -74,7 +72,7 @@ public class ItemInteractionsListener {
         return player.getItemInHand(HandTypes.MAIN_HAND);
     }
 
-    private Optional<InteractiveItemHandler> getHandler(InteractEvent event) {
+    private Optional<InteractiveItemHandler> getHandler(Event event) {
         Cause cause = event.getCause();
         Optional<Player> potentialTarget = cause.first(Player.class);
         if(!potentialTarget.isPresent()) {
@@ -84,4 +82,5 @@ public class ItemInteractionsListener {
         InteractiveItemHandler handler = UUIDHolder.getByUUID(users, playerID);
         return Optional.ofNullable(handler);
     }
+
 }

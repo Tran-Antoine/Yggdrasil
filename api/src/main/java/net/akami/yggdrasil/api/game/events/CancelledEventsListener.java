@@ -55,7 +55,6 @@ public class CancelledEventsListener {
         event
                 .filterEntities(entity -> entity.getType() != EntityTypes.EXPERIENCE_ORB)
                 .forEach(Entity::remove);
-
     }
 
     @Listener(order = Order.LAST)
@@ -65,9 +64,9 @@ public class CancelledEventsListener {
 
     @Listener(order = Order.LAST)
     public void onItemSpawned(SpawnEntityEvent event) {
-        event.
-                filterEntities(entity -> entity.getType() != EntityTypes.ITEM)
-                .forEach(Entity::remove);
+        /*event.getEntities().stream()
+                .filter(entity -> entity.getType() == EntityTypes.ITEM && !entity.get(YggdrasilKeys.PERSISTENT).orElse(false))
+        .forEach(Entity::remove);*/
     }
     // TODO : add hit, craft, use anvils, enchantment tables
 }
