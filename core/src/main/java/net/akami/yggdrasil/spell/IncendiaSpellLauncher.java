@@ -18,7 +18,7 @@ import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class IncendiaSpellLauncher implements SpellLauncher {
+public class IncendiaSpellLauncher implements SpellLauncher<IncendiaSpellLauncher> {
 
     @Override
     public LaunchResult commonLaunch(SpellCreationData data, Player caster) {

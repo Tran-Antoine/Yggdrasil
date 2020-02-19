@@ -8,7 +8,7 @@ import net.akami.yggdrasil.api.utils.YggdrasilMath;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
 
-public class CounterVelocityLauncher implements SpellLauncher {
+public class CounterVelocityLauncher implements SpellLauncher<CounterVelocityLauncher> {
 
     private Vector3d counteredVelocity;
 
