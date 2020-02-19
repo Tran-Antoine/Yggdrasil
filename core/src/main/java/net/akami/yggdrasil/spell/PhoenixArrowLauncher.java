@@ -92,7 +92,7 @@ public class PhoenixArrowLauncher implements SpellLauncher<PhoenixArrowLauncher>
 
         double velocityFactor = 1.3;
         Vector3d arrowDirection = dir.mul(velocityFactor);
-
+        
         arrow.offer(Keys.VELOCITY, arrowDirection);
         arrow.offer(Keys.ACCELERATION, arrowDirection.mul(0.1));
         arrow.offer(Keys.FIRE_TICKS, 100000);

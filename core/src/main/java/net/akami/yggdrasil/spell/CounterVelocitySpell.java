@@ -26,9 +26,9 @@ public class CounterVelocitySpell implements Spell {
         return Arrays.asList(
                 new CounterVelocityMaxTier(1),
                 new CounterVelocityMaxTier(1.6),
-                new CounterVelocityMaxTier(2.2),
+                new CounterVelocityMaxTier(2),
                 new CounterVelocityPushBackTier(),
-                new CounterVelocityMaxTier(2.6),
+                new CounterVelocityMaxTier(2.3),
                 new StorableSpellTier(item, handler, 2),
                 new StorableSpellTier(3)
         );
