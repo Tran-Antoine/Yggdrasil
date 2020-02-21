@@ -1,13 +1,13 @@
 package net.akami.yggdrasil.api.item;
 
 import net.akami.yggdrasil.api.game.task.GameItemClock;
+import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.spell.MagicUser;
 import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellLauncher;
 import net.akami.yggdrasil.api.utils.ItemUtils;
 import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
 
 public class LaunchableSpellItem implements InteractiveItem {
@@ -30,10 +30,11 @@ public class LaunchableSpellItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(InteractEvent event, GameItemClock clock) { }
+    public void onLeftClicked(CancellableEvent<?> event, GameItemClock clock) {
+    }
 
     @Override
-    public void onRightClicked(InteractEvent event, GameItemClock clock) {
+    public void onRightClicked(CancellableEvent<?> event, GameItemClock clock) {
         Player player = event.getCause().first(Player.class).get();
         HandType chosen = ItemUtils.getMatchingHand(player, this.modelItem);
 

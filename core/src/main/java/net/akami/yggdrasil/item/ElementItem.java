@@ -14,7 +14,6 @@ import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleOptions;
 import org.spongepowered.api.effect.particle.ParticleType;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
@@ -47,13 +46,13 @@ public abstract class ElementItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(InteractEvent event, GameItemClock clock) {
+    public void onLeftClicked(CancellableEvent<?> event, GameItemClock clock) {
         click();
         event.setCancelled(true);
     }
 
     @Override
-    public void onRightClicked(InteractEvent event, GameItemClock clock) {
+    public void onRightClicked(CancellableEvent<?> event, GameItemClock clock) {
 
     }
 

@@ -2,13 +2,13 @@ package net.akami.yggdrasil.item;
 
 import com.flowpowered.math.vector.Vector3d;
 import net.akami.yggdrasil.api.game.task.GameItemClock;
+import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.item.InteractiveAimingItem;
 import net.akami.yggdrasil.api.spell.MagicUser;
 import net.akami.yggdrasil.api.spell.Spell;
 import net.akami.yggdrasil.api.spell.SpellCastContext;
 import net.akami.yggdrasil.api.spell.SpellCaster;
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentTypes;
@@ -56,13 +56,13 @@ public class SpellTriggerItem extends InteractiveAimingItem {
     }
 
     @Override
-    public void onRightClicked(InteractEvent event, GameItemClock clock) {
+    public void onRightClicked(CancellableEvent<?> event, GameItemClock clock) {
         if(!aimlessSpell(event)) {
             super.onRightClicked(event, clock);
         }
     }
 
-    private boolean aimlessSpell(InteractEvent event) {
+    private boolean aimlessSpell(CancellableEvent<?> event) {
 
         if(!ready) {
             return false;
@@ -71,7 +71,7 @@ public class SpellTriggerItem extends InteractiveAimingItem {
 
         if(optResult.isPresent()) {
             SpellCastContext result = optResult.get();
-            if (!result.requiresLocation()) {
+            if(!result.requiresLocation()) {
                 user.clearSequence();
                 applyEffect(null, result);
                 event.setCancelled(true);
