@@ -5,7 +5,7 @@ import net.akami.yggdrasil.api.spell.SpellLauncher;
 import net.akami.yggdrasil.api.spell.SpellTier;
 import org.spongepowered.api.entity.living.player.Player;
 
-public class SpellRadiusTier<T extends SpellLauncher<?>> implements SpellTier<T> {
+public class SpellRadiusTier<T extends SpellLauncher<T>> implements SpellTier<T> {
 
     private int radius;
 
