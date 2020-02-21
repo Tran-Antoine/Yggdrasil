@@ -19,7 +19,6 @@ public class IncendiaCraterTier implements SpellTier<IncendiaSpellLauncher> {
     public void definePreLaunchProperties(Player caster, SpellCreationData<IncendiaSpellLauncher> data) {
         this.data = data;
         data.addPreAction((futureCaster, launcher) -> makeCrater(futureCaster));
-        //data.setProperty("explosion_radius", 0); // For testing only
     }
 
     private void makeCrater(Player caster) {

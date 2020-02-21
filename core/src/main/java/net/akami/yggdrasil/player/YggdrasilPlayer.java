@@ -10,10 +10,7 @@ import net.akami.yggdrasil.api.utils.ItemUtils;
 import net.akami.yggdrasil.item.*;
 import net.akami.yggdrasil.life.PlayerLifeComponent;
 import net.akami.yggdrasil.mana.PlayerManaContainer;
-import net.akami.yggdrasil.spell.CounterVelocityCaster;
-import net.akami.yggdrasil.spell.FireballCaster;
-import net.akami.yggdrasil.spell.IncendiaCaster;
-import net.akami.yggdrasil.spell.PhoenixArrowCaster;
+import net.akami.yggdrasil.spell.*;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 
@@ -71,7 +68,8 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
                 new FireballCaster(this),
                 new PhoenixArrowCaster(),
                 new IncendiaCaster(),
-                new CounterVelocityCaster(this)
+                new CounterVelocityCaster(this),
+                new WaterPrisonCaster()
         ));
     }
 
