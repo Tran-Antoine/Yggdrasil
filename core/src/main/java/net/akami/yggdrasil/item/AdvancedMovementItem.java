@@ -67,7 +67,7 @@ public class AdvancedMovementItem implements InteractiveItem {
         } else {
             performJump(target, factor);
             changeItemColor(target, PotionTypes.SLOWNESS);
-            clock.queueItem(this, 60);
+            clock.queueItem(this, 300);
         }
     }
 
@@ -76,7 +76,7 @@ public class AdvancedMovementItem implements InteractiveItem {
         target.setVelocity(this.nextDirection.mul(factor).add(targetVelocity).div(1, 1.4, 1));
         double yVelocity = - target.getVelocity().getY();
         if(!target.isOnGround()) {
-            target.offer(Keys.FALL_DISTANCE, (float) Math.max(2.8 * Math.exp(1.298 * yVelocity) - 5, 0));
+            target.offer(Keys.FALL_DISTANCE, (float) YggdrasilMath.velocityToFallingDistance(yVelocity));
         }
         this.nextDirection = null;
     }

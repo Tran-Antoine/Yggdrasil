@@ -9,17 +9,11 @@ public class SpellCaster {
     protected Supplier<Spell> generator;
     protected BiFunction<Float, Integer, Float> manaUsage;
     protected List<ElementType> baseSequence;
-    private List<Integer> locationRequiredTiers = Collections.emptyList();
+    protected List<Integer> locationRequiredTiers = Collections.emptyList();
+    protected SpellType spellType;
     private int currentMaxTier = 7;
 
     protected SpellCaster() { }
-
-    public SpellCaster(Supplier<Spell> generator, BiFunction<Float, Integer, Float> manaUsage,
-                       List<ElementType> sequence) {
-        this.generator = generator;
-        this.manaUsage = manaUsage;
-        this.baseSequence = sequence;
-    }
 
     public void enhance() {
         if (currentMaxTier < 7) {
@@ -60,6 +54,18 @@ public class SpellCaster {
         return generator.get();
     }
 
+    public SpellType getSpellType() {
+        return spellType;
+    }
+
+    public enum SpellType {
+        OFFENSIVE,
+        DEFENSIVE,
+        MOTION,
+        UNDEFINED,
+        NONE
+    }
+
     public static class Builder {
 
         private SpellCaster caster;
@@ -89,6 +95,11 @@ public class SpellCaster {
 
         public Builder withLocationRequiredTiers(Integer... tiers) {
             caster.locationRequiredTiers = Arrays.asList(tiers);
+            return this;
+        }
+
+        public Builder withSpellType(SpellType spellType) {
+            caster.spellType = spellType;
             return this;
         }
 

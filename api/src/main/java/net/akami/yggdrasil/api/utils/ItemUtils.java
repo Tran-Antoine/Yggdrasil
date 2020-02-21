@@ -21,23 +21,33 @@ public class ItemUtils {
     }
 
     public static void fitItem(Player player, InteractiveItemHandler handler, InteractiveItem item) {
+        if(fitItemInInventory(player, item)) {
+            handler.addItem(item);
+        }
+    }
+
+    public static boolean fitItemInInventory(Player player, InteractiveItem item) {
         if(item == null) {
             throw new IllegalStateException("Cannot add null item to inventory");
         }
         ItemStack itemToProvide = item.matchingItem();
         for(Slot slot : player.getInventory().<Slot>slots()) {
-            if(slot.canFit(itemToProvide)) {
-                handler.addItem(item);
+            if(slot.size() == 0) {
                 slot.set(itemToProvide);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     public static HandType getMatchingHand(Player target, ItemStack item) {
         Optional<ItemStack> optItem = target.getItemInHand(HandTypes.MAIN_HAND);
+        if(optItem.isPresent() && ItemStackComparators.IGNORE_SIZE.compare(optItem.get(), item) == 0) {
+            return HandTypes.MAIN_HAND;
+        }
+        optItem = target.getItemInHand(HandTypes.OFF_HAND);
         return optItem.isPresent() && ItemStackComparators.IGNORE_SIZE.compare(optItem.get(), item) == 0
-                ? HandTypes.MAIN_HAND
-                : HandTypes.OFF_HAND;
+                ? HandTypes.OFF_HAND
+                : null;
     }
 }

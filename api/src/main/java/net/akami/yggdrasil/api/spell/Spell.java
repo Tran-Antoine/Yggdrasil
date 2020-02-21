@@ -4,37 +4,40 @@ import com.flowpowered.math.vector.Vector3d;
 import net.akami.yggdrasil.api.item.InteractiveItemHandler;
 import net.akami.yggdrasil.api.item.LaunchableSpellItem;
 import net.akami.yggdrasil.api.utils.ItemUtils;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 
 import java.util.List;
 
-public interface Spell {
+public interface Spell<T extends SpellLauncher<T>> {
 
-    List<SpellTier> getTiers();
-    SpellLauncher getLauncher();
+    List<SpellTier<T>> getTiers();
+    T getLauncher();
 
-    default SpellTier getTier(int tier) {
+    default SpellTier<T> getTier(int tier) {
         return getTiers().get(tier);
     }
 
-    default void cast(Player player, Vector3d location, int tier) {
-        SpellCreationData data = new SpellCreationData();
+    default void cast(MagicUser user, Vector3d location, int tier) {
+
+        Player wizard = Sponge.getServer().getPlayer(user.getUUID()).get();
+
+        SpellCreationData<T> data = new SpellCreationData<>();
         data.setProperty("location", location);
 
         for(int i = 0; i < tier; i++) {
-            SpellTier spellTier = getTier(i);
-            spellTier.definePreLaunchProperties(player, data);
+            SpellTier<T> spellTier = getTier(i);
+            spellTier.definePreLaunchProperties(wizard, data);
         }
 
-        SpellLauncher launcher = this.getLauncher();
+        T launcher = this.getLauncher();
 
         if(data.isStorable()) {
-            LaunchableSpellItem item = new LaunchableSpellItem(data.getItem(), data, launcher);
+            LaunchableSpellItem item = new LaunchableSpellItem(data.getItem(), data, launcher, user);
             InteractiveItemHandler handler = data.getHandler();
-            ItemUtils.fitItem(player, handler, item);
+            ItemUtils.fitItem(wizard, handler, item);
         } else {
-            launcher.launch(data, player);
+            launcher.launch(data, wizard, user);
         }
-
     }
 }
