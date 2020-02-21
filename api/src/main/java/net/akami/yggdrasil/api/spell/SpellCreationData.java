@@ -39,6 +39,10 @@ public class SpellCreationData<T extends SpellLauncher<T>> {
             this.properties = new HashMap<>();
         }
 
+        public Object getProperty(String name) {
+            return properties.get(name);
+        }
+
         public <R> R getProperty(String name, Class<R> type) {
             Object result = properties.get(name);
             if(result != null && type.isAssignableFrom(result.getClass())) {
@@ -100,9 +104,12 @@ public class SpellCreationData<T extends SpellLauncher<T>> {
     }
 
     public void excludeTargetSpells(MagicUser user, T launcher) {
+
         PropertyMap map = getPropertyMap();
         ExcludedSpellHandler spellHandler = user.getExclusionHandler();
-        BiPredicate<T, MagicUser> condition = map.getPropertyOrElse("exclusion_condition", (t,m) -> false);
+        BiPredicate<T, MagicUser> condition = (BiPredicate<T, MagicUser>) map.getProperty("exclusion_condition");
+        if(condition == null) return;
+
         this.excluded_type = map.getPropertyOrElse("excluded_type", SpellType.NONE);
         this.caster = user;
         this.deprivedUsers = spellHandler.addExcludingType(excluded_type, launcher, condition);

@@ -16,8 +16,9 @@ public class DefenseDepriverLauncherTest implements SpellLauncher<DefenseDeprive
 
     @Override
     public LaunchResult commonLaunch(SpellCreationData<DefenseDepriverLauncherTest> data, Player caster) {
+        System.out.println("Spell launched");
         BiPredicate<DefenseDepriverLauncherTest, MagicUser> condition = (launcher, other) -> areEntitiesNear(caster, other);
-        data.setProperty("excluded_type", SpellType.DEFENSIVE);
+        data.setProperty("excluded_type", SpellType.OFFENSIVE);
         data.setProperty("exclusion_condition", condition);
         scheduleRestoringTask(data);
         return LaunchResult.SUCCESS;
@@ -33,9 +34,12 @@ public class DefenseDepriverLauncherTest implements SpellLauncher<DefenseDeprive
     private boolean areEntitiesNear(Player a, MagicUser target) {
         Optional<Player> optPlayer = Sponge.getServer().getPlayer(target.getUUID());
         if(!optPlayer.isPresent()) {
+            System.out.println("Player target not present");
             return false;
         }
         Player b = optPlayer.get();
+        System.out.println(a.getUniqueId());
+        System.out.println(b.getUniqueId());
         return a.getPosition().distance(b.getLocation().getPosition()) <= 10;
     }
 }

@@ -1,20 +1,20 @@
-package net.akami.yggdrasil.spell;
+package net.akami.yggdrasil.api.spell;
 
 import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellLauncher;
 import net.akami.yggdrasil.api.spell.SpellTier;
 import org.spongepowered.api.entity.living.player.Player;
 
-public class SpellTimeTier<T extends SpellLauncher<T>> implements SpellTier<T> {
+public class SpellRadiusTier<T extends SpellLauncher<T>> implements SpellTier<T> {
 
-    private long time;
+    private int radius;
 
-    public SpellTimeTier(long time) {
-        this.time = time;
+    public SpellRadiusTier(int radius) {
+        this.radius = radius;
     }
 
     @Override
     public void definePreLaunchProperties(Player caster, SpellCreationData<T> data) {
-        data.setProperty("time", time);
+        data.setProperty("radius", radius);
     }
 }
