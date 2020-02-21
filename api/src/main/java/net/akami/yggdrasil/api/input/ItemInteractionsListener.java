@@ -5,7 +5,9 @@ import net.akami.yggdrasil.api.item.InteractiveItemHandler;
 import net.akami.yggdrasil.api.item.InteractiveItemUser;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.type.HandTypes;
+import org.spongepowered.api.data.value.mutable.Value;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.gamemode.GameMode;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Event;
 import org.spongepowered.api.event.Listener;
@@ -54,10 +56,16 @@ public class ItemInteractionsListener {
 
     @Listener
     public void onChangeBlock(ChangeBlockEvent.Place event) {
-        getItem(event).ifPresent(item -> getHandler(event).ifPresent(handler -> {
-            handler.rightClick(item, CancellableEvent.of(event), clock);
-            if(event.getCause().first(Player.class).map(player -> player.gameMode().get() != GameModes.CREATIVE).orElse(false)) {
-                event.getTransactions().forEach(transaction -> transaction.setValid(false));
+        getItem(event).ifPresent(item -> getHandler(event).ifPresent(handler -> { //If item and handler are present
+
+            handler.rightClick(item, CancellableEvent.of(event), clock); //Trigger rightClick
+
+            Value<GameMode> playerMode = event.getCause()
+                    .first(Player.class)
+                    .map(Player::gameMode).get();
+
+            if(playerMode.get() != GameModes.CREATIVE) { //If the Player mode isn't CREATIVE
+                event.getTransactions().forEach(transaction -> transaction.setValid(false)); //Could be better. This also cancels item changes.
             }
         }));
     }
