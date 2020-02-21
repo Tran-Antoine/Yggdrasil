@@ -6,6 +6,7 @@ group 'net.akami.yggdrasil.core'
 
 dependencies {
     compile project(':api')
+    testCompile 'org.spongepowered:spongeapi:7.1.0'
 }
 
 jar {
