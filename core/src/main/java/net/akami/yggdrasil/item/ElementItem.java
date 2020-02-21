@@ -1,6 +1,7 @@
 package net.akami.yggdrasil.item;
 
 import com.flowpowered.math.vector.Vector3d;
+import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.item.InteractiveItem;
 import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.spell.ElementType;
