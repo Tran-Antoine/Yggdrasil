@@ -8,10 +8,7 @@ import net.akami.yggdrasil.api.spell.MagicUser;
 import net.akami.yggdrasil.api.spell.Spell;
 import net.akami.yggdrasil.api.spell.SpellCastContext;
 import net.akami.yggdrasil.api.spell.SpellCaster;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.event.Cancellable;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentTypes;
@@ -65,7 +62,7 @@ public class SpellTriggerItem extends InteractiveAimingItem {
         }
     }
 
-    private boolean aimlessSpell(Cancellable event) {
+    private boolean aimlessSpell(CancellableEvent<?> event) {
 
         if(!ready) {
             return false;
@@ -94,8 +91,7 @@ public class SpellTriggerItem extends InteractiveAimingItem {
     private void castSpell(SpellCaster caster, Vector3d location, int tier) {
         user.getMana().ifEnoughMana(caster.getCastingCost(tier), () -> {
             Spell spell = caster.createSpell();
-            Player wizard = Sponge.getServer().getPlayer(user.getUUID()).get();
-            spell.cast(wizard, location, tier);
+            spell.cast(user, location, tier);
         });
     }
 
