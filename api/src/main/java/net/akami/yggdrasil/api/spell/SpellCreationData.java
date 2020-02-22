@@ -1,16 +1,16 @@
 package net.akami.yggdrasil.api.spell;
 
 import net.akami.yggdrasil.api.item.InteractiveItemHandler;
+import net.akami.yggdrasil.api.spell.SpellCaster.SpellType;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
-public class SpellCreationData<T extends SpellLauncher> {
+public class SpellCreationData<T extends SpellLauncher<T>> {
 
     private List<BiConsumer<Player, T>> preActions;
     private List<BiConsumer<Player, T>> postActions;
@@ -19,6 +19,9 @@ public class SpellCreationData<T extends SpellLauncher> {
     private boolean isStorable;
     private ItemStack item;
     private InteractiveItemHandler handler;
+    private Set deprivedUsers;
+    private MagicUser caster;
+    private SpellType excluded_type;
 
     public SpellCreationData() {
         this.preActions = new ArrayList<>();
@@ -27,12 +30,17 @@ public class SpellCreationData<T extends SpellLauncher> {
         this.isStorable = false;
     }
 
+
     public static class PropertyMap {
 
         private Map<String, Object> properties;
 
         private PropertyMap() {
             this.properties = new HashMap<>();
+        }
+
+        public Object getProperty(String name) {
+            return properties.get(name);
         }
 
         public <R> R getProperty(String name, Class<R> type) {
@@ -43,8 +51,8 @@ public class SpellCreationData<T extends SpellLauncher> {
             return null;
         }
 
-        public <R> R getPropertyOrElse(String name, Class<R> type, R orElse) {
-            R result = getProperty(name, type);
+        public <R> R getPropertyOrElse(String name, R orElse) {
+            R result = (R) getProperty(name, orElse.getClass());
             return result != null ? result : orElse;
         }
     }
@@ -93,6 +101,28 @@ public class SpellCreationData<T extends SpellLauncher> {
         for(BiConsumer<Player, T> consumer : sequence) {
             consumer.accept(caster, launcher);
         }
+    }
+
+    public void excludeTargetSpells(MagicUser user, T launcher) {
+
+        PropertyMap map = getPropertyMap();
+        ExcludedSpellHandler spellHandler = user.getExclusionHandler();
+        BiPredicate<T, MagicUser> condition = (BiPredicate<T, MagicUser>) map.getProperty("exclusion_condition");
+        if(condition == null) return;
+
+        this.excluded_type = map.getPropertyOrElse("excluded_type", SpellType.NONE);
+        this.caster = user;
+        this.deprivedUsers = spellHandler.addExcludingType(excluded_type, launcher, condition);
+    }
+
+    public void restoreSpellAccess() {
+        restoreSpellAccess((user) -> true, null);
+    }
+
+    public void restoreSpellAccess(Predicate<MagicUser> condition, T launcher) {
+        BiPredicate<T, MagicUser> convertedCondition = (l, user) -> condition.test(user);
+        BiPredicate<T, MagicUser> combination = convertedCondition.and((l, user) -> deprivedUsers.contains(user));
+        caster.getExclusionHandler().removeExcludingType(this.excluded_type, launcher, combination);
     }
 
     public ItemStack getItem() {

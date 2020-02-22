@@ -2,13 +2,13 @@ package net.akami.yggdrasil.item;
 
 import com.flowpowered.math.vector.Vector3d;
 import net.akami.yggdrasil.api.game.task.GameItemClock;
+import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.item.InteractiveItem;
 import net.akami.yggdrasil.api.item.InteractiveItemUser;
 import net.akami.yggdrasil.api.utils.YggdrasilMath;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.Slot;
@@ -47,22 +47,22 @@ public class AdvancedMovementItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(InteractEvent event, GameItemClock clock) {
+    public void onLeftClicked(CancellableEvent<?> event, GameItemClock clock) {
         clickPerformed(event, 1, clock);
     }
 
     @Override
-    public void onRightClicked(InteractEvent event, GameItemClock clock) {
+    public void onRightClicked(CancellableEvent<?> event, GameItemClock clock) {
         clickPerformed(event, 1.5, clock);
     }
 
-    private void clickPerformed(InteractEvent event, double factor, GameItemClock clock) {
+    private void clickPerformed(CancellableEvent<?> event, double factor, GameItemClock clock) {
         Player target = event.getCause().first(Player.class).get();
         double timeLeft = clock.timeLeft(this);
         if(timeLeft != 0) {
             return;
         }
-        if (nextDirection == null) {
+        if(nextDirection == null) {
             this.nextDirection = YggdrasilMath.headRotationToDirection(target.getHeadRotation());
         } else {
             performJump(target, factor);
