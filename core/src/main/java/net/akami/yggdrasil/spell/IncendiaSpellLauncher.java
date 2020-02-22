@@ -33,7 +33,7 @@ public class IncendiaSpellLauncher implements SpellLauncher {
             createExplosion(world, explosionRadius, center);
         }
         Task.builder()
-                .delay(250, TimeUnit.MILLISECONDS)
+                .delay(350, TimeUnit.MILLISECONDS)
                 .execute(() -> createFireArea(world, fireRadius, center))
                 .submit(Sponge.getPluginManager().getPlugin("yggdrasil").get());
     }
