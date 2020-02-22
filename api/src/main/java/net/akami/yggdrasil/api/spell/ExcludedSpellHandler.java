@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.BiPredicate;
+import java.util.function.Predicate;
 
 public class ExcludedSpellHandler {
 
@@ -24,23 +24,23 @@ public class ExcludedSpellHandler {
         users.remove(user);
     }
 
-    public <T extends SpellLauncher<T>> Set<MagicUser> addExcludingType(SpellType excluded, T launcher, BiPredicate<T, MagicUser> condition) {
-        return actionExcludingType(excluded, launcher, condition, MagicUser::addExcludedType);
+    public Set<MagicUser> addExcludingType(SpellType excluded, Predicate<MagicUser> condition) {
+        return actionExcludingType(excluded, condition, MagicUser::addExcludedType);
     }
 
     public void removeExcludingType(SpellType excluded, List<MagicUser> users) {
-        removeExcludingType(excluded, null, (l, user) -> users.contains(user));
+        removeExcludingType(excluded, users::contains);
     }
 
-    public <T extends SpellLauncher<T>> void removeExcludingType(SpellType excluded, T launcher, BiPredicate<T, MagicUser> condition) {
-        actionExcludingType(excluded, launcher, condition, MagicUser::removeExcludedType);
+    public void removeExcludingType(SpellType excluded, Predicate<MagicUser> condition) {
+        actionExcludingType(excluded, condition, MagicUser::removeExcludedType);
     }
 
-    private <T extends SpellLauncher<T>> Set<MagicUser> actionExcludingType(SpellType excluded, T launcher, BiPredicate<T, MagicUser> condition,
-                                                                            BiConsumer<MagicUser, SpellType> action) {
+    private Set<MagicUser> actionExcludingType(SpellType excluded, Predicate<MagicUser> condition,
+                                               BiConsumer<MagicUser, SpellType> action) {
         Set<MagicUser> concernedUsers = new HashSet<>();
         for(MagicUser user : users) {
-            if(condition.test(launcher, user)) {
+            if(condition.test(user)) {
                 action.accept(user, excluded);
                 concernedUsers.add(user);
             }

@@ -24,6 +24,7 @@ public interface Spell<T extends SpellLauncher<T>> {
 
         SpellCreationData<T> data = new SpellCreationData<>();
         data.setProperty("location", location);
+        data.setProperty("caster", user);
 
         for(int i = 0; i < tier; i++) {
             SpellTier<T> spellTier = getTier(i);
@@ -37,7 +38,7 @@ public interface Spell<T extends SpellLauncher<T>> {
             InteractiveItemHandler handler = data.getHandler();
             ItemUtils.fitItem(wizard, handler, item);
         } else {
-            launcher.launch(data, wizard, user);
+            launcher.launch(data, wizard);
         }
     }
 }

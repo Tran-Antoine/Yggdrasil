@@ -61,7 +61,8 @@ public class SpellCaster {
     public enum SpellType {
         OFFENSIVE,
         DEFENSIVE,
-        MOTION,
+        LIGHT_MOTION,
+        HIGH_MOTION,
         UNDEFINED,
         NONE
     }

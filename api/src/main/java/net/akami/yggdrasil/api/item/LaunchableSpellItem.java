@@ -42,7 +42,7 @@ public class LaunchableSpellItem implements InteractiveItem {
         this.modelItem.setQuantity(nextQuantity);
 
         player.setItemInHand(chosen, this.modelItem);
-        launcher.launch(finalData, player, user);
+        launcher.launch(finalData, player);
     }
 
     @Override
