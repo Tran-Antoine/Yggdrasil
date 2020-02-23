@@ -32,7 +32,7 @@ public class ExcludedSpellHandler {
         removeExcludingType(excluded, users::contains);
     }
 
-    public void removeExcludingType(SpellType excluded, Predicate< MagicUser> condition) {
+    public void removeExcludingType(SpellType excluded, Predicate<MagicUser> condition) {
         actionExcludingType(excluded, condition, MagicUser::removeExcludedType);
     }
 
