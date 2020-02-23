@@ -27,7 +27,7 @@ public class DefenseDepriverLauncherTest implements SpellLauncher<DefenseDeprive
     private void scheduleRestoringTask(SpellCreationData<DefenseDepriverLauncherTest> data) {
         Task.builder()
                 .delay(10, TimeUnit.SECONDS)
-                .execute(data::restoreSpellAccess)
+                .execute((Runnable) data::restoreSpellAccess)
                 .submit(Sponge.getPluginManager().getPlugin("yggdrasil").get());
     }
 
