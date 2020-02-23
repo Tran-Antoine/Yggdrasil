@@ -38,7 +38,7 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
     private int radius;
     private Vector3i center;
     private SpellCreationData<WaterPrisonLauncher> data;
-    private int lifeSpan;
+    private Integer lifeSpan;
     private PotionEffect slownessEffect;
 
     public WaterPrisonLauncher() {
@@ -53,11 +53,8 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
         this.radius = map.getProperty("radius", Integer.class);
         this.center = map.getProperty("location", Vector3d.class).toInt();
         this.lifeSpan = map.getProperty("lifeSpan", Integer.class);
-        this.slownessEffect = PotionEffect.builder()
-                .potionType(PotionEffectTypes.SLOWNESS)
-                .duration(lifeSpan)
-                .build();
         data.setProperty("excluded_type", SpellType.HIGH_MOTION);
+        setSlownessEffect();
         World world = caster.getWorld();
         Object plugin = Sponge.getPluginManager().getPlugin("yggdrasil").get();
 
@@ -68,6 +65,13 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
                 .execute(() -> removeWater(radius, world))
                 .submit(plugin);
         return LaunchResult.SUCCESS;
+    }
+
+    private void setSlownessEffect() {
+        this.slownessEffect = PotionEffect.builder()
+                .potionType(PotionEffectTypes.SLOWNESS)
+                .duration(lifeSpan)
+                .build();
     }
 
     @Listener
@@ -106,8 +110,8 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
             return;
         }
         trappedEntities.remove(target.getUniqueId());
-        setEffects(target, List::remove);
         data.restoreSpellAccess((magicUser) -> magicUser.getUUID().equals(targetID));
+        setEffects(target, List::remove);
     }
 
     private void depriveEntity(Living target) {
@@ -118,7 +122,7 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
         setEffects(target, List::add);
         data.excludeTargetSpells();
     }
-    
+
     private void setEffects(Entity target, BiConsumer<List<PotionEffect>, PotionEffect> action) {
         List<PotionEffect> effects = target.get(Keys.POTION_EFFECTS).orElse(new ArrayList<>(1));
         action.accept(effects, slownessEffect);
