@@ -1,6 +1,5 @@
 package net.akami.yggdrasil.spell;
 
-import net.akami.yggdrasil.api.item.InteractiveItemHandler;
 import net.akami.yggdrasil.api.spell.AbstractSpellCaster;
 import net.akami.yggdrasil.api.spell.ElementType;
 import net.akami.yggdrasil.api.spell.Spell;
@@ -11,31 +10,23 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class FireballCaster extends AbstractSpellCaster {
-
-    private InteractiveItemHandler handler;
-
-    public FireballCaster(InteractiveItemHandler handler) {
-        this.handler = handler;
-    }
+public class DefenseDepriverCaster extends AbstractSpellCaster {
 
     @Override
     protected Supplier<Spell> loadGenerator() {
-        return () -> new FireballSpell(handler);
+        return DefenseDepriverSpell::new;
     }
 
     @Override
     protected List<ElementType> loadSequence() {
-        return Arrays.asList(ElementType.FIRE, ElementType.EARTH);
+        return Arrays.asList(
+                ElementType.WATER,
+                ElementType.FIRE
+        );
     }
 
     @Override
     protected BiFunction<Float, Integer, Float> loadManaUsage() {
-        return YggdrasilMath.instantStandardPolynomialFunction(15);
-    }
-
-    @Override
-    protected SpellType loadSpellType() {
-        return SpellType.OFFENSIVE;
+        return YggdrasilMath.instantStandardPolynomialFunction(30);
     }
 }

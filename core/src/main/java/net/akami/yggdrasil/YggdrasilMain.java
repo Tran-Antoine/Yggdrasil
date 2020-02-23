@@ -34,7 +34,6 @@ public class YggdrasilMain {
     public void onServerStart(GameStartedServerEvent event) {
 
         logger.info("Plugin successfully initialized");
-
         AbstractYggdrasilPlayerManager playerManager = new YggdrasilPlayerManager();
         List<AbstractYggdrasilPlayer> players = playerManager.getPlayers();
 

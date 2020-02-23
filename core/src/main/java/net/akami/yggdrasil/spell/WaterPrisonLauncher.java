@@ -2,6 +2,7 @@ package net.akami.yggdrasil.spell;
 
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
+import net.akami.yggdrasil.api.spell.SpellCaster.SpellType;
 import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellCreationData.PropertyMap;
 import net.akami.yggdrasil.api.spell.SpellLauncher;
@@ -12,6 +13,8 @@ import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.property.block.MatterProperty;
 import org.spongepowered.api.data.property.block.MatterProperty.Matter;
+import org.spongepowered.api.effect.potion.PotionEffect;
+import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
@@ -26,6 +29,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 
 public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
 
@@ -33,20 +37,27 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
     private List<UUID> trappedEntities;
     private int radius;
     private Vector3i center;
-    private SpellCreationData data;
+    private SpellCreationData<WaterPrisonLauncher> data;
+    private int lifeSpan;
+    private PotionEffect slownessEffect;
 
     public WaterPrisonLauncher() {
         this.trappedEntities = new ArrayList<>();
     }
 
     @Override
-    public void commonLaunch(SpellCreationData data, Player caster) {
+    public LaunchResult commonLaunch(SpellCreationData<WaterPrisonLauncher> data, Player caster) {
 
         PropertyMap map = data.getPropertyMap();
         this.data = data;
         this.radius = map.getProperty("radius", Integer.class);
         this.center = map.getProperty("location", Vector3d.class).toInt();
-        int lifeSpan = map.getProperty("life_span", Integer.class);
+        this.lifeSpan = map.getProperty("lifeSpan", Integer.class);
+        this.slownessEffect = PotionEffect.builder()
+                .potionType(PotionEffectTypes.SLOWNESS)
+                .duration(lifeSpan)
+                .build();
+        data.setProperty("excluded_type", SpellType.HIGH_MOTION);
         World world = caster.getWorld();
         Object plugin = Sponge.getPluginManager().getPlugin("yggdrasil").get();
 
@@ -56,6 +67,7 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
                 .delay(lifeSpan, TimeUnit.SECONDS)
                 .execute(() -> removeWater(radius, world))
                 .submit(plugin);
+        return LaunchResult.SUCCESS;
     }
 
     @Listener
@@ -68,7 +80,7 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
 
         Vector3d position = target.getLocation().getPosition();
         if(position.distance(center.toDouble()) > radius) {
-            checkClearEffects(target);
+            clearEffects(target);
         } else {
             depriveEntity((Living) target);
             trappedEntities.add(target.getUniqueId());
@@ -88,12 +100,14 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
         }
     }
 
-    private void checkClearEffects(Entity target) {
-        if(!trappedEntities.contains(target.getUniqueId())) {
+    private void clearEffects(Entity target) {
+        UUID targetID = target.getUniqueId();
+        if(!trappedEntities.contains(targetID)) {
             return;
         }
         trappedEntities.remove(target.getUniqueId());
-        // TODO add the rest according to the newest api changes
+        setEffects(target, List::remove);
+        data.restoreSpellAccess((magicUser) -> magicUser.getUUID().equals(targetID));
     }
 
     private void depriveEntity(Living target) {
@@ -101,6 +115,14 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
             return;
         }
         target.offer(Keys.REMAINING_AIR, 40);
+        setEffects(target, List::add);
+        data.excludeTargetSpells();
+    }
+    
+    private void setEffects(Entity target, BiConsumer<List<PotionEffect>, PotionEffect> action) {
+        List<PotionEffect> effects = target.get(Keys.POTION_EFFECTS).orElse(new ArrayList<>(1));
+        action.accept(effects, slownessEffect);
+        target.offer(Keys.POTION_EFFECTS, effects);
     }
 
     private void register(Object plugin) {
@@ -125,7 +147,6 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
                 }
             }
         }
-        System.out.println("Successfully created sphere");
     }
 
     private void createBlock(Vector3i center, int radius, int dx, int dy, int dz,

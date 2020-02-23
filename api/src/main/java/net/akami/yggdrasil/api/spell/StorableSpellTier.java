@@ -4,7 +4,7 @@ import net.akami.yggdrasil.api.item.InteractiveItemHandler;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 
-public class StorableSpellTier implements SpellTier {
+public class StorableSpellTier<T extends SpellLauncher<T>> implements SpellTier<T> {
 
     private ItemStack itemToProvide;
     private InteractiveItemHandler handler;
@@ -21,9 +21,9 @@ public class StorableSpellTier implements SpellTier {
     }
 
     @Override
-    public void definePreLaunchProperties(Player caster, SpellCreationData data) {
+    public void definePreLaunchProperties(Player caster, SpellCreationData<T> data) {
         data.setStorable(true);
-        if (itemToProvide != null && handler != null) {
+        if(itemToProvide != null && handler != null) {
             data.setItem(itemToProvide);
             data.setHandler(handler);
         }

@@ -2,6 +2,7 @@ package net.akami.yggdrasil.api.item;
 
 import com.flowpowered.math.vector.Vector3d;
 import net.akami.yggdrasil.api.game.task.GameItemClock;
+import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.input.UUIDHolder;
 import net.akami.yggdrasil.api.utils.ItemUtils;
 import org.spongepowered.api.Sponge;
@@ -14,7 +15,6 @@ import org.spongepowered.api.entity.projectile.arrow.Arrow;
 import org.spongepowered.api.entity.projectile.source.ProjectileSource;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.CollideEvent;
-import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.event.entity.SpawnEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
@@ -87,7 +87,7 @@ public abstract class InteractiveAimingItem implements InteractiveItem {
     }
 
     @Override
-    public void onRightClicked(InteractEvent event, GameItemClock clock) {
+    public void onRightClicked(CancellableEvent<?> event, GameItemClock clock) {
 
         if(arrowID == null || world == null) {
             return;
@@ -115,5 +115,6 @@ public abstract class InteractiveAimingItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(InteractEvent event, GameItemClock clock) { }
+    public void onLeftClicked(CancellableEvent<?> event, GameItemClock clock) {
+    }
 }

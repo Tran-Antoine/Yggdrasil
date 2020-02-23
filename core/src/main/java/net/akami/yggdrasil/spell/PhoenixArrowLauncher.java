@@ -64,7 +64,7 @@ public class PhoenixArrowLauncher implements SpellLauncher<PhoenixArrowLauncher>
     }
 
     @Override
-    public void commonLaunch(SpellCreationData data, Player caster) {
+    public LaunchResult commonLaunch(SpellCreationData data, Player caster) {
 
         Object plugin = Sponge.getPluginManager().getPlugin("yggdrasil").get();
 
@@ -72,12 +72,13 @@ public class PhoenixArrowLauncher implements SpellLauncher<PhoenixArrowLauncher>
             Sponge.getEventManager().registerListeners(plugin,this);
         }
         PropertyMap map = data.getPropertyMap();
-        this.arrowsCount = map.getPropertyOrElse("arrowsCount", Integer.class, 1);
+        this.arrowsCount = map.getPropertyOrElse("arrowsCount", 1);
         Task.builder()
                 .interval(300, TimeUnit.MILLISECONDS)
                 .execute(task -> summonArrow(task, map, caster))
                 .submit(plugin);
 
+        return LaunchResult.SUCCESS;
     }
 
     private void summonArrow(Task task, PropertyMap map, Player caster) {
