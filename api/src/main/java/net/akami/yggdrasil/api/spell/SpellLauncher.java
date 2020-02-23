@@ -8,6 +8,7 @@ public interface SpellLauncher<SELF extends SpellLauncher<SELF>> {
 
     default void launch(SpellCreationData<SELF> data, Player caster) {
         data.performPreActions(caster, (SELF) this);
+
         LaunchResult result = commonLaunch(data, caster);
         if(result == LaunchResult.SUCCESS) {
             data.excludeTargetSpells();
