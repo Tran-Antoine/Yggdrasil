@@ -40,7 +40,7 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
     }
 
     @Override
-    public void commonLaunch(SpellCreationData data, Player caster) {
+    public LaunchResult commonLaunch(SpellCreationData data, Player caster) {
 
         PropertyMap map = data.getPropertyMap();
         this.data = data;
@@ -56,6 +56,7 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
                 .delay(lifeSpan, TimeUnit.SECONDS)
                 .execute(() -> removeWater(radius, world))
                 .submit(plugin);
+        return LaunchResult.SUCCESS;
     }
 
     @Listener
