@@ -6,11 +6,11 @@ public interface SpellLauncher<SELF extends SpellLauncher<SELF>> {
 
     LaunchResult commonLaunch(SpellCreationData<SELF> data, Player caster);
 
-    default void launch(SpellCreationData<SELF> data, Player caster, MagicUser user) {
+    default void launch(SpellCreationData<SELF> data, Player caster) {
         data.performPreActions(caster, (SELF) this);
         LaunchResult result = commonLaunch(data, caster);
         if(result == LaunchResult.SUCCESS) {
-            data.excludeTargetSpells(user, (SELF) this);
+            data.excludeTargetSpells();
             data.performPostActions(caster, (SELF) this);
         }
     }

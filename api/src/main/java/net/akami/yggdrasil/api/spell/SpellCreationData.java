@@ -7,7 +7,6 @@ import org.spongepowered.api.item.inventory.ItemStack;
 
 import java.util.*;
 import java.util.function.BiConsumer;
-import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 public class SpellCreationData<T extends SpellLauncher<T>> {
@@ -21,12 +20,12 @@ public class SpellCreationData<T extends SpellLauncher<T>> {
     private InteractiveItemHandler handler;
     private Set deprivedUsers;
     private MagicUser caster;
-    private SpellType excluded_type;
 
     public SpellCreationData() {
         this.preActions = new ArrayList<>();
         this.postActions = new ArrayList<>();
         this.propertyMap = new PropertyMap();
+        this.deprivedUsers = new HashSet();
         this.isStorable = false;
     }
 
@@ -103,26 +102,31 @@ public class SpellCreationData<T extends SpellLauncher<T>> {
         }
     }
 
-    public void excludeTargetSpells(MagicUser user, T launcher) {
+    public void excludeTargetSpells() {
+        PropertyMap map = getPropertyMap();
+        Predicate<MagicUser> condition = (Predicate<MagicUser>) map.getProperty("exclusion_condition");
+        excludeTargetSpells(condition);
+    }
+
+    public void excludeTargetSpells(Predicate<MagicUser> condition) {
 
         PropertyMap map = getPropertyMap();
+        MagicUser user = map.getProperty("caster", MagicUser.class);
         ExcludedSpellHandler spellHandler = user.getExclusionHandler();
-        BiPredicate<T, MagicUser> condition = (BiPredicate<T, MagicUser>) map.getProperty("exclusion_condition");
         if(condition == null) return;
 
-        this.excluded_type = map.getPropertyOrElse("excluded_type", SpellType.NONE);
-        this.caster = user;
-        this.deprivedUsers = spellHandler.addExcludingType(excluded_type, launcher, condition);
+        SpellType excluded = map.getPropertyOrElse("excluded_type", SpellType.NONE);
+        this.deprivedUsers.addAll(spellHandler.addExcludingType(excluded, condition));
     }
 
     public void restoreSpellAccess() {
-        restoreSpellAccess((user) -> true, null);
+        restoreSpellAccess((user) -> true);
     }
 
-    public void restoreSpellAccess(Predicate<MagicUser> condition, T launcher) {
-        BiPredicate<T, MagicUser> convertedCondition = (l, user) -> condition.test(user);
-        BiPredicate<T, MagicUser> combination = convertedCondition.and((l, user) -> deprivedUsers.contains(user));
-        caster.getExclusionHandler().removeExcludingType(this.excluded_type, launcher, combination);
+    public void restoreSpellAccess(Predicate<MagicUser> condition) {
+        Predicate<MagicUser> combination = condition.and(deprivedUsers::contains);
+        SpellType type = getPropertyMap().getPropertyOrElse("excluded_type", SpellType.NONE);
+        caster.getExclusionHandler().removeExcludingType(type, combination);
     }
 
     public ItemStack getItem() {
