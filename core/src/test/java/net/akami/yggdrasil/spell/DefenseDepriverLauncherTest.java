@@ -1,5 +1,6 @@
 package net.akami.yggdrasil.spell;
 
+import net.akami.yggdrasil.YggdrasilMain;
 import net.akami.yggdrasil.api.spell.MagicUser;
 import net.akami.yggdrasil.api.spell.SpellCaster.SpellType;
 import net.akami.yggdrasil.api.spell.SpellCreationData;
