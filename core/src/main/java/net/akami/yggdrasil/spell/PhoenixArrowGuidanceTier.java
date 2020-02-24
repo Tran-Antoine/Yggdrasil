@@ -1,9 +1,9 @@
 package net.akami.yggdrasil.spell;
 
 import com.flowpowered.math.vector.Vector3d;
+import net.akami.yggdrasil.YggdrasilMain;
 import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellTier;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
@@ -37,7 +37,7 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
             return;
         }
 
-        Object plugin = Sponge.getPluginManager().getPlugin("yggdrasil").get();
+        Object plugin = YggdrasilMain.getPlugin();
         Task.builder()
                 .delay(500, TimeUnit.MILLISECONDS)
                 .interval(200, TimeUnit.MILLISECONDS)

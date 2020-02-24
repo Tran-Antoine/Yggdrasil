@@ -2,10 +2,10 @@ package net.akami.yggdrasil.spell;
 
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
+import net.akami.yggdrasil.YggdrasilMain;
 import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellCreationData.PropertyMap;
 import net.akami.yggdrasil.api.spell.SpellLauncher;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.EntityTypes;
@@ -35,7 +35,7 @@ public class IncendiaSpellLauncher implements SpellLauncher<IncendiaSpellLaunche
         Task.builder()
                 .delay(350, TimeUnit.MILLISECONDS)
                 .execute(() -> createFireArea(world, fireRadius, center))
-                .submit(Sponge.getPluginManager().getPlugin("yggdrasil").get());
+                .submit(YggdrasilMain.getPlugin());
         return LaunchResult.SUCCESS;
     }
 

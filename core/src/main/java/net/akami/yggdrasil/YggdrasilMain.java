@@ -69,4 +69,8 @@ public class YggdrasilMain {
     public void onServerStop(GameStoppedServerEvent event) {
         logger.info("Plugin successfully stopped");
     }
+
+    public static Object getPlugin() {
+        return Sponge.getPluginManager().getPlugin("yggdrasil").get();
+    }
 }

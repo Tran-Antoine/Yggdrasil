@@ -28,7 +28,7 @@ public class DefenseDepriverLauncherTest implements SpellLauncher<DefenseDeprive
         Task.builder()
                 .delay(10, TimeUnit.SECONDS)
                 .execute((Runnable) data::restoreSpellAccess)
-                .submit(Sponge.getPluginManager().getPlugin("yggdrasil").get());
+                .submit(YggdrasilMain.getPlugin());
     }
 
     private boolean areEntitiesNear(Player a, MagicUser target) {

@@ -1,8 +1,8 @@
 package net.akami.yggdrasil.spell;
 
+import net.akami.yggdrasil.YggdrasilMain;
 import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellTier;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.entity.Entity;
@@ -38,7 +38,7 @@ public class PhoenixArrowBaseTier implements SpellTier<PhoenixArrowLauncher> {
                 .delay(100, TimeUnit.MILLISECONDS)
                 .interval(20, TimeUnit.MILLISECONDS)
                 .execute(task -> spawnParticles(task, launcher))
-                .submit(Sponge.getPluginManager().getPlugin("yggdrasil").get());
+                .submit(YggdrasilMain.getPlugin());
     }
 
     private void spawnParticles(Task task, PhoenixArrowLauncher launcher) {

@@ -17,8 +17,8 @@ public class WaterPrisonSpell implements Spell {
                 new WaterPrisonDurationTier(8),
                 new WaterPrisonRadiusTier(5),
                 new WaterPrisonDurationTier(11),
-                new WaterPrisonRadiusTier(6),
-                new WaterPrisonRadiusTier(8)
+                new WaterPrisonRadiusTier(7),
+                new WaterPrisonCurrentTier()
         );
     }
 

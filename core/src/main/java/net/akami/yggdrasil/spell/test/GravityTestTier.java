@@ -1,9 +1,9 @@
 package net.akami.yggdrasil.spell.test;
 
 import com.flowpowered.math.vector.Vector3d;
+import net.akami.yggdrasil.YggdrasilMain;
 import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellTier;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
@@ -25,7 +25,7 @@ public class GravityTestTier implements SpellTier {
     public void definePreLaunchProperties(Player caster, SpellCreationData data) {
         Vector3d loc = caster.getPosition();
         World world = caster.getWorld();
-        Object plugin = Sponge.getPluginManager().getPlugin("yggdrasil").get();
+        Object plugin = YggdrasilMain.getPlugin();
         Task
                 .builder()
                 .interval(50, TimeUnit.MILLISECONDS)

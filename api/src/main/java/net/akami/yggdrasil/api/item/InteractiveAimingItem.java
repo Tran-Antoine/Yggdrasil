@@ -6,6 +6,7 @@ import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.input.UUIDHolder;
 import net.akami.yggdrasil.api.utils.ItemUtils;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
@@ -50,6 +51,7 @@ public abstract class InteractiveAimingItem implements InteractiveItem {
             return;
         }
         Projectile projectile = (Projectile) entity;
+        projectile.offer(Keys.VANISH, true);
         ProjectileSource shooter = projectile.getShooter();
         if(!(shooter instanceof Player)) {
             return;
