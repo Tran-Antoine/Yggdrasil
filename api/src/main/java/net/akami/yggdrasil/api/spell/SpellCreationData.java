@@ -18,7 +18,7 @@ public class SpellCreationData<T extends SpellLauncher<T>> {
     private boolean isStorable;
     private ItemStack item;
     private InteractiveItemHandler handler;
-    private Set deprivedUsers;
+    private Set<MagicUser> deprivedUsers;
 
     public SpellCreationData() {
         this.preActions = new ArrayList<>();
@@ -50,8 +50,8 @@ public class SpellCreationData<T extends SpellLauncher<T>> {
         }
 
         public <R> R getPropertyOrElse(String name, R orElse) {
-            R result = (R) getProperty(name, orElse.getClass());
-            return result != null ? result : orElse;
+            Object result = getProperty(name);
+            return result != null ? (R) result : orElse;
         }
     }
 

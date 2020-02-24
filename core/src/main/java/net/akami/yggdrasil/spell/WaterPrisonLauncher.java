@@ -169,7 +169,6 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
         }
         if(toReplace == null || world.getBlockType(pos) == toReplace) {
             world.setBlockType(pos, newType);
-            System.out.println("Successfully placed block of " + newType.getName());
         }
     }
 

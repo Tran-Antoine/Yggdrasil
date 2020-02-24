@@ -39,8 +39,6 @@ public class DefenseDepriverLauncherTest implements SpellLauncher<DefenseDeprive
             return false;
         }
         Player b = optPlayer.get();
-        System.out.println(a.getUniqueId());
-        System.out.println(b.getUniqueId());
         return a.getPosition().distance(b.getLocation().getPosition()) <= 10;
     }
 }
