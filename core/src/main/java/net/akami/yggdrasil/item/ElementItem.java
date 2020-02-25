@@ -1,11 +1,12 @@
 package net.akami.yggdrasil.item;
 
 import com.flowpowered.math.vector.Vector3d;
+import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.item.InteractiveItem;
-import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.spell.ElementType;
 import net.akami.yggdrasil.api.spell.MagicUser;
+import net.akami.yggdrasil.api.utils.TextDisplayer;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
@@ -23,8 +24,9 @@ public abstract class ElementItem implements InteractiveItem {
 
     private MagicUser user;
     private ItemStack item;
+    private TextDisplayer textDisplayer;
 
-    public ElementItem(MagicUser user) {
+    public ElementItem(MagicUser user, TextDisplayer textDisplayer) {
         this.user = user;
         this.item = ItemStack
                 .builder()
@@ -33,6 +35,7 @@ public abstract class ElementItem implements InteractiveItem {
                 .add(Keys.DYE_COLOR, getColor())
                 .quantity(1)
                 .build();
+        this.textDisplayer = textDisplayer;
     }
 
     protected abstract ElementType getType();
@@ -59,6 +62,7 @@ public abstract class ElementItem implements InteractiveItem {
 
     private void click() {
         user.currentSequence().add(getType());
+        textDisplayer.display(getName());
         // Since it is called right after a click, we know that the player is there
         Player player = Sponge.getServer().getPlayer(user.getUUID()).get();
         BlockState blockState = BlockState
