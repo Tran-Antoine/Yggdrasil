@@ -4,7 +4,8 @@ import org.spongepowered.api.text.Text;
 
 public interface TextDisplayer {
 
-    void display(Text name);
-    void clearDisplay();
+    void displayActionBar(Text name);
+    void addActionBarDisplayElement(Text element);
+    void clearActionBarDisplay();
 
 }

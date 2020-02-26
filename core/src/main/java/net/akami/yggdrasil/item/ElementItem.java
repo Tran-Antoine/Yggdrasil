@@ -62,7 +62,7 @@ public abstract class ElementItem implements InteractiveItem {
 
     private void click() {
         user.currentSequence().add(getType());
-        textDisplayer.display(getName());
+        textDisplayer.addActionBarDisplayElement(getName());
         // Since it is called right after a click, we know that the player is there
         Player player = Sponge.getServer().getPlayer(user.getUUID()).get();
         BlockState blockState = BlockState

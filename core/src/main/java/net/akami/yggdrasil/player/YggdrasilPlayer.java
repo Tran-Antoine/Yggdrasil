@@ -18,6 +18,7 @@ import net.akami.yggdrasil.spell.*;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.chat.ChatTypes;
 
 import java.util.*;
 
@@ -130,12 +131,18 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer, TextDisplayer {
     }
 
     @Override
-    public void display(Text name) {
-        actionBarSpellDisplayer.addElement(this.id, name);
+    public void displayActionBar(Text text) {
+        Sponge.getServer().getPlayer(this.id).ifPresent(player -> player.sendMessage(ChatTypes.ACTION_BAR, text));
     }
 
     @Override
-    public void clearDisplay() {
-        actionBarSpellDisplayer.clearDisplay(this.id);
+    public void addActionBarDisplayElement(Text element) {
+        actionBarSpellDisplayer.addElement(this, element);
+    }
+
+    @Override
+    public void clearActionBarDisplay() {
+        actionBarSpellDisplayer.clearSequence(this);
+        Sponge.getServer().getPlayer(this.id).ifPresent(player -> player.sendMessage(ChatTypes.ACTION_BAR, Text.of("")));
     }
 }

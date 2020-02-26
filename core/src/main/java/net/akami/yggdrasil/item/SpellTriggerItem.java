@@ -55,7 +55,7 @@ public class SpellTriggerItem extends InteractiveAimingItem {
     protected void applyEffect(Vector3d location, World world) {
         Optional<SpellCastContext> optResult = user.findBySequence();
         user.clearSequence();
-        textDisplayer.clearDisplay();
+        textDisplayer.clearActionBarDisplay();
         optResult.ifPresent(result -> applyEffect(location, result));
     }
 
@@ -77,7 +77,7 @@ public class SpellTriggerItem extends InteractiveAimingItem {
             SpellCastContext result = optResult.get();
             if(!result.requiresLocation()) {
                 user.clearSequence();
-                textDisplayer.clearDisplay();
+                textDisplayer.clearActionBarDisplay();
                 applyEffect(null, result);
                 event.setCancelled(true);
                 ready = true;
