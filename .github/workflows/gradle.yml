@@ -4,7 +4,6 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -29,7 +28,10 @@ jobs:
           name: yggdrasil-core
           path: core/build/libs
       - name: Move build things to artifact folder
-        run: mkdir artifact && mv api/build/libs/*.jar artifact/ && mv core/build/libs/*.jar artifact/
+        run: | 
+          mkdir artifact 
+          mv api/build/libs/*.jar artifact/ 
+          mv core/build/libs/*.jar artifact/
       - name: Upload all artifacts
         uses: actions/upload-artifact@v1.0.0
         with:
