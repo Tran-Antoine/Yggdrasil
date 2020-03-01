@@ -13,8 +13,8 @@ import java.util.Optional;
 
 public class PlayerManaContainer extends ManaContainer {
 
-    private UUIDHolder idHolder;
-    private ServerBossBar indicator;
+    private final UUIDHolder idHolder;
+    private final ServerBossBar indicator;
 
     public PlayerManaContainer(float maxMana, float gainPerSecond, UUIDHolder idHolder) {
         super(maxMana, gainPerSecond);
@@ -34,7 +34,11 @@ public class PlayerManaContainer extends ManaContainer {
 
     @Override
     public void remove() {
-        Sponge.getServer().getPlayer(idHolder.getUUID()).ifPresent(indicator::removePlayer);
+        getSpongePlayer().ifPresent(indicator::removePlayer);
+    }
+
+    private Optional<Player> getSpongePlayer() {
+        return Sponge.getServer().getPlayer(idHolder.getUUID());
     }
 
     @Override
@@ -50,22 +54,37 @@ public class PlayerManaContainer extends ManaContainer {
     }
 
     private void update() {
-        Optional<Player> optGamePlayer = Sponge.getServer().getPlayer(idHolder.getUUID());
-        if(!optGamePlayer.isPresent()) {
-            return;
+
+        getSpongePlayer().ifPresent(this::updateIndicator);
+    }
+
+    private void updateIndicator(Player player) {
+
+        if(!indicator.getPlayers().contains(player)) {
+            indicator.addPlayer(player);
         }
-        Player gamePlayer = optGamePlayer.get();
-        if(!indicator.getPlayers().contains(gamePlayer)) {
-            indicator.addPlayer(gamePlayer);
-        }
-        float percentage = currentMana / maxMana;
+
+        setIndicatorProperties(current / max);
+
+    }
+
+    private void setIndicatorProperties(float percentage) {
+
         indicator.setPercent(percentage);
+
         if(percentage < 0.15) {
+
             indicator.setColor(BossBarColors.RED);
+
         } else if(percentage < 0.40) {
+
             indicator.setColor(BossBarColors.PINK);
+
         } else {
+
             indicator.setColor(BossBarColors.PURPLE);
+
         }
+
     }
 }

@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 public class TestVelocityTask implements Consumer<Task> {
 
-    private Player player;
-    private List<Float> fallingDistances;
-    private List<Double> velocities;
+    private final Player player;
+    private final List<Float> fallingDistances;
+    private final List<Double> velocities;
 
     public TestVelocityTask(Player player) {
         this.player = player;
@@ -26,30 +26,56 @@ public class TestVelocityTask implements Consumer<Task> {
 
     @Override
     public void accept(Task task) {
-        Optional<Float> time = player.get(Keys.FALL_DISTANCE);
-        if(!time.isPresent() || time.get() == 0) return;
-        double velocity = -player.getVelocity().getY();
-        fallingDistances.add(time.get());
-        velocities.add(velocity);
-        System.out.println("Values : "+ fallingDistances.size());
-        if(fallingDistances.size() >= 100) {
-            task.cancel();
-            try {
-                File file = new File("values.txt");
-                if(!file.exists()) file.createNewFile();
-                System.out.println(file.getAbsolutePath());
-                BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
-                writer.append("X = [");
-                writer.append(fallingDistances.stream().map(Object::toString).collect(Collectors.joining(", ")));
-                writer.append("]");
-                writer.newLine();
-                writer.append("Y = [");
-                writer.append(velocities.stream().map(Object::toString).collect(Collectors.joining(", ")));
-                writer.append("]");
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+        Float time = player.get(Keys.FALL_DISTANCE).orElse(0f);
+        if(time == 0) {
+            return;
         }
+
+        double velocity = - player.getVelocity().getY();
+        fallingDistances.add(time);
+        velocities.add(velocity);
+        System.out.println("Values : " + fallingDistances.size());
+
+        if(fallingDistances.size() >= 100) {
+
+            task.cancel();
+            writeValues();
+
+        }
+
     }
+
+    private void writeValues() {
+
+        try {
+
+            File file = new File("values.txt");
+
+            if(!file.exists()) {
+                file.createNewFile();
+            }
+
+            System.out.println(file.getAbsolutePath());
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
+
+            writer.append("X = [")
+                    .append(fallingDistances.stream().map(Object::toString).collect(Collectors.joining(", ")))
+                    .append("]");
+
+            writer.newLine();
+
+            writer.append("Y = [")
+                    .append(velocities.stream().map(Object::toString).collect(Collectors.joining(", ")))
+                    .append("]");
+
+            writer.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 }

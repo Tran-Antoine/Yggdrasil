@@ -18,14 +18,23 @@ public class FoodRestoringTask implements Runnable {
 
     @Override
     public void run() {
-        for (UUIDHolder holder : users) {
-            Optional<Player> optPlayer = Sponge.getServer().getPlayer(holder.getUUID());
-            optPlayer.ifPresent((player) -> {
-                int currentLevel = player.get(Keys.FOOD_LEVEL).get();
-                int diff = 20 - currentLevel;
-                int bonus = diff <= 2 ? diff : 2;
-                player.offer(Keys.FOOD_LEVEL, currentLevel + bonus);
-            });
-        }
+
+        this.users.forEach(user -> getSpongePlayer(user).ifPresent(this::restoreFoodToUser));
+
     }
+
+    private Optional<Player> getSpongePlayer(UUIDHolder user) {
+        return Sponge.getServer().getPlayer(user.getUUID());
+    }
+
+    private void restoreFoodToUser(Player player) {
+
+        int currentLevel = player.get(Keys.FOOD_LEVEL).orElse(10);
+
+        int diff = 20 - currentLevel;
+        int bonus = Math.min(diff, 2);
+        player.offer(Keys.FOOD_LEVEL, currentLevel + bonus);
+
+    }
+
 }

@@ -8,26 +8,27 @@ import java.util.UUID;
 
 public class YggdrasilPlayerManager extends AbstractYggdrasilPlayerManager {
 
-    private ExcludedSpellHandler handler;
+    private final ExcludedSpellHandler handler;
 
     public YggdrasilPlayerManager() {
         super();
         this.handler = new ExcludedSpellHandler();
     }
 
-    public void createNewPlayer(UUID id) {
-        YggdrasilPlayer player = new YggdrasilPlayer(id, handler);
+    public void createNewPlayer(UUID uniqueId) {
+        YggdrasilPlayer player = new YggdrasilPlayer(uniqueId, handler);
         handler.add(player);
-        if(players.contains(player)) {
-            removeExistingPlayer(id);
+        if(super.players.contains(player)) {
+            removeExistingPlayer(uniqueId);
         }
-        this.players.add(player);
+        super.players.add(player);
     }
 
     @Override
     public void removeExistingPlayer(UUID id) {
-        AbstractYggdrasilPlayer player = getById(id);
+        AbstractYggdrasilPlayer player = super.getById(id);
         player.getMana().remove();
-        players.remove(player);
+        super.players.remove(player);
     }
+
 }

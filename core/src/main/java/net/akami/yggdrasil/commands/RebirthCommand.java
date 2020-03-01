@@ -9,19 +9,23 @@ import org.spongepowered.api.entity.living.player.Player;
 
 public class RebirthCommand implements CommandExecutor {
 
-    private AbstractYggdrasilPlayerManager manager;
+    private final AbstractYggdrasilPlayerManager manager;
 
     public RebirthCommand(AbstractYggdrasilPlayerManager manager) {
         this.manager = manager;
     }
 
     @Override
-    public CommandResult execute(CommandSource src, CommandContext args) {
-        if(!(src instanceof Player)) {
+    public CommandResult execute(CommandSource executor, CommandContext args) {
+
+        if(!(executor instanceof Player)) {
             return CommandResult.empty();
         }
-        Player target = (Player) src;
+
+        Player target = (Player) executor;
         manager.createNewPlayer(target.getUniqueId());
+
         return CommandResult.success();
     }
+
 }

@@ -2,41 +2,40 @@ package net.akami.yggdrasil.api.mana;
 
 public class ManaContainer {
 
-    protected float currentMana;
-    protected float maxMana;
-    protected float gainPerSecond;
+    protected final float max;
+    protected final float gainPerSecond;
 
-    public ManaContainer(float maxMana, float gainPerSecond) {
-        this.maxMana = maxMana;
-        this.currentMana = maxMana;
+    protected float current;
+
+    public ManaContainer(float max, float gainPerSecond) {
+        this.max = max;
+        this.current = max;
         this.gainPerSecond = gainPerSecond;
     }
 
-    public boolean hasEnoughMana(float cost) {
-        return currentMana >= cost;
-    }
-
-    public void use(float used) {
-        currentMana -= used;
-    }
-
-    public void remove() {}
-
-    public void ifEnoughMana(float cost, Runnable action) {
-        if(hasEnoughMana(cost)) {
+    public void ifEnough(float cost, Runnable action) {
+        if(hasEnough(cost)) {
             use(cost);
             action.run();
         }
     }
 
-    public void restore(float mana) {
-        this.currentMana += mana;
-        if(currentMana > maxMana) {
-            currentMana = maxMana;
-        }
+    public boolean hasEnough(float cost) {
+        return current >= cost;
     }
+
+    public void use(float used) {
+        current -= used;
+    }
+
+    public void remove() {}
 
     public void autoRestore(float deltaTime) {
         restore(gainPerSecond * deltaTime);
     }
+
+    public void restore(float mana) {
+        this.current = Math.min(this.current + mana, this.max);
+    }
+
 }

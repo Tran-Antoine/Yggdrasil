@@ -8,7 +8,8 @@ import java.util.function.Consumer;
 
 public class TestAccelerationTask implements Consumer<Task> {
 
-    private Player player;
+    private final Player player;
+
     private Vector3d lastVelocity;
     private int values = 0;
 
@@ -18,17 +19,28 @@ public class TestAccelerationTask implements Consumer<Task> {
 
     @Override
     public void accept(Task task) {
-        if(lastVelocity == null) {
-            lastVelocity = player.getVelocity();
-        } else {
-            values++;
-            Vector3d currentVelocity = player.getVelocity();
-            Vector3d dV = currentVelocity.sub(lastVelocity);
-            lastVelocity = currentVelocity;
-            System.out.println("Calculated instant acceleration : " + dV.length() / 0.1);
-        }
-        if(values >= 50) {
+
+        updateVelocity();
+
+        if (values >= 50) {
             task.cancel();
         }
+
     }
+
+    private void updateVelocity() {
+        if (lastVelocity == null) {
+
+            lastVelocity = player.getVelocity();
+            return;
+        }
+
+        ++values;
+        Vector3d currentVelocity = player.getVelocity();
+        Vector3d dV = currentVelocity.sub(lastVelocity);
+        lastVelocity = currentVelocity;
+        System.out.println("Calculated instant acceleration : " + dV.length() / 0.1);
+
+    }
+
 }

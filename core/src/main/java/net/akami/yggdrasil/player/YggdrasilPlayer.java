@@ -20,14 +20,14 @@ import java.util.*;
 
 public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
 
-    private UUID id;
-    private ManaContainer mana;
-    private LifeComponent life;
-    private List<ElementType> sequence;
-    private List<SpellType> excludedTypes;
-    private List<SpellCaster> spells;
-    private List<InteractiveItem> items;
-    private ExcludedSpellHandler spellHandler;
+    private final UUID id;
+    private final ManaContainer mana;
+    private final LifeComponent life;
+    private final List<ElementType> sequence;
+    private final List<SpellType> excludedTypes;
+    private final List<SpellCaster> spells;
+    private final List<InteractiveItem> items;
+    private final ExcludedSpellHandler spellHandler;
 
     public YggdrasilPlayer(UUID id, ExcludedSpellHandler spellHandler) {
         this.id = id;
@@ -123,4 +123,5 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer {
     public boolean equals(Object obj) {
         return obj instanceof YggdrasilPlayer && id.equals(((YggdrasilPlayer) obj).id);
     }
+
 }

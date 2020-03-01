@@ -17,4 +17,5 @@ public interface BoolData extends DataManipulator<BoolData, BoolData.Immutable> 
     interface Builder extends DataManipulatorBuilder<BoolData, BoolData.Immutable> {
 
     }
+
 }

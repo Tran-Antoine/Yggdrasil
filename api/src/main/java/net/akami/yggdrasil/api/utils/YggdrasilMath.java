@@ -10,12 +10,12 @@ public class YggdrasilMath {
     private YggdrasilMath() {}
 
     public static Vector3d headRotationToDirection(Vector3d headRot) {
-        double pitch = Math.toRadians(-headRot.getX());
-        double yaw = Math.toRadians(-headRot.getY());
-        double x = Math.sin(yaw)*Math.cos(pitch);
-        double z = Math.cos(yaw)*Math.cos(pitch);
+        double pitch = Math.toRadians( - headRot.getX());
+        double yaw = Math.toRadians( - headRot.getY());
+        double x = Math.sin(yaw) * Math.cos(pitch);
+        double z = Math.cos(yaw) * Math.cos(pitch);
         double y = Math.sin(pitch);
-        return new Vector3d(x, y/1.5, z);
+        return new Vector3d(x, y / 1.5, z);
     }
 
     public static double velocityToFallingDistance(double yVelocity) {

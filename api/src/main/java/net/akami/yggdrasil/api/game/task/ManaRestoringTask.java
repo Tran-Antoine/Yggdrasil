@@ -6,8 +6,8 @@ import java.util.List;
 
 public class ManaRestoringTask implements Runnable {
 
-    private float deltaTime;
-    private List<? extends ManaHolder> manaUsers;
+    private final float deltaTime;
+    private final List<? extends ManaHolder> manaUsers;
 
     // Delta time is the delay in seconds between every run() call
     public ManaRestoringTask(List<? extends ManaHolder> manaUsers, float deltaTime) {
@@ -17,8 +17,9 @@ public class ManaRestoringTask implements Runnable {
 
     @Override
     public void run() {
-        for(ManaHolder user : manaUsers) {
-            user.getMana().autoRestore(deltaTime);
-        }
+
+        manaUsers.forEach(user -> user.getMana().autoRestore(deltaTime));
+
     }
+
 }

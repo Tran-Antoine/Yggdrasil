@@ -12,10 +12,10 @@ import org.spongepowered.api.item.inventory.ItemStack;
 
 public class LaunchableSpellItem implements InteractiveItem {
 
-    private ItemStack modelItem;
-    private SpellCreationData finalData;
-    private SpellLauncher launcher;
-    private MagicUser user;
+    private final ItemStack modelItem;
+    private final SpellCreationData finalData;
+    private final SpellLauncher launcher;
+    private final MagicUser user;
 
     public LaunchableSpellItem(ItemStack item, SpellCreationData finalData, SpellLauncher launcher, MagicUser user) {
         this.modelItem = item;
@@ -49,4 +49,5 @@ public class LaunchableSpellItem implements InteractiveItem {
     public boolean isDestroyed() {
         return modelItem.getQuantity() == 0;
     }
+
 }

@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class PlayerLifeComponent extends LifeComponent {
 
-    private UUIDHolder idHolder;
+    private final UUIDHolder idHolder;
 
     public PlayerLifeComponent(int lives, int lifeLength, UUIDHolder idHolder) {
         super(lives, lifeLength);
@@ -37,7 +37,7 @@ public class PlayerLifeComponent extends LifeComponent {
             return;
         }
         Player gamePlayer = optGamePlayer.get();
-        float lifePercentage = (float) currentLife / (float) lifeLength;
+        float lifePercentage = (float) current / (float) max;
         updateLifeBar(gamePlayer);
         updateExpLevel(gamePlayer, lifePercentage);
         updateExpBar(gamePlayer, lifePercentage);

@@ -8,4 +8,5 @@ public class EmptySpellTier<T extends SpellLauncher<T>> implements SpellTier<T> 
     public void definePreLaunchProperties(Player caster, SpellCreationData<T> data) {
 
     }
+
 }

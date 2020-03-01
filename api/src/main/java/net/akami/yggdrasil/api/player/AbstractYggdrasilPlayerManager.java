@@ -6,10 +6,10 @@ import java.util.UUID;
 
 public abstract class AbstractYggdrasilPlayerManager {
 
-    protected List<AbstractYggdrasilPlayer> players;
+    protected final List<AbstractYggdrasilPlayer> players = new ArrayList<>();
 
-    public AbstractYggdrasilPlayerManager() {
-        this.players = new ArrayList<>();
+    public boolean exists(UUID id) {
+        return getById(id) != null;
     }
 
     protected AbstractYggdrasilPlayer getById(UUID id) {
@@ -21,11 +21,8 @@ public abstract class AbstractYggdrasilPlayerManager {
         return null;
     }
 
-    public boolean exists(UUID id) {
-        return getById(id) != null;
-    }
+    public abstract void createNewPlayer(UUID uniqueId);
 
-    public abstract void createNewPlayer(UUID id);
     public abstract void removeExistingPlayer(UUID uniqueId);
 
     public List<AbstractYggdrasilPlayer> getPlayers() {

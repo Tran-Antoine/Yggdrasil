@@ -11,26 +11,25 @@ import java.util.function.Function;
 
 public class GameItemClock {
 
-    private double gameTime;
-    private Queue<TimedItemData> queue;
+    private double gameTime = -1;
+    private Queue<TimedItemData> queue = new PriorityQueue<>();
+
     private TimedItemData currentHead;
 
-    public GameItemClock() {
-        this.queue = new PriorityQueue<>();
-        this.gameTime = -1;
-    }
-
     public void update() {
+
         gameTime = Sponge.getServer().getRunningTimeTicks();
         if(!reloadHead()) {
             return;
         }
+
         double headEndTime = currentHead.getEndingTime();
         if (gameTime >= headEndTime) {
             currentHead.getItem().onReady();
             currentHead = null;
             queue.remove();
         }
+
     }
 
     private boolean reloadHead() {
@@ -45,23 +44,31 @@ public class GameItemClock {
     }
 
     public void queueItem(InteractiveItem item, double time) {
-        queue.add(new TimedItemData(item, time, gameTime));
+        TimedItemData timedItemData = new TimedItemData(item, time, gameTime);
+        queue.add(timedItemData);
     }
 
     public boolean isInQueue(InteractiveItem item) {
-        return reduceMatch(item, (data) -> true).orElse(false);
+        return reduceMatch(item, (data) -> true)
+                .orElse(false);
     }
 
     public double timeLeft(InteractiveItem item) {
-        return reduceMatch(item, (data) -> data.getEndingTime() - gameTime).orElse(0D);
+        return reduceMatch(item, (data) -> data.getEndingTime() - gameTime)
+                .orElse(0D);
     }
 
     private <T> Optional<T> reduceMatch(InteractiveItem item, Function<TimedItemData, T> supplier) {
+
         for(TimedItemData data : queue) {
+
             if(data.getItem().equals(item)) {
                 return Optional.of(supplier.apply(data));
             }
+
         }
+
         return Optional.empty();
     }
+
 }

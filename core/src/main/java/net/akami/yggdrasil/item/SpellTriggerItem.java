@@ -89,7 +89,7 @@ public class SpellTriggerItem extends InteractiveAimingItem {
     }
 
     private void castSpell(SpellCaster caster, Vector3d location, int tier) {
-        user.getMana().ifEnoughMana(caster.getCastingCost(tier), () -> {
+        user.getMana().ifEnough(caster.getCastingCost(tier), () -> {
             Spell spell = caster.createSpell();
             spell.cast(user, location, tier);
         });
