@@ -55,12 +55,12 @@ public class SpellTriggerItem extends InteractiveAimingItem {
     protected void applyEffect(Vector3d location, World world) {
         Optional<SpellCastContext> optResult = user.findBySequence();
         user.clearSequence();
-        textDisplayer.clearActionBarDisplay();
         optResult.ifPresent(result -> applyEffect(location, result));
     }
 
     @Override
     public void onRightClicked(CancellableEvent<?> event, GameItemClock clock) {
+        textDisplayer.clearActionBarDisplay();
         if(!aimlessSpell(event)) {
             super.onRightClicked(event, clock);
         }
