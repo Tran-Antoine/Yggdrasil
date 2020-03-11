@@ -1,5 +1,6 @@
 package net.akami.yggdrasil.player;
 
+import net.akami.yggdrasil.api.display.DisplayGroup;
 import net.akami.yggdrasil.api.item.InteractiveItem;
 import net.akami.yggdrasil.api.life.LifeComponent;
 import net.akami.yggdrasil.api.mana.ManaContainer;
@@ -9,8 +10,7 @@ import net.akami.yggdrasil.api.spell.ExcludedSpellHandler;
 import net.akami.yggdrasil.api.spell.SpellCaster;
 import net.akami.yggdrasil.api.spell.SpellCaster.SpellType;
 import net.akami.yggdrasil.api.utils.ItemUtils;
-import net.akami.yggdrasil.api.utils.TextDisplayer;
-import net.akami.yggdrasil.display.ActionBarSpellDisplayer;
+import net.akami.yggdrasil.api.display.SimpleTextDisplayer;
 import net.akami.yggdrasil.item.*;
 import net.akami.yggdrasil.life.PlayerLifeComponent;
 import net.akami.yggdrasil.mana.PlayerManaContainer;
@@ -22,7 +22,7 @@ import org.spongepowered.api.text.chat.ChatTypes;
 
 import java.util.*;
 
-public class YggdrasilPlayer implements AbstractYggdrasilPlayer, TextDisplayer {
+public class YggdrasilPlayer implements AbstractYggdrasilPlayer, SimpleTextDisplayer {
 
     private UUID id;
     private ManaContainer mana;
@@ -32,9 +32,9 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer, TextDisplayer {
     private List<SpellCaster> spells;
     private List<InteractiveItem> items;
     private ExcludedSpellHandler spellHandler;
-    private ActionBarSpellDisplayer actionBarSpellDisplayer;
+    private DisplayGroup displayGroup;
 
-    public YggdrasilPlayer(UUID id, ExcludedSpellHandler spellHandler, ActionBarSpellDisplayer actionBarSpellDisplayer) {
+    public YggdrasilPlayer(UUID id, ExcludedSpellHandler spellHandler, DisplayGroup displayGroup) {
         this.id = id;
         this.spellHandler = spellHandler;
         this.sequence = new ArrayList<>();
@@ -43,7 +43,7 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer, TextDisplayer {
         this.excludedTypes = new ArrayList<>();
         this.spells = new ArrayList<>();
         this.items = new ArrayList<>();
-        this.actionBarSpellDisplayer = actionBarSpellDisplayer;
+        this.displayGroup = displayGroup;
         addDefaultItems();
         addDefaultSpells();
     }
@@ -131,18 +131,18 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer, TextDisplayer {
     }
 
     @Override
+    public DisplayGroup getDisplayGroup() {
+        return displayGroup;
+    }
+
+    @Override
     public void displayActionBar(Text text) {
         Sponge.getServer().getPlayer(this.id).ifPresent(player -> player.sendMessage(ChatTypes.ACTION_BAR, text));
     }
 
     @Override
-    public void addActionBarDisplayElement(Text element) {
-        actionBarSpellDisplayer.addElement(this, element);
-    }
-
-    @Override
     public void clearActionBarDisplay() {
-        actionBarSpellDisplayer.clearSequence(this);
+        displayGroup.clearSequence(this);
         Sponge.getServer().getPlayer(this.id).ifPresent(player -> player.sendMessage(ChatTypes.ACTION_BAR, Text.of("")));
     }
 }

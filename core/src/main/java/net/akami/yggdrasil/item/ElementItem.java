@@ -6,7 +6,7 @@ import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.item.InteractiveItem;
 import net.akami.yggdrasil.api.spell.ElementType;
 import net.akami.yggdrasil.api.spell.MagicUser;
-import net.akami.yggdrasil.api.utils.TextDisplayer;
+import net.akami.yggdrasil.api.display.SimpleTextDisplayer;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockTypes;
@@ -24,9 +24,9 @@ public abstract class ElementItem implements InteractiveItem {
 
     private MagicUser user;
     private ItemStack item;
-    private TextDisplayer textDisplayer;
+    private SimpleTextDisplayer textDisplayer;
 
-    public ElementItem(MagicUser user, TextDisplayer textDisplayer) {
+    public ElementItem(MagicUser user, SimpleTextDisplayer textDisplayer) {
         this.user = user;
         this.item = ItemStack
                 .builder()
@@ -40,6 +40,7 @@ public abstract class ElementItem implements InteractiveItem {
 
     protected abstract ElementType getType();
     protected abstract Text getName();
+    protected abstract Text getSymbol();
     protected abstract DyeColor getColor();
     protected abstract ParticleType getParticleType();
     protected int getParticleQuantity() { return 70; }
@@ -62,7 +63,7 @@ public abstract class ElementItem implements InteractiveItem {
 
     private void click() {
         user.currentSequence().add(getType());
-        textDisplayer.addActionBarDisplayElement(getName());
+        textDisplayer.addActionBarDisplayElement(getSymbol());
         // Since it is called right after a click, we know that the player is there
         Player player = Sponge.getServer().getPlayer(user.getUUID()).get();
         BlockState blockState = BlockState
