@@ -20,6 +20,7 @@ public class WaterPrisonCurrentTier implements SpellTier<WaterPrisonLauncher> {
     @Override
     public void definePreLaunchProperties(Player caster, SpellCreationData<WaterPrisonLauncher> data) {
         data.addPostAction(this::makeCurrent);
+        data.setProperty("slows_down", false);
     }
 
     private void makeCurrent(Player player, WaterPrisonLauncher launcher) {

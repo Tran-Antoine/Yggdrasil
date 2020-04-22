@@ -15,8 +15,6 @@ import org.spongepowered.api.data.property.block.MatterProperty;
 import org.spongepowered.api.data.property.block.MatterProperty.Matter;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleTypes;
-import org.spongepowered.api.effect.potion.PotionEffect;
-import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.Living;
 import org.spongepowered.api.entity.living.player.Player;
@@ -26,9 +24,11 @@ import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.World;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiConsumer;
 
 public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
 
@@ -37,8 +37,8 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
     private int radius;
     private Vector3i center;
     private SpellCreationData<WaterPrisonLauncher> data;
+    private boolean slowsDown;
     private int lifeSpan;
-    private PotionEffect slownessEffect;
     private boolean dead = false;
 
     public WaterPrisonLauncher() {
@@ -53,7 +53,8 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
         this.radius = map.getProperty("radius", Integer.class);
         this.center = map.getProperty("location", Vector3d.class).toInt();
         this.lifeSpan = map.getProperty("life_span", Integer.class);
-        setSlownessEffect();
+        this.slowsDown = map.getPropertyOrElse("slows_down", true);
+
         World world = caster.getWorld();
         Object plugin = YggdrasilMain.getPlugin();
 
@@ -75,12 +76,6 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
                 .build(), center.toDouble());
     }
 
-    private void setSlownessEffect() {
-        this.slownessEffect = PotionEffect.builder()
-                .potionType(PotionEffectTypes.SLOWNESS)
-                .duration(lifeSpan)
-                .build();
-    }
 
     @Listener
     public void onMove(MoveEntityEvent event) {
@@ -117,23 +112,25 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
             return;
         }
         data.restoreSpellAccess((magicUser) -> magicUser.getUUID().equals(targetID));
-        setEffects(target, List::remove);
+        trappedEntities.remove(targetID);
     }
 
     private void depriveEntity(Living target) {
+
+        if(slowsDown) {
+            Vector3d vel = target.getVelocity();
+            if (vel.length() > 0.01) {
+                target.setVelocity(vel.normalize().mul(0.01, 0.00001, 0.01));
+            }
+        }
+
         if(trappedEntities.contains(target.getUniqueId())) {
             return;
         }
+
         trappedEntities.add(target.getUniqueId());
         target.offer(Keys.REMAINING_AIR, 40);
-        setEffects(target, List::add);
         data.excludeTargetSpells();
-    }
-
-    private void setEffects(Entity target, BiConsumer<List<PotionEffect>, PotionEffect> action) {
-        List<PotionEffect> effects = target.get(Keys.POTION_EFFECTS).orElse(new ArrayList<>(1));
-        action.accept(effects, slownessEffect);
-        target.offer(Keys.POTION_EFFECTS, effects);
     }
 
     private void register(Object plugin) {
