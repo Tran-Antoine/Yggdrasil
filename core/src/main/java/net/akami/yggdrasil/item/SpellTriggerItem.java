@@ -1,7 +1,6 @@
 package net.akami.yggdrasil.item;
 
 import com.flowpowered.math.vector.Vector3d;
-import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.item.InteractiveAimingItem;
 import net.akami.yggdrasil.api.spell.MagicUser;
@@ -9,6 +8,7 @@ import net.akami.yggdrasil.api.spell.Spell;
 import net.akami.yggdrasil.api.spell.SpellCastContext;
 import net.akami.yggdrasil.api.spell.SpellCaster;
 import net.akami.yggdrasil.api.display.SimpleTextDisplayer;
+import net.akami.yggdrasil.api.task.AbstractGameItemClock;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.enchantment.Enchantment;
@@ -59,7 +59,7 @@ public class SpellTriggerItem extends InteractiveAimingItem {
     }
 
     @Override
-    public void onRightClicked(CancellableEvent<?> event, GameItemClock clock) {
+    public void onRightClicked(CancellableEvent<?> event, AbstractGameItemClock clock) {
         textDisplayer.clearActionBarDisplay();
         if(!aimlessSpell(event)) {
             super.onRightClicked(event, clock);

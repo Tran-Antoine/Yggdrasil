@@ -2,9 +2,9 @@ package net.akami.yggdrasil.game.events;
 
 import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.input.UUIDHolder;
-import net.akami.yggdrasil.game.task.GameItemClock;
 import net.akami.yggdrasil.api.item.InteractiveItemHandler;
 import net.akami.yggdrasil.api.item.InteractiveItemUser;
+import net.akami.yggdrasil.api.task.AbstractGameItemClock;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.data.value.mutable.Value;
@@ -25,10 +25,10 @@ import java.util.UUID;
 
 public class ItemInteractionsListener {
 
-    private GameItemClock clock;
+    private AbstractGameItemClock clock;
     private List<? extends InteractiveItemUser> users;
 
-    public ItemInteractionsListener(List<? extends InteractiveItemUser> users, GameItemClock clock) {
+    public ItemInteractionsListener(List<? extends InteractiveItemUser> users, AbstractGameItemClock clock) {
         this.users = users;
         this.clock = clock;
     }
