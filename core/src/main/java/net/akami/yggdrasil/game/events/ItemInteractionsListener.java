@@ -1,6 +1,8 @@
-package net.akami.yggdrasil.api.input;
+package net.akami.yggdrasil.game.events;
 
-import net.akami.yggdrasil.api.game.task.GameItemClock;
+import net.akami.yggdrasil.api.input.CancellableEvent;
+import net.akami.yggdrasil.api.input.UUIDHolder;
+import net.akami.yggdrasil.game.task.GameItemClock;
 import net.akami.yggdrasil.api.item.InteractiveItemHandler;
 import net.akami.yggdrasil.api.item.InteractiveItemUser;
 import org.spongepowered.api.block.BlockTypes;

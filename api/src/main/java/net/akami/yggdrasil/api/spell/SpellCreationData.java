@@ -18,8 +18,7 @@ public class SpellCreationData<T extends SpellLauncher<T>> {
     private boolean isStorable;
     private ItemStack item;
     private InteractiveItemHandler handler;
-    private Set deprivedUsers;
-    private MagicUser caster;
+    private Set<MagicUser> deprivedUsers;
 
     public SpellCreationData() {
         this.preActions = new ArrayList<>();
@@ -51,8 +50,8 @@ public class SpellCreationData<T extends SpellLauncher<T>> {
         }
 
         public <R> R getPropertyOrElse(String name, R orElse) {
-            R result = (R) getProperty(name, orElse.getClass());
-            return result != null ? result : orElse;
+            Object result = getProperty(name);
+            return result != null ? (R) result : orElse;
         }
     }
 
@@ -115,6 +114,8 @@ public class SpellCreationData<T extends SpellLauncher<T>> {
         ExcludedSpellHandler spellHandler = user.getExclusionHandler();
         if(condition == null) return;
 
+        System.out.println(map);
+        System.out.println(map.getProperty("excluded_type"));
         SpellType excluded = map.getPropertyOrElse("excluded_type", SpellType.NONE);
         this.deprivedUsers.addAll(spellHandler.addExcludingType(excluded, condition));
     }
@@ -125,8 +126,9 @@ public class SpellCreationData<T extends SpellLauncher<T>> {
 
     public void restoreSpellAccess(Predicate<MagicUser> condition) {
         Predicate<MagicUser> combination = condition.and(deprivedUsers::contains);
-        SpellType type = getPropertyMap().getPropertyOrElse("excluded_type", SpellType.NONE);
-        caster.getExclusionHandler().removeExcludingType(type, combination);
+        PropertyMap map = getPropertyMap();
+        SpellType type = map.getPropertyOrElse("excluded_type", SpellType.NONE);
+        map.getProperty("caster", MagicUser.class).getExclusionHandler().removeExcludingType(type, combination);
     }
 
     public ItemStack getItem() {

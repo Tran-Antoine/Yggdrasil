@@ -1,6 +1,6 @@
 package net.akami.yggdrasil.api.item;
 
-import net.akami.yggdrasil.api.game.task.GameItemClock;
+import net.akami.yggdrasil.api.task.AbstractGameItemClock;
 import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.spell.MagicUser;
 import net.akami.yggdrasil.api.spell.SpellCreationData;
@@ -30,11 +30,11 @@ public class LaunchableSpellItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(CancellableEvent<?> event, GameItemClock clock) {
+    public void onLeftClicked(CancellableEvent<?> event, AbstractGameItemClock clock) {
     }
 
     @Override
-    public void onRightClicked(CancellableEvent<?> event, GameItemClock clock) {
+    public void onRightClicked(CancellableEvent<?> event, AbstractGameItemClock clock) {
         Player player = event.getCause().first(Player.class).get();
         HandType chosen = ItemUtils.getMatchingHand(player, this.modelItem);
 

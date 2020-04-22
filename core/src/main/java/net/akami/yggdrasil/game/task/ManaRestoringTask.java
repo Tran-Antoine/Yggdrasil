@@ -1,4 +1,4 @@
-package net.akami.yggdrasil.api.game.task;
+package net.akami.yggdrasil.game.task;
 
 import net.akami.yggdrasil.api.mana.ManaHolder;
 

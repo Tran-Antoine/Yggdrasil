@@ -1,4 +1,4 @@
-package net.akami.yggdrasil.api.game.task;
+package net.akami.yggdrasil.game.task;
 
 import com.flowpowered.math.vector.Vector3d;
 import org.spongepowered.api.entity.living.player.Player;

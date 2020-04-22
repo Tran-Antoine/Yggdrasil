@@ -4,9 +4,9 @@ import org.spongepowered.api.entity.living.player.Player;
 
 public class SpellTimeTier<T extends SpellLauncher<T>> implements SpellTier<T> {
 
-    private long time;
+    private int time;
 
-    public SpellTimeTier(long time) {
+    public SpellTimeTier(int time) {
         this.time = time;
     }
 
