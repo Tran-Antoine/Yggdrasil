@@ -1,7 +1,8 @@
-package net.akami.yggdrasil.api.game.task;
+package net.akami.yggdrasil.game.task;
 
 import net.akami.yggdrasil.api.item.InteractiveItem;
 import net.akami.yggdrasil.api.item.TimedItemData;
+import net.akami.yggdrasil.api.task.AbstractGameItemClock;
 import org.spongepowered.api.Sponge;
 
 import java.util.Optional;
@@ -9,7 +10,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.function.Function;
 
-public class GameItemClock {
+public class GameItemClock implements AbstractGameItemClock {
 
     private double gameTime;
     private Queue<TimedItemData> queue;
@@ -20,6 +21,7 @@ public class GameItemClock {
         this.gameTime = -1;
     }
 
+    @Override
     public void update() {
         gameTime = Sponge.getServer().getRunningTimeTicks();
         if(!reloadHead()) {
@@ -44,14 +46,17 @@ public class GameItemClock {
         return true;
     }
 
+    @Override
     public void queueItem(InteractiveItem item, double time) {
         queue.add(new TimedItemData(item, time, gameTime));
     }
 
+    @Override
     public boolean isInQueue(InteractiveItem item) {
         return reduceMatch(item, (data) -> true).orElse(false);
     }
 
+    @Override
     public double timeLeft(InteractiveItem item) {
         return reduceMatch(item, (data) -> data.getEndingTime() - gameTime).orElse(0D);
     }

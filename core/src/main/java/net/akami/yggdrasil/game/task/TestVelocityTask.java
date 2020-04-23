@@ -1,4 +1,4 @@
-package net.akami.yggdrasil.api.game.task;
+package net.akami.yggdrasil.game.task;
 
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;

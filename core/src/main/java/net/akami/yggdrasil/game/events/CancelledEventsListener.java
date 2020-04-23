@@ -1,4 +1,4 @@
-package net.akami.yggdrasil.api.game.events;
+package net.akami.yggdrasil.game.events;
 
 import net.akami.yggdrasil.api.data.YggdrasilKeys;
 import net.akami.yggdrasil.api.player.AbstractYggdrasilPlayerManager;
@@ -9,6 +9,9 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.Order;
+import org.spongepowered.api.event.block.ChangeBlockEvent;
+import org.spongepowered.api.event.cause.Cause;
+import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.event.entity.SpawnEntityEvent;
@@ -20,6 +23,16 @@ public class CancelledEventsListener {
 
     public CancelledEventsListener(AbstractYggdrasilPlayerManager manager) {
         this.manager = manager;
+    }
+
+    @Listener(order = Order.LAST)
+    public void onBlockChange(ChangeBlockEvent event) {
+        Cause cause = event.getCause();
+        cause.getContext().get(EventContextKeys.PLAYER).ifPresent((player) -> {
+            if(player.gameMode().get() != GameModes.CREATIVE) {
+                event.setCancelled(true);
+            }
+        });
     }
 
     @Listener(order = Order.LAST)
