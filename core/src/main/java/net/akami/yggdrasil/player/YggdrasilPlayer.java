@@ -81,7 +81,10 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer, SimpleTextDispl
                 new PhoenixArrowCaster(),
                 new IncendiaCaster(),
                 new CounterVelocityCaster(this),
-                new WaterPrisonCaster()
+                new WaterPrisonCaster(),
+                new MistCaster(),
+                new FreezingCaster(),
+                new LevitationCaster()
         ));
     }
 

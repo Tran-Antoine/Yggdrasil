@@ -11,10 +11,10 @@ public class PhoenixArrowSpell implements Spell<PhoenixArrowLauncher> {
     public List<SpellTier<PhoenixArrowLauncher>> getTiers() {
         return Arrays.asList(
                 new PhoenixArrowBaseTier(),
-                new PhoenixArrowDamageTier(3),
-                new PhoenixArrowCountTier(2),
-                new PhoenixArrowExplosiveTier(),
+                new PhoenixArrowDamageTier(4),
                 new PhoenixArrowCountTier(3),
+                new PhoenixArrowExplosiveTier(),
+                new PhoenixArrowCountTier(4),
                 new PhoenixArrowDamageTier(5),
                 new PhoenixArrowGuidanceTier()
         );

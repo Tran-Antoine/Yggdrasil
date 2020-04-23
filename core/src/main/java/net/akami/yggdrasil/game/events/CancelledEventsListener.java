@@ -25,7 +25,7 @@ public class CancelledEventsListener {
         this.manager = manager;
     }
 
-    //@Listener(order = Order.LAST)
+    @Listener(order = Order.LAST)
     public void onBlockChange(ChangeBlockEvent event) {
         Cause cause = event.getCause();
         cause.getContext().get(EventContextKeys.PLAYER).ifPresent((player) -> {

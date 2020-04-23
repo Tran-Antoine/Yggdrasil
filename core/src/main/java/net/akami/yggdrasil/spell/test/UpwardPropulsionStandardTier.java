@@ -1,9 +1,9 @@
 package net.akami.yggdrasil.spell.test;
 
 import com.flowpowered.math.vector.Vector3d;
+import net.akami.yggdrasil.YggdrasilMain;
 import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellTier;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Task;
 
@@ -32,7 +32,7 @@ public class UpwardPropulsionStandardTier implements SpellTier {
                 .delay(500, TimeUnit.MILLISECONDS)
                 .interval(250, TimeUnit.MILLISECONDS)
                 .execute(task -> run(task, caster, finalHeight))
-                .submit(Sponge.getPluginManager().getPlugin("yggdrasil").get());
+                .submit(YggdrasilMain.getPlugin());
     }
 
     private void run(Task task, Player player, double finalHeight) {

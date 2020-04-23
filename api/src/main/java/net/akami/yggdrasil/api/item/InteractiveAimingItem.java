@@ -51,6 +51,7 @@ public abstract class InteractiveAimingItem implements InteractiveItem {
             return;
         }
         Projectile projectile = (Projectile) entity;
+        projectile.offer(Keys.VANISH, true);
         ProjectileSource shooter = projectile.getShooter();
         if(!(shooter instanceof Player)) {
             return;
