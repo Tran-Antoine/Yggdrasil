@@ -28,7 +28,7 @@ public class PhoenixArrowBaseTier implements SpellTier<PhoenixArrowLauncher> {
 
     @Override
     public void definePreLaunchProperties(Player caster, SpellCreationData<PhoenixArrowLauncher> data) {
-        data.setProperty("damage", 2.0);
+        data.setProperty("damage", 2.5);
         data.addPostAction(this::addParticles);
     }
 

@@ -47,8 +47,10 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
 
     private UUID findClosestPlayer(Player player) {
 
-        Collection<Entity> worldPlayers = player.getWorld().getEntities(e -> e.getType() == EntityTypes.PIG);
+        Collection<Entity> worldPlayers = player.getWorld().getEntities(e -> isOtherPlayer(e, player));
         Map<Entity, Double> distanceMap = new HashMap<>();
+
+        if(worldPlayers.size() == 0) return null;
 
         worldPlayers.forEach(entity -> distanceMap.put(entity, distance(entity, player)));
         List<Entry<Entity, Double>> orderedDistances = new ArrayList<>(distanceMap.entrySet());
@@ -62,6 +64,9 @@ public class PhoenixArrowGuidanceTier implements SpellTier<PhoenixArrowLauncher>
                 .getUniqueId();
     }
 
+    private boolean isOtherPlayer(Entity test, Player player) {
+        return test.getType() == EntityTypes.PLAYER && test != player;
+    }
     private double distance(Entity a, Entity b) {
         Vector3d posA = a.getLocation().getPosition();
         Vector3d posB = b.getLocation().getPosition();

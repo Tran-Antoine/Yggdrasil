@@ -19,7 +19,7 @@ public class CounterVelocityLauncher implements SpellLauncher<CounterVelocityLau
         double maxVelocityCountered = map.getProperty("max_velocity_countered", Double.class);
         this.counteredVelocity = currentVelocity.length() <= maxVelocityCountered
                 ? currentVelocity
-                : currentVelocity.normalize().mul(maxVelocityCountered / 1.3);
+                : currentVelocity.normalize().mul(maxVelocityCountered / 1.4);
 
         caster.setVelocity(currentVelocity.sub(counteredVelocity));
         float fakeFallingDistance = (float) YggdrasilMath.velocityToFallingDistance(caster.getVelocity().getY());
