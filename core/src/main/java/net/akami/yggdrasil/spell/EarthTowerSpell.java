@@ -1,6 +1,8 @@
 package net.akami.yggdrasil.spell;
 
+import net.akami.yggdrasil.api.spell.EmptySpellTier;
 import net.akami.yggdrasil.api.spell.Spell;
+import net.akami.yggdrasil.api.spell.SpellRadiusTier;
 import net.akami.yggdrasil.api.spell.SpellTier;
 
 import java.util.Arrays;
@@ -11,9 +13,11 @@ public class EarthTowerSpell implements Spell<EarthTowerLauncher> {
     @Override
     public List<SpellTier<EarthTowerLauncher>> getTiers() {
         return Arrays.asList(
-                new EarthTowerDimensionTier(1, 5),
-                new EarthTowerDimensionTier(2, 5),
-                new EarthTowerDimensionTier(2, 8)
+                new EarthTowerBaseTier(),
+                new SpellRadiusTier<>(2),
+                new EarthTowerHeightTier(8),
+                new EarthTowerUnderneathTier(),
+                new EmptySpellTier<>()
         );
     }
 
