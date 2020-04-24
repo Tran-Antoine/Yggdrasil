@@ -31,6 +31,8 @@ public class YggdrasilPlayerManager extends AbstractYggdrasilPlayerManager {
     @Override
     public void removeExistingPlayer(UUID id) {
         AbstractYggdrasilPlayer player = getById(id);
+        if(player == null) return;
+        
         player.getMana().remove();
         players.remove(player);
     }
