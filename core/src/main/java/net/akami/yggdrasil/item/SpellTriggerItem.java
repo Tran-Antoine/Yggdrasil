@@ -53,7 +53,7 @@ public class SpellTriggerItem extends InteractiveAimingItem {
 
     @Override
     protected void applyEffect(Vector3d location, World world) {
-        Optional<SpellCastContext> optResult = user.findBySequence();
+        Optional<SpellCastContext> optResult = user.findBySequenceThenClear();
         optResult.ifPresent(result -> applyEffect(location, result));
     }
 
@@ -63,7 +63,6 @@ public class SpellTriggerItem extends InteractiveAimingItem {
         if(!aimlessSpell(event)) {
             super.onRightClicked(event, clock);
         }
-        user.clearSequence();
     }
 
     private boolean aimlessSpell(CancellableEvent<?> event) {
@@ -71,7 +70,7 @@ public class SpellTriggerItem extends InteractiveAimingItem {
         if(!ready) {
             return false;
         }
-        Optional<SpellCastContext> optResult = user.findBySequence();
+        Optional<SpellCastContext> optResult = user.findBySequenceThenClear();
         if(optResult.isPresent()) {
             SpellCastContext result = optResult.get();
             if(!result.requiresLocation()) {
