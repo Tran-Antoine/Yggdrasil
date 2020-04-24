@@ -11,7 +11,9 @@ public class EarthTowerSpell implements Spell<EarthTowerLauncher> {
     @Override
     public List<SpellTier<EarthTowerLauncher>> getTiers() {
         return Arrays.asList(
-
+                new EarthTowerDimensionTier(1, 5),
+                new EarthTowerDimensionTier(2, 5),
+                new EarthTowerDimensionTier(2, 8)
         );
     }
 
