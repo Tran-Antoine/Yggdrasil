@@ -1,5 +1,6 @@
 package net.akami.yggdrasil.spell;
 
+import net.akami.yggdrasil.api.item.InteractiveItemHandler;
 import net.akami.yggdrasil.api.spell.AbstractSpellCaster;
 import net.akami.yggdrasil.api.spell.ElementType;
 import net.akami.yggdrasil.api.spell.Spell;
@@ -13,9 +14,15 @@ import java.util.function.Supplier;
 
 public class EarthTowerCaster extends AbstractSpellCaster {
 
+    private InteractiveItemHandler handler;
+
+    public EarthTowerCaster(InteractiveItemHandler handler) {
+        this.handler = handler;
+    }
+
     @Override
     protected Supplier<Spell> loadGenerator() {
-        return EarthTowerSpell::new;
+        return () -> new EarthTowerSpell(handler);
     }
 
     @Override
