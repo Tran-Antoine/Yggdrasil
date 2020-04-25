@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class EarthTowerUnderneathTier implements SpellTier<EarthTowerLauncher> {
 
-    private static final CenterRetriever UNDERNEATH = (caster) -> Optional.of(caster.getPosition().toInt());
+    private static final CenterRetriever UNDERNEATH = (caster, map) -> Optional.of(caster.getPosition().toInt());
 
     @Override
     public void definePreLaunchProperties(Player caster, SpellCreationData<EarthTowerLauncher> data) {

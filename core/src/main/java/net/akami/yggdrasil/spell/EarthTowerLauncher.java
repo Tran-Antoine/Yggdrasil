@@ -39,7 +39,7 @@ public class EarthTowerLauncher implements SpellLauncher<EarthTowerLauncher> {
         int height = map.getProperty("height", Integer.class);
         World world = caster.getWorld();
 
-        Optional<Vector3i> optCenter = retriever.getCenter(caster);
+        Optional<Vector3i> optCenter = retriever.getCenter(caster, map);
         if (!optCenter.isPresent()) {
             return LaunchResult.FAIL;
         }
@@ -142,7 +142,11 @@ public class EarthTowerLauncher implements SpellLauncher<EarthTowerLauncher> {
 
     public interface CenterRetriever {
 
-        CenterRetriever DEFAULT = (caster) -> {
+        CenterRetriever DEFAULT = (caster, map) -> {
+            Vector3d arrowLoc = map.getProperty("location", Vector3d.class);
+            if(arrowLoc != null) {
+                return Optional.of(arrowLoc.toInt());
+            }
             Vector3d dir = YggdrasilMath.headRotationToDirection(caster.getHeadRotation());
             Vector3d flatDir = new Vector3d(dir.getX(), 0, dir.getZ());
 
@@ -158,13 +162,13 @@ public class EarthTowerLauncher implements SpellLauncher<EarthTowerLauncher> {
         };
 
 
-        Optional<Vector3i> getCenter(Player caster);
+        Optional<Vector3i> getCenter(Player caster, PropertyMap map);
 
         default CenterRetriever or(CenterRetriever or) {
-            return (caster) -> {
-                Optional<Vector3i> first = this.getCenter(caster);
+            return (caster, map) -> {
+                Optional<Vector3i> first = this.getCenter(caster, map);
                 if (first.isPresent()) return first;
-                return or.getCenter(caster);
+                return or.getCenter(caster, map);
             };
         }
     }
