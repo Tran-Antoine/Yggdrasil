@@ -114,8 +114,6 @@ public class SpellCreationData<T extends SpellLauncher<T>> {
         ExcludedSpellHandler spellHandler = user.getExclusionHandler();
         if(condition == null) return;
 
-        System.out.println(map);
-        System.out.println(map.getProperty("excluded_type"));
         SpellType excluded = map.getPropertyOrElse("excluded_type", SpellType.NONE);
         this.deprivedUsers.addAll(spellHandler.addExcludingType(excluded, condition));
     }
