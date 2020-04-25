@@ -84,7 +84,6 @@ public class EarthTowerLauncher implements SpellLauncher<EarthTowerLauncher> {
             int deltaGroundingY = findDeltaGroundingY(center, dx, dz, world);
 
             heights.put(column, new Vector2i(finalHeight, deltaGroundingY));
-            System.out.println("Added height for column " + column + " : " + finalHeight);
         }
 
         return heights.get(column);

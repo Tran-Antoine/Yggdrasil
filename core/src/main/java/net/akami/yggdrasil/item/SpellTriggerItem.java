@@ -60,28 +60,29 @@ public class SpellTriggerItem extends InteractiveAimingItem {
     @Override
     public void onRightClicked(CancellableEvent<?> event, AbstractGameItemClock clock) {
         textDisplayer.clearActionBarDisplay();
-        if(!aimlessSpell(event)) {
+        if(aimingSpellOtherwiseLaunch(event)) {
             super.onRightClicked(event, clock);
         }
     }
 
-    private boolean aimlessSpell(CancellableEvent<?> event) {
+    private boolean aimingSpellOtherwiseLaunch(CancellableEvent<?> event) {
 
         if(!ready) {
-            return false;
+            return true;
         }
-        Optional<SpellCastContext> optResult = user.findBySequenceThenClear();
+        Optional<SpellCastContext> optResult = user.findBySequence();
         if(optResult.isPresent()) {
             SpellCastContext result = optResult.get();
             if(!result.requiresLocation()) {
+                user.clearSequence();
                 textDisplayer.clearActionBarDisplay();
                 applyEffect(null, result);
                 event.setCancelled(true);
                 ready = true;
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     private void applyEffect(Vector3d location, SpellCastContext context) {
