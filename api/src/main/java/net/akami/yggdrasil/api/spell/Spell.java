@@ -34,7 +34,7 @@ public interface Spell<T extends SpellLauncher<T>> {
         T launcher = this.getLauncher();
 
         if(data.isStorable()) {
-            LaunchableSpellItem item = new LaunchableSpellItem(data.getItem(), data, launcher, user);
+            LaunchableSpellItem item = new LaunchableSpellItem(data.getItem(), data, () -> launcher);
             InteractiveItemHandler handler = data.getHandler();
             ItemUtils.fitItem(wizard, handler, item);
         } else {
