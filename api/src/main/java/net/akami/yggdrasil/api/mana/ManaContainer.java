@@ -22,11 +22,13 @@ public class ManaContainer {
 
     public void remove() {}
 
-    public void ifEnoughMana(float cost, Runnable action) {
+    public boolean ifEnoughMana(float cost, Runnable action) {
         if(hasEnoughMana(cost)) {
             use(cost);
             action.run();
+            return true;
         }
+        return false;
     }
 
     public void restore(float mana) {
