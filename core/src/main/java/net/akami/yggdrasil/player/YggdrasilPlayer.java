@@ -53,6 +53,7 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer, SimpleTextDispl
         items.addAll(Arrays.asList(
                 new AdvancedMovementItem(this),
                 new InstantHealItem(this),
+                new ControlModeSwitchItem(this),
 
                 new SpellTriggerItem(this, this),
                 new FireElementItem(this, this),

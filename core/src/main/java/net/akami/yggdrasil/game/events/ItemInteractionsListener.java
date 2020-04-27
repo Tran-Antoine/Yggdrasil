@@ -17,6 +17,7 @@ import org.spongepowered.api.event.block.InteractBlockEvent;
 import org.spongepowered.api.event.cause.Cause;
 import org.spongepowered.api.event.filter.cause.Root;
 import org.spongepowered.api.event.filter.type.Include;
+import org.spongepowered.api.event.item.inventory.ChangeInventoryEvent;
 import org.spongepowered.api.event.item.inventory.InteractItemEvent;
 import org.spongepowered.api.item.inventory.ItemStack;
 
@@ -55,6 +56,12 @@ public class ItemInteractionsListener {
         Optional<ItemStack> optItem = getItem(event);
         optItem.ifPresent((item) ->
                 getHandler(event).ifPresent((handler) -> handler.leftClick(item, CancellableEvent.of(event), clock)));
+    }
+
+    @Listener
+    public void onItemSelected(ChangeInventoryEvent event) {
+        Optional<ItemStack> optItem = getItem(event);
+        optItem.ifPresent(item -> getHandler(event).ifPresent((handler) -> handler.select(item, CancellableEvent.of(event), clock)));
     }
 
     @Listener(order = Order.LAST)
