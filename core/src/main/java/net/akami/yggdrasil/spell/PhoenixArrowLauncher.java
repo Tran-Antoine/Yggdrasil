@@ -31,7 +31,7 @@ public class PhoenixArrowLauncher implements SpellLauncher<PhoenixArrowLauncher>
 
     private int arrowsCount;
     private int arrowsSummoned = 0;
-    private List<UUID> arrows;
+    private final List<UUID> arrows;
 
     public PhoenixArrowLauncher() {
         this.arrows = new ArrayList<>();
@@ -65,7 +65,7 @@ public class PhoenixArrowLauncher implements SpellLauncher<PhoenixArrowLauncher>
     }
 
     @Override
-    public LaunchResult commonLaunch(SpellCreationData data, Player caster) {
+    public LaunchResult commonLaunch(SpellCreationData<PhoenixArrowLauncher> data, Player caster) {
 
         Object plugin = YggdrasilMain.getPlugin();
 

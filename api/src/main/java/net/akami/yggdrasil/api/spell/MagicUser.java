@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface MagicUser extends ManaHolder, UUIDHolder {
 
-    List<SpellCaster> getSpells();
+    List<SpellCaster<?>> getSpells();
     ExcludedSpellHandler getExclusionHandler();
     List<SpellType> currentlyExcludedTypes();
     List<ElementType> currentSequence();
 
     default Optional<SpellCastContext> findBySequence() {
-        for(SpellCaster caster : getSpells()) {
+        for(SpellCaster<?> caster : getSpells()) {
             if(currentlyExcludedTypes().contains(caster.getSpellType())) {
                 continue;
             }

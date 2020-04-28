@@ -11,16 +11,16 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class FireballCaster extends AbstractSpellCaster {
+public class FireballCaster extends AbstractSpellCaster<FireballSpellLauncher> {
 
-    private InteractiveItemHandler handler;
+    private final InteractiveItemHandler handler;
 
     public FireballCaster(InteractiveItemHandler handler) {
         this.handler = handler;
     }
 
     @Override
-    protected Supplier<Spell> loadGenerator() {
+    protected Supplier<Spell<FireballSpellLauncher>> loadGenerator() {
         return () -> new FireballSpell(handler);
     }
 

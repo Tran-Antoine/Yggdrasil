@@ -1,16 +1,15 @@
 package net.akami.yggdrasil.spell;
 
 import net.akami.yggdrasil.api.spell.Spell;
-import net.akami.yggdrasil.api.spell.SpellLauncher;
 import net.akami.yggdrasil.api.spell.SpellTier;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class WaterPrisonSpell implements Spell {
+public class WaterPrisonSpell implements Spell<WaterPrisonLauncher> {
 
     @Override
-    public List<SpellTier> getTiers() {
+    public List<SpellTier<WaterPrisonLauncher>> getTiers() {
         return Arrays.asList(
                 new WaterPrisonBaseTier(),
                 new WaterPrisonRadiusTier(4),
@@ -23,7 +22,7 @@ public class WaterPrisonSpell implements Spell {
     }
 
     @Override
-    public SpellLauncher getLauncher() {
+    public WaterPrisonLauncher getLauncher() {
         return new WaterPrisonLauncher();
     }
 }

@@ -7,7 +7,7 @@ import org.spongepowered.api.entity.living.player.Player;
 public class PhoenixArrowExplosiveTier implements SpellTier<PhoenixArrowLauncher> {
 
     @Override
-    public void definePreLaunchProperties(Player caster, SpellCreationData data) {
+    public void definePreLaunchProperties(Player caster, SpellCreationData<PhoenixArrowLauncher> data) {
         data.addProperty("explosive");
     }
 }

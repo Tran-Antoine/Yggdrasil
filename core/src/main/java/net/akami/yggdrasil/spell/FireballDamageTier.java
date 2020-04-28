@@ -4,10 +4,10 @@ import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellTier;
 import org.spongepowered.api.entity.living.player.Player;
 
-public class FireballDamageTier implements SpellTier {
+public class FireballDamageTier implements SpellTier<FireballSpellLauncher> {
 
-    private int radius;
-    private double damage;
+    private final int radius;
+    private final double damage;
 
     public FireballDamageTier(int radius, double damage) {
         this.radius = radius;
@@ -15,7 +15,7 @@ public class FireballDamageTier implements SpellTier {
     }
 
     @Override
-    public void definePreLaunchProperties(Player caster, SpellCreationData data) {
+    public void definePreLaunchProperties(Player caster, SpellCreationData<FireballSpellLauncher> data) {
         data.setProperty("radius", radius);
         data.setProperty("damage", damage);
     }

@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class IncendiaCaster extends AbstractSpellCaster {
+public class IncendiaCaster extends AbstractSpellCaster<IncendiaSpellLauncher> {
 
     @Override
-    protected Supplier<Spell> loadGenerator() {
+    protected Supplier<Spell<IncendiaSpellLauncher>> loadGenerator() {
         return IncendiaSpell::new;
     }
 

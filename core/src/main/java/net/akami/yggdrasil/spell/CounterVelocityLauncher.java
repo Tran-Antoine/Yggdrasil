@@ -13,7 +13,7 @@ public class CounterVelocityLauncher implements SpellLauncher<CounterVelocityLau
     private Vector3d counteredVelocity;
 
     @Override
-    public LaunchResult commonLaunch(SpellCreationData data, Player caster) {
+    public LaunchResult commonLaunch(SpellCreationData<CounterVelocityLauncher> data, Player caster) {
         Vector3d currentVelocity = caster.getVelocity();
         PropertyMap map = data.getPropertyMap();
         double maxVelocityCountered = map.getProperty("max_velocity_countered", Double.class);

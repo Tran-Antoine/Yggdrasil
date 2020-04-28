@@ -1,16 +1,15 @@
 package net.akami.yggdrasil.spell;
 
 import net.akami.yggdrasil.api.spell.Spell;
-import net.akami.yggdrasil.api.spell.SpellLauncher;
 import net.akami.yggdrasil.api.spell.SpellTier;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class IncendiaSpell implements Spell {
+public class IncendiaSpell implements Spell<IncendiaSpellLauncher> {
 
     @Override
-    public List<SpellTier> getTiers() {
+    public List<SpellTier<IncendiaSpellLauncher>> getTiers() {
         return Arrays.asList(
                 new IncendiaRadiusTier(3),
                 new IncendiaRadiusTier(4),
@@ -23,7 +22,7 @@ public class IncendiaSpell implements Spell {
     }
 
     @Override
-    public SpellLauncher getLauncher() {
+    public IncendiaSpellLauncher getLauncher() {
         return new IncendiaSpellLauncher();
     }
 }

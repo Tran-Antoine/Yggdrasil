@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class PhoenixArrowCaster extends AbstractSpellCaster {
+public class PhoenixArrowCaster extends AbstractSpellCaster<PhoenixArrowLauncher> {
 
     @Override
-    protected Supplier<Spell> loadGenerator() {
+    protected Supplier<Spell<PhoenixArrowLauncher>> loadGenerator() {
         return PhoenixArrowSpell::new;
     }
 

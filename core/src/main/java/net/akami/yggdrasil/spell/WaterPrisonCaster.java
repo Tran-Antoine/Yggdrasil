@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class WaterPrisonCaster extends AbstractSpellCaster {
+public class WaterPrisonCaster extends AbstractSpellCaster<WaterPrisonLauncher> {
 
     @Override
-    protected Supplier<Spell> loadGenerator() {
+    protected Supplier<Spell<WaterPrisonLauncher>> loadGenerator() {
         return WaterPrisonSpell::new;
     }
 

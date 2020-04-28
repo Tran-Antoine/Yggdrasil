@@ -12,10 +12,10 @@ import org.spongepowered.api.world.World;
 
 import java.util.Optional;
 
-public class FireballSpellLauncher implements SpellLauncher {
+public class FireballSpellLauncher implements SpellLauncher<FireballSpellLauncher> {
 
     @Override
-    public LaunchResult commonLaunch(SpellCreationData data, Player caster) {
+    public LaunchResult commonLaunch(SpellCreationData<FireballSpellLauncher> data, Player caster) {
 
         Entity fireBall = createBaseEntity(caster);
 

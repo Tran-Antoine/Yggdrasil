@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class PhoenixArrowBaseTier implements SpellTier<PhoenixArrowLauncher> {
 
     private World world;
-    private ParticleEffect effect;
+    private final ParticleEffect effect;
 
     public PhoenixArrowBaseTier() {
         this.effect = ParticleEffect.builder()
@@ -28,7 +28,7 @@ public class PhoenixArrowBaseTier implements SpellTier<PhoenixArrowLauncher> {
 
     @Override
     public void definePreLaunchProperties(Player caster, SpellCreationData<PhoenixArrowLauncher> data) {
-        data.setProperty("damage", 2.0);
+        data.setProperty("damage", 2.5);
         data.addPostAction(this::addParticles);
     }
 

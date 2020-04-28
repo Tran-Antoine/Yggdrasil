@@ -6,14 +6,14 @@ import org.spongepowered.api.entity.living.player.Player;
 
 public class PhoenixArrowCountTier implements SpellTier<PhoenixArrowLauncher> {
 
-    private int count;
+    private final int count;
 
     public PhoenixArrowCountTier(int count) {
         this.count = count;
     }
 
     @Override
-    public void definePreLaunchProperties(Player caster, SpellCreationData data) {
+    public void definePreLaunchProperties(Player caster, SpellCreationData<PhoenixArrowLauncher> data) {
         data.setProperty("arrowsCount", count);
     }
 }

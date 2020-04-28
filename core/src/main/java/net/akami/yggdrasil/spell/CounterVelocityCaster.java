@@ -11,16 +11,16 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class CounterVelocityCaster extends AbstractSpellCaster {
+public class CounterVelocityCaster extends AbstractSpellCaster<CounterVelocityLauncher> {
 
-    private InteractiveItemHandler handler;
+    private final InteractiveItemHandler handler;
 
     public CounterVelocityCaster(InteractiveItemHandler handler) {
         this.handler = handler;
     }
 
     @Override
-    protected Supplier<Spell> loadGenerator() {
+    protected Supplier<Spell<CounterVelocityLauncher>> loadGenerator() {
         return () -> new CounterVelocitySpell(handler);
     }
 

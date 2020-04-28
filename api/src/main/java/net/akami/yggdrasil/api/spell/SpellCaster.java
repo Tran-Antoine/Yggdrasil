@@ -4,9 +4,9 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class SpellCaster {
+public class SpellCaster<T extends SpellLauncher<T>> {
 
-    protected Supplier<Spell> generator;
+    protected Supplier<Spell<T>> generator;
     protected BiFunction<Float, Integer, Float> manaUsage;
     protected List<ElementType> baseSequence;
     protected List<Integer> locationRequiredTiers = Collections.emptyList();
@@ -69,7 +69,7 @@ public class SpellCaster {
 
     public static class Builder {
 
-        private SpellCaster caster;
+        private final SpellCaster caster;
 
         public Builder() {
             this.caster = new SpellCaster();

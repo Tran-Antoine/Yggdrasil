@@ -11,27 +11,27 @@ import java.util.function.Predicate;
 
 public class SpellCreationData<T extends SpellLauncher<T>> {
 
-    private List<BiConsumer<Player, T>> preActions;
-    private List<BiConsumer<Player, T>> postActions;
-    private PropertyMap propertyMap;
+    private final List<BiConsumer<Player, T>> preActions;
+    private final List<BiConsumer<Player, T>> postActions;
+    private final PropertyMap propertyMap;
 
     private boolean isStorable;
     private ItemStack item;
     private InteractiveItemHandler handler;
-    private Set deprivedUsers;
+    private final Set<MagicUser> deprivedUsers;
 
     public SpellCreationData() {
         this.preActions = new ArrayList<>();
         this.postActions = new ArrayList<>();
         this.propertyMap = new PropertyMap();
-        this.deprivedUsers = new HashSet();
+        this.deprivedUsers = new HashSet<>();
         this.isStorable = false;
     }
 
 
     public static class PropertyMap {
 
-        private Map<String, Object> properties;
+        private final Map<String, Object> properties;
 
         private PropertyMap() {
             this.properties = new HashMap<>();

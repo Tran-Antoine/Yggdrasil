@@ -6,14 +6,14 @@ import org.spongepowered.api.entity.living.player.Player;
 
 public class PhoenixArrowDamageTier implements SpellTier<PhoenixArrowLauncher> {
 
-    private double damage;
+    private final double damage;
 
     public PhoenixArrowDamageTier(double damage) {
         this.damage = damage;
     }
 
     @Override
-    public void definePreLaunchProperties(Player caster, SpellCreationData data) {
+    public void definePreLaunchProperties(Player caster, SpellCreationData<PhoenixArrowLauncher> data) {
         data.setProperty("damage", damage);
     }
 }

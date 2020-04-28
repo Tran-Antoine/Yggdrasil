@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public abstract class AbstractSpellCaster extends SpellCaster {
+public abstract class AbstractSpellCaster<T extends SpellLauncher<T>> extends SpellCaster<T> {
 
     public AbstractSpellCaster() {
         super();
@@ -16,7 +16,7 @@ public abstract class AbstractSpellCaster extends SpellCaster {
         super.spellType = loadSpellType();
     }
 
-    protected abstract Supplier<Spell> loadGenerator();
+    protected abstract Supplier<Spell<T>> loadGenerator();
     protected abstract List<ElementType> loadSequence();
     protected abstract BiFunction<Float, Integer, Float> loadManaUsage();
     protected List<Integer> loadLocationRequiredTiers() { return Collections.emptyList(); }
