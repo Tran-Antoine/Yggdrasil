@@ -28,7 +28,7 @@ import java.util.List;
 public class YggdrasilMain {
 
     @Inject
-    private Logger logger;
+    private static Logger logger;
 
     @Listener
     public void onServerStart(GameStartedServerEvent event) {
@@ -73,4 +73,6 @@ public class YggdrasilMain {
     public static Object getPlugin() {
         return Sponge.getPluginManager().getPlugin("yggdrasil").get();
     }
+
+    public static Logger getLogger(){ return logger; }
 }

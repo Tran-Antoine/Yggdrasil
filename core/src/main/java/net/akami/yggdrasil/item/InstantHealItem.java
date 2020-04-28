@@ -17,9 +17,9 @@ import org.spongepowered.api.item.inventory.ItemStack;
 
 public class InstantHealItem implements InteractiveItem {
 
-    private LivingUser livingUser;
-    private ManaHolder manaHolder;
-    private ItemStack item;
+    private final LivingUser livingUser;
+    private final ManaHolder manaHolder;
+    private final ItemStack item;
 
     public <T extends LivingUser & ManaHolder> InstantHealItem(T user) {
         this.livingUser = user;

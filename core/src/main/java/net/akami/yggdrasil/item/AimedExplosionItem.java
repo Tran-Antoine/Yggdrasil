@@ -14,7 +14,7 @@ import org.spongepowered.api.world.World;
 
 public class AimedExplosionItem extends InteractiveAimingItem {
 
-    private ItemStack item;
+    private final ItemStack item;
 
     public AimedExplosionItem(UUIDHolder holder) {
         super(holder);

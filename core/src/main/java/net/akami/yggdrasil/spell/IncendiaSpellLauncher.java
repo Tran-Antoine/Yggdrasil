@@ -20,8 +20,10 @@ import java.util.concurrent.TimeUnit;
 
 public class IncendiaSpellLauncher implements SpellLauncher<IncendiaSpellLauncher> {
 
+    private final Random random = new Random();
+
     @Override
-    public LaunchResult commonLaunch(SpellCreationData data, Player caster) {
+    public LaunchResult commonLaunch(SpellCreationData<IncendiaSpellLauncher> data, Player caster) {
 
         PropertyMap map = data.getPropertyMap();
         Vector3d center = map.getProperty("location", Vector3d.class);
@@ -40,7 +42,6 @@ public class IncendiaSpellLauncher implements SpellLauncher<IncendiaSpellLaunche
     }
 
     private void createFireArea(World world, int radius, Vector3d center) {
-        Random random = new Random();
         for(int dx = -radius; dx <= radius; dx++) {
             for(int dy = -10; dy <= 5; dy++) {
                 for (int dz = -radius; dz <= radius; dz++) {

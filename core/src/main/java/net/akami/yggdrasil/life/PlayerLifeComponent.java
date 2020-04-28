@@ -1,5 +1,6 @@
 package net.akami.yggdrasil.life;
 
+import net.akami.yggdrasil.YggdrasilMain;
 import net.akami.yggdrasil.api.input.UUIDHolder;
 import net.akami.yggdrasil.api.life.LifeComponent;
 import org.spongepowered.api.Sponge;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 public class PlayerLifeComponent extends LifeComponent {
 
-    private UUIDHolder idHolder;
+    private final UUIDHolder idHolder;
 
     public PlayerLifeComponent(int lives, int lifeLength, UUIDHolder idHolder) {
         super(lives, lifeLength);
@@ -33,7 +34,7 @@ public class PlayerLifeComponent extends LifeComponent {
     private void update() {
         Optional<Player> optGamePlayer = Sponge.getServer().getPlayer(idHolder.getUUID());
         if(!optGamePlayer.isPresent()) {
-            System.out.println("Warning : a non yggdrasil player got damaged");
+            YggdrasilMain.getLogger().warn("Warning : a non yggdrasil player got damaged");
             return;
         }
         Player gamePlayer = optGamePlayer.get();
@@ -65,6 +66,6 @@ public class PlayerLifeComponent extends LifeComponent {
 
     @Override
     public void onKilled() {
-        System.out.println("Player has been killed");
+        YggdrasilMain.getLogger().info("Player has been killed");
     }
 }

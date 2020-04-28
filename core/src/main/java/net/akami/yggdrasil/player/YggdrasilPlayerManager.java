@@ -8,7 +8,7 @@ import java.util.UUID;
 
 public class YggdrasilPlayerManager extends AbstractYggdrasilPlayerManager {
 
-    private ExcludedSpellHandler handler;
+    private final ExcludedSpellHandler handler;
 
     public YggdrasilPlayerManager() {
         super();

@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 
 public class WaterPrisonCurrentTier implements SpellTier<WaterPrisonLauncher> {
 
+    private final Random random = new Random();
+
     @Override
     public void definePreLaunchProperties(Player caster, SpellCreationData<WaterPrisonLauncher> data) {
         data.addPostAction(this::makeCurrent);
@@ -25,7 +27,7 @@ public class WaterPrisonCurrentTier implements SpellTier<WaterPrisonLauncher> {
     private void makeCurrent(Player player, WaterPrisonLauncher launcher) {
         Task.builder()
                 .interval(600, TimeUnit.MILLISECONDS)
-                .execute((task) -> moveEntities(launcher, player.getWorld(), task))
+                .execute(task -> moveEntities(launcher, player.getWorld(), task))
                 .submit(YggdrasilMain.getPlugin());
     }
 
@@ -44,7 +46,6 @@ public class WaterPrisonCurrentTier implements SpellTier<WaterPrisonLauncher> {
                 .collect(Collectors.toList());
 
         Vector3d center = launcher.getCenter().toDouble();
-        Random random = new Random();
 
         for(Entity entity : entities) {
             Vector3d pos = entity.getLocation().getPosition();

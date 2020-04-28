@@ -13,7 +13,7 @@ public class WaterPrisonDurationTier implements SpellTier<WaterPrisonLauncher> {
     }
 
     @Override
-    public void definePreLaunchProperties(Player caster, SpellCreationData data) {
+    public void definePreLaunchProperties(Player caster, SpellCreationData<WaterPrisonLauncher> data) {
         data.setProperty("life_span", lifeSpan);
     }
 }

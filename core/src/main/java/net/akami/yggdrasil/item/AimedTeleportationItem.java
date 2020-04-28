@@ -12,7 +12,7 @@ import org.spongepowered.api.world.World;
 
 public class AimedTeleportationItem extends InteractiveAimingItem {
 
-    private ItemStack item;
+    private final ItemStack item;
 
     public AimedTeleportationItem(UUIDHolder holder) {
         super(holder);

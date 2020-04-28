@@ -14,6 +14,7 @@ import java.util.Random;
 public class IncendiaCraterTier implements SpellTier<IncendiaSpellLauncher> {
 
     private SpellCreationData<IncendiaSpellLauncher> data;
+    private final Random random = new Random();
 
     @Override
     public void definePreLaunchProperties(Player caster, SpellCreationData<IncendiaSpellLauncher> data) {
@@ -26,7 +27,6 @@ public class IncendiaCraterTier implements SpellTier<IncendiaSpellLauncher> {
         Vector3d arrowLocation = map.getProperty("location", Vector3d.class);
         int radius = map.getProperty("radius", Integer.class);
         World world = caster.getWorld();
-        Random random = new Random();
 
         for(int dx = -radius; dx <= radius; dx++) {
             for(int dz = -radius; dz <= radius; dz++) {

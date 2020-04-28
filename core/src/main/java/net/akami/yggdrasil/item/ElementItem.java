@@ -1,9 +1,9 @@
 package net.akami.yggdrasil.item;
 
 import com.flowpowered.math.vector.Vector3d;
+import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.item.InteractiveItem;
-import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.spell.ElementType;
 import net.akami.yggdrasil.api.spell.MagicUser;
 import org.spongepowered.api.Sponge;
@@ -21,8 +21,10 @@ import org.spongepowered.api.text.Text;
 
 public abstract class ElementItem implements InteractiveItem {
 
-    private MagicUser user;
-    private ItemStack item;
+    private final MagicUser user;
+    private final ItemStack item;
+
+    private static final int PARTICLE_QUANTITY = 70;
 
     public ElementItem(MagicUser user) {
         this.user = user;
@@ -39,7 +41,7 @@ public abstract class ElementItem implements InteractiveItem {
     protected abstract Text getName();
     protected abstract DyeColor getColor();
     protected abstract ParticleType getParticleType();
-    protected int getParticleQuantity() { return 70; }
+    protected int getParticleQuantity() { return PARTICLE_QUANTITY; }
 
     @Override
     public ItemStack matchingItem() {

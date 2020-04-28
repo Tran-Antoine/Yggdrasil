@@ -1,6 +1,7 @@
 package net.akami.yggdrasil.item;
 
 import com.flowpowered.math.vector.Vector3d;
+import net.akami.yggdrasil.YggdrasilMain;
 import net.akami.yggdrasil.api.input.UUIDHolder;
 import net.akami.yggdrasil.api.item.InteractiveAimingItem;
 import org.spongepowered.api.data.key.Keys;
@@ -10,7 +11,7 @@ import org.spongepowered.api.world.World;
 
 public class LocationIndicatorItem extends InteractiveAimingItem {
 
-    private ItemStack item;
+    private final ItemStack item;
 
     public LocationIndicatorItem(UUIDHolder holder) {
         super(holder);
@@ -20,8 +21,8 @@ public class LocationIndicatorItem extends InteractiveAimingItem {
 
     @Override
     protected void applyEffect(Vector3d location, World world) {
-        System.out.println("Stopped location : " + location);
-        System.out.println("Holder : " + holder.getUUID());
+        YggdrasilMain.getLogger().info("Stopped location : " + location);
+        YggdrasilMain.getLogger().info("Holder : " + holder.getUUID());
     }
 
     @Override

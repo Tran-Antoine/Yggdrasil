@@ -10,7 +10,7 @@ import org.spongepowered.api.entity.living.player.Player;
 
 public class CounterVelocityPushBackTier implements SpellTier<CounterVelocityLauncher> {
 
-    private ParticleEffect effect;
+    private final ParticleEffect effect;
 
     public CounterVelocityPushBackTier() {
         this.effect = ParticleEffect.builder()

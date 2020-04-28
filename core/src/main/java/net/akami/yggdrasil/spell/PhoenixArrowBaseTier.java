@@ -44,7 +44,7 @@ public class PhoenixArrowBaseTier implements SpellTier<PhoenixArrowLauncher> {
     private void spawnParticles(Task task, PhoenixArrowLauncher launcher) {
         List<Entity> entities = launcher.getAsEntities(world)
                 .stream()
-                .filter((e) -> e.getVelocity().length() > 0.1)
+                .filter(e -> e.getVelocity().length() > 0.1)
                 .collect(Collectors.toList());
         if(entities.size() == 0) {
             task.cancel();

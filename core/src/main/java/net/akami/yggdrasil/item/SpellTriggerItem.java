@@ -23,8 +23,8 @@ import java.util.Optional;
 
 public class SpellTriggerItem extends InteractiveAimingItem {
 
-    private ItemStack item;
-    private MagicUser user;
+    private final ItemStack item;
+    private final MagicUser user;
 
     public SpellTriggerItem(MagicUser user) {
         super(user);
@@ -83,14 +83,14 @@ public class SpellTriggerItem extends InteractiveAimingItem {
     }
 
     private void applyEffect(Vector3d location, SpellCastContext context) {
-        SpellCaster caster = context.getCaster();
+        SpellCaster<?> caster = context.getCaster();
         int tier = context.getChosenTier();
         castSpell(caster, location, tier);
     }
 
-    private void castSpell(SpellCaster caster, Vector3d location, int tier) {
+    private void castSpell(SpellCaster<?> caster, Vector3d location, int tier) {
         user.getMana().ifEnoughMana(caster.getCastingCost(tier), () -> {
-            Spell spell = caster.createSpell();
+            Spell<?> spell = caster.createSpell();
             spell.cast(user, location, tier);
         });
     }

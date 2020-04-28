@@ -33,7 +33,7 @@ import java.util.function.BiConsumer;
 public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
 
     private static final BlockType ALL = null;
-    private Set<UUID> trappedEntities;
+    private final Set<UUID> trappedEntities;
     private int radius;
     private Vector3i center;
     private SpellCreationData<WaterPrisonLauncher> data;
@@ -116,7 +116,7 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
         if(!trappedEntities.contains(targetID)) {
             return;
         }
-        data.restoreSpellAccess((magicUser) -> magicUser.getUUID().equals(targetID));
+        data.restoreSpellAccess(magicUser -> magicUser.getUUID().equals(targetID));
         setEffects(target, List::remove);
     }
 
@@ -169,7 +169,7 @@ public class WaterPrisonLauncher implements SpellLauncher<WaterPrisonLauncher> {
         }
         if(toReplace == null || world.getBlockType(pos) == toReplace) {
             world.setBlockType(pos, newType);
-            System.out.println("Successfully placed block of " + newType.getName());
+            YggdrasilMain.getLogger().info("Successfully placed block of " + newType.getName());
         }
     }
 

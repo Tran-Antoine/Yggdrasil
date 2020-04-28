@@ -23,8 +23,8 @@ import java.util.Optional;
 public class AdvancedMovementItem implements InteractiveItem {
 
     private Vector3d nextDirection;
-    private ItemStack item;
-    private InteractiveItemUser user;
+    private final ItemStack item;
+    private final InteractiveItemUser user;
 
     public AdvancedMovementItem(InteractiveItemUser user) {
         this.user = user;

@@ -13,8 +13,8 @@ import java.util.Optional;
 
 public class PlayerManaContainer extends ManaContainer {
 
-    private UUIDHolder idHolder;
-    private ServerBossBar indicator;
+    private final UUIDHolder idHolder;
+    private final ServerBossBar indicator;
 
     public PlayerManaContainer(float maxMana, float gainPerSecond, UUIDHolder idHolder) {
         super(maxMana, gainPerSecond);
