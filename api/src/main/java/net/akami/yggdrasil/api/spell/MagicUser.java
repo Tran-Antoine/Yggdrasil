@@ -29,6 +29,12 @@ public interface MagicUser extends ManaHolder, UUIDHolder {
         return Optional.empty();
     }
 
+    default Optional<SpellCastContext> findBySequenceThenClear() {
+        Optional<SpellCastContext> result = findBySequence();
+        clearSequence();
+        return result;
+    }
+
     default void addExcludedType(SpellType type) {
         currentlyExcludedTypes().add(type);
     }

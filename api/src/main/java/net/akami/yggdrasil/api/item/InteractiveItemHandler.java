@@ -1,7 +1,7 @@
 package net.akami.yggdrasil.api.item;
 
-import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.input.CancellableEvent;
+import net.akami.yggdrasil.api.task.AbstractGameItemClock;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.ItemStackComparators;
 
@@ -12,12 +12,16 @@ public interface InteractiveItemHandler {
 
     List<InteractiveItem> getItems();
 
-    default void leftClick(ItemStack item, CancellableEvent<?> event, GameItemClock clock) {
+    default void leftClick(ItemStack item, CancellableEvent<?> event, AbstractGameItemClock clock) {
         click(item, (interactiveItem) -> interactiveItem.onLeftClicked(event, clock));
     }
 
-    default void rightClick(ItemStack item, CancellableEvent<?> event, GameItemClock clock) {
+    default void rightClick(ItemStack item, CancellableEvent<?> event, AbstractGameItemClock clock) {
         click(item, (interactiveItem) -> interactiveItem.onRightClicked(event, clock));
+    }
+
+    default void select(ItemStack item, CancellableEvent<?> event, AbstractGameItemClock clock) {
+        click(item, (interactiveItem) -> interactiveItem.onLeftClicked(event, clock), true);
     }
 
     default void addItem(InteractiveItem item) {
@@ -25,9 +29,14 @@ public interface InteractiveItemHandler {
     }
 
     default void click(ItemStack item, Consumer<InteractiveItem> call) {
+        click(item, call, false);
+    }
+
+    default void click(ItemStack item, Consumer<InteractiveItem> call, boolean expertMode) {
         InteractiveItem result = null;
         for(InteractiveItem interactiveItem : getItems()) {
-            if(ItemStackComparators.IGNORE_SIZE.compare(interactiveItem.matchingItem(), item) == 0) {
+            if(ItemStackComparators.IGNORE_SIZE.compare(interactiveItem.matchingItem(), item) == 0
+                    && (!expertMode || interactiveItem.isExpertModeEnabled())) {
                 result = interactiveItem;
                 break;
             }
@@ -44,5 +53,13 @@ public interface InteractiveItemHandler {
 
     default boolean hasItem(InteractiveItem item) {
         return getItems().contains(item);
+    }
+
+    default void enableExpertMode() {
+        getItems().forEach(InteractiveItem::enableExpertMode);
+    }
+
+    default void disableExpertMode() {
+        getItems().forEach(InteractiveItem::disableExpertMode);
     }
 }

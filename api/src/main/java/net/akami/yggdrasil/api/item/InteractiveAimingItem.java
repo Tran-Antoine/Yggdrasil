@@ -1,11 +1,12 @@
 package net.akami.yggdrasil.api.item;
 
 import com.flowpowered.math.vector.Vector3d;
-import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.input.UUIDHolder;
+import net.akami.yggdrasil.api.task.AbstractGameItemClock;
 import net.akami.yggdrasil.api.utils.ItemUtils;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
@@ -50,6 +51,7 @@ public abstract class InteractiveAimingItem implements InteractiveItem {
             return;
         }
         Projectile projectile = (Projectile) entity;
+        projectile.offer(Keys.VANISH, true);
         ProjectileSource shooter = projectile.getShooter();
         if(!(shooter instanceof Player)) {
             return;
@@ -57,6 +59,7 @@ public abstract class InteractiveAimingItem implements InteractiveItem {
         Player entityShooter = (Player) shooter;
         HandType hand = ItemUtils.getMatchingHand(entityShooter, matchingItem());
         if(hand != null && entityShooter.getUniqueId().equals(holder.getUUID()) && arrowID == null) {
+            projectile.offer(Keys.VANISH, true);
             launched(projectile);
         }
     }
@@ -87,7 +90,7 @@ public abstract class InteractiveAimingItem implements InteractiveItem {
     }
 
     @Override
-    public void onRightClicked(CancellableEvent<?> event, GameItemClock clock) {
+    public void onRightClicked(CancellableEvent<?> event, AbstractGameItemClock clock) {
 
         if(arrowID == null || world == null) {
             return;
@@ -115,6 +118,6 @@ public abstract class InteractiveAimingItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(CancellableEvent<?> event, GameItemClock clock) {
+    public void onLeftClicked(CancellableEvent<?> event, AbstractGameItemClock clock) {
     }
 }

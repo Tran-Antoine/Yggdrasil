@@ -1,13 +1,10 @@
-package net.akami.yggdrasil.api.game.events;
+package net.akami.yggdrasil.game.events;
 
 import net.akami.yggdrasil.api.life.LivingUser;
 import net.akami.yggdrasil.api.input.UUIDHolder;
-import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
-import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 
 import java.util.List;

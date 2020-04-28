@@ -1,4 +1,4 @@
-package net.akami.yggdrasil.api.input;
+package net.akami.yggdrasil.game.events;
 
 import net.akami.yggdrasil.api.player.AbstractYggdrasilPlayerManager;
 import org.spongepowered.api.event.Listener;

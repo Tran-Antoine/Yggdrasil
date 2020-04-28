@@ -1,5 +1,6 @@
 package net.akami.yggdrasil.spell;
 
+import net.akami.yggdrasil.YggdrasilMain;
 import net.akami.yggdrasil.api.spell.MagicUser;
 import net.akami.yggdrasil.api.spell.SpellCaster.SpellType;
 import net.akami.yggdrasil.api.spell.SpellCreationData;
@@ -28,7 +29,7 @@ public class DefenseDepriverLauncherTest implements SpellLauncher<DefenseDeprive
         Task.builder()
                 .delay(10, TimeUnit.SECONDS)
                 .execute((Runnable) data::restoreSpellAccess)
-                .submit(Sponge.getPluginManager().getPlugin("yggdrasil").get());
+                .submit(YggdrasilMain.getPlugin());
     }
 
     private boolean areEntitiesNear(Player a, MagicUser target) {
@@ -38,8 +39,6 @@ public class DefenseDepriverLauncherTest implements SpellLauncher<DefenseDeprive
             return false;
         }
         Player b = optPlayer.get();
-        System.out.println(a.getUniqueId());
-        System.out.println(b.getUniqueId());
         return a.getPosition().distance(b.getLocation().getPosition()) <= 10;
     }
 }

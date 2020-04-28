@@ -1,7 +1,6 @@
 package net.akami.yggdrasil.item;
 
 import com.flowpowered.math.vector.Vector3d;
-import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.item.InteractiveAimingItem;
 import net.akami.yggdrasil.api.spell.MagicUser;
@@ -9,7 +8,12 @@ import net.akami.yggdrasil.api.spell.Spell;
 import net.akami.yggdrasil.api.spell.SpellCastContext;
 import net.akami.yggdrasil.api.spell.SpellCaster;
 import net.akami.yggdrasil.api.display.SimpleTextDisplayer;
+import net.akami.yggdrasil.api.task.AbstractGameItemClock;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.effect.sound.SoundType;
+import org.spongepowered.api.effect.sound.SoundTypes;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentTypes;
@@ -53,39 +57,46 @@ public class SpellTriggerItem extends InteractiveAimingItem {
 
     @Override
     protected void applyEffect(Vector3d location, World world) {
-        Optional<SpellCastContext> optResult = user.findBySequence();
-        user.clearSequence();
+        Optional<SpellCastContext> optResult = user.findBySequenceThenClear();
         optResult.ifPresent(result -> applyEffect(location, result));
     }
 
     @Override
-    public void onRightClicked(CancellableEvent<?> event, GameItemClock clock) {
+    public void onRightClicked(CancellableEvent<?> event, AbstractGameItemClock clock) {
         textDisplayer.clearActionBarDisplay();
-        if(!aimlessSpell(event)) {
+        if (isAimingSpellOtherwiseLaunch(event)) {
+            // the super method is for aiming spells
             super.onRightClicked(event, clock);
         }
     }
 
-    private boolean aimlessSpell(CancellableEvent<?> event) {
+    private boolean isAimingSpellOtherwiseLaunch(CancellableEvent<?> event) {
 
-        if(!ready) {
-            return false;
+        if (!ready) {
+            // meaning an arrow is flying, thus no other spell can be cast.
+            // It obviously means that this is an aiming spell
+            return true;
         }
-        Optional<SpellCastContext> optResult = user.findBySequence();
 
-        if(optResult.isPresent()) {
+        Optional<SpellCastContext> optResult = user.findBySequence();
+        if (optResult.isPresent()) {
             SpellCastContext result = optResult.get();
-            if(!result.requiresLocation()) {
-                user.clearSequence();
-                textDisplayer.clearActionBarDisplay();
-                applyEffect(null, result);
-                event.setCancelled(true);
-                ready = true;
+
+            if (result.requiresLocation()) {
+                // Then the click is just about launching the arrow. No need for sequence clearing yet
                 return true;
             }
+
+            textDisplayer.clearActionBarDisplay();
+            applyEffect(null, result);
+            event.setCancelled(true);
+            ready = true;
         }
+
+        user.clearSequence();
         return false;
     }
+
 
     private void applyEffect(Vector3d location, SpellCastContext context) {
         SpellCaster caster = context.getCaster();
@@ -94,10 +105,13 @@ public class SpellTriggerItem extends InteractiveAimingItem {
     }
 
     private void castSpell(SpellCaster caster, Vector3d location, int tier) {
-        user.getMana().ifEnoughMana(caster.getCastingCost(tier), () -> {
+        boolean worked = user.getMana().ifEnoughMana(caster.getCastingCost(tier), () -> {
             Spell spell = caster.createSpell();
             spell.cast(user, location, tier);
         });
+        Player player = Sponge.getServer().getPlayer(user.getUUID()).get();
+        SoundType sound = worked ? SoundTypes.ENTITY_EXPERIENCE_ORB_PICKUP : SoundTypes.ITEM_BOTTLE_FILL_DRAGONBREATH;
+        player.playSound(sound, player.getPosition(), 1);
     }
 
     @Override

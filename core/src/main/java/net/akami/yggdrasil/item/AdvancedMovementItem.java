@@ -1,10 +1,10 @@
 package net.akami.yggdrasil.item;
 
 import com.flowpowered.math.vector.Vector3d;
-import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.item.InteractiveItem;
 import net.akami.yggdrasil.api.item.InteractiveItemUser;
+import net.akami.yggdrasil.api.task.AbstractGameItemClock;
 import net.akami.yggdrasil.api.utils.YggdrasilMath;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
@@ -47,16 +47,16 @@ public class AdvancedMovementItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(CancellableEvent<?> event, GameItemClock clock) {
+    public void onLeftClicked(CancellableEvent<?> event, AbstractGameItemClock clock) {
         clickPerformed(event, 1, clock);
     }
 
     @Override
-    public void onRightClicked(CancellableEvent<?> event, GameItemClock clock) {
+    public void onRightClicked(CancellableEvent<?> event, AbstractGameItemClock clock) {
         clickPerformed(event, 1.5, clock);
     }
 
-    private void clickPerformed(CancellableEvent<?> event, double factor, GameItemClock clock) {
+    private void clickPerformed(CancellableEvent<?> event, double factor, AbstractGameItemClock clock) {
         Player target = event.getCause().first(Player.class).get();
         double timeLeft = clock.timeLeft(this);
         if(timeLeft != 0) {

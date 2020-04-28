@@ -1,6 +1,7 @@
 package net.akami.yggdrasil.spell;
 
 import com.flowpowered.math.vector.Vector3d;
+import net.akami.yggdrasil.YggdrasilMain;
 import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellCreationData.PropertyMap;
 import net.akami.yggdrasil.api.spell.SpellLauncher;
@@ -66,7 +67,7 @@ public class PhoenixArrowLauncher implements SpellLauncher<PhoenixArrowLauncher>
     @Override
     public LaunchResult commonLaunch(SpellCreationData data, Player caster) {
 
-        Object plugin = Sponge.getPluginManager().getPlugin("yggdrasil").get();
+        Object plugin = YggdrasilMain.getPlugin();
 
         if(data.hasProperty("explosive")) {
             Sponge.getEventManager().registerListeners(plugin,this);

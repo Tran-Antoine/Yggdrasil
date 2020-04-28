@@ -1,13 +1,13 @@
 package net.akami.yggdrasil.item;
 
 import com.flowpowered.math.vector.Vector3d;
-import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.item.InteractiveItem;
 import net.akami.yggdrasil.api.life.LifeComponent;
 import net.akami.yggdrasil.api.life.LivingUser;
 import net.akami.yggdrasil.api.mana.ManaContainer;
 import net.akami.yggdrasil.api.mana.ManaHolder;
+import net.akami.yggdrasil.api.task.AbstractGameItemClock;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.effect.particle.ParticleEffect;
 import org.spongepowered.api.effect.particle.ParticleTypes;
@@ -37,7 +37,7 @@ public class InstantHealItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(CancellableEvent<?> event, GameItemClock clock) {
+    public void onLeftClicked(CancellableEvent<?> event, AbstractGameItemClock clock) {
         LifeComponent component = livingUser.getLife();
         ManaContainer mana = manaHolder.getMana();
         int healValue = 5;
@@ -54,7 +54,7 @@ public class InstantHealItem implements InteractiveItem {
     }
 
     @Override
-    public void onRightClicked(CancellableEvent<?> event, GameItemClock clock) {
+    public void onRightClicked(CancellableEvent<?> event, AbstractGameItemClock clock) {
         event.setCancelled(true);
     }
 }

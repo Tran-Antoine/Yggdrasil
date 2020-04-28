@@ -1,27 +1,26 @@
 package net.akami.yggdrasil.api.item;
 
-import net.akami.yggdrasil.api.game.task.GameItemClock;
 import net.akami.yggdrasil.api.input.CancellableEvent;
-import net.akami.yggdrasil.api.spell.MagicUser;
 import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellLauncher;
+import net.akami.yggdrasil.api.task.AbstractGameItemClock;
 import net.akami.yggdrasil.api.utils.ItemUtils;
 import org.spongepowered.api.data.type.HandType;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 
+import java.util.function.Supplier;
+
 public class LaunchableSpellItem implements InteractiveItem {
 
     private ItemStack modelItem;
     private SpellCreationData finalData;
-    private SpellLauncher launcher;
-    private MagicUser user;
+    private Supplier<SpellLauncher> generator;
 
-    public LaunchableSpellItem(ItemStack item, SpellCreationData finalData, SpellLauncher launcher, MagicUser user) {
+    public LaunchableSpellItem(ItemStack item, SpellCreationData finalData, Supplier<SpellLauncher> generator) {
         this.modelItem = item;
         this.finalData = finalData;
-        this.launcher = launcher;
-        this.user = user;
+        this.generator = generator;
     }
 
     @Override
@@ -30,11 +29,11 @@ public class LaunchableSpellItem implements InteractiveItem {
     }
 
     @Override
-    public void onLeftClicked(CancellableEvent<?> event, GameItemClock clock) {
+    public void onLeftClicked(CancellableEvent<?> event, AbstractGameItemClock clock) {
     }
 
     @Override
-    public void onRightClicked(CancellableEvent<?> event, GameItemClock clock) {
+    public void onRightClicked(CancellableEvent<?> event, AbstractGameItemClock clock) {
         Player player = event.getCause().first(Player.class).get();
         HandType chosen = ItemUtils.getMatchingHand(player, this.modelItem);
 
@@ -42,7 +41,7 @@ public class LaunchableSpellItem implements InteractiveItem {
         this.modelItem.setQuantity(nextQuantity);
 
         player.setItemInHand(chosen, this.modelItem);
-        launcher.launch(finalData, player);
+        generator.get().launch(finalData, player);
     }
 
     @Override

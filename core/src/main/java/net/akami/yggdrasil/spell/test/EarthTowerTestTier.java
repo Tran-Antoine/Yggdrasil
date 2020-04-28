@@ -1,9 +1,9 @@
 package net.akami.yggdrasil.spell.test;
 
 import com.flowpowered.math.vector.Vector3d;
+import net.akami.yggdrasil.YggdrasilMain;
 import net.akami.yggdrasil.api.spell.SpellCreationData;
 import net.akami.yggdrasil.api.spell.SpellTier;
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Task;
@@ -21,7 +21,7 @@ public class EarthTowerTestTier implements SpellTier {
     public void definePreLaunchProperties(Player caster, SpellCreationData data) {
         Vector3d pos = caster.getPosition();
         World world = caster.getWorld();
-        Object plugin = Sponge.getPluginManager().getPlugin("yggdrasil").get();
+        Object plugin = YggdrasilMain.getPlugin();
         Task
                 .builder()
                 .interval(80, TimeUnit.MILLISECONDS)

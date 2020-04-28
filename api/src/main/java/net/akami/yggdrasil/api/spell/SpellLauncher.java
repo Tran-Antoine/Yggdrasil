@@ -1,5 +1,6 @@
 package net.akami.yggdrasil.api.spell;
 
+import org.spongepowered.api.effect.sound.SoundTypes;
 import org.spongepowered.api.entity.living.player.Player;
 
 public interface SpellLauncher<SELF extends SpellLauncher<SELF>> {
@@ -13,6 +14,8 @@ public interface SpellLauncher<SELF extends SpellLauncher<SELF>> {
         if(result == LaunchResult.SUCCESS) {
             data.excludeTargetSpells();
             data.performPostActions(caster, (SELF) this);
+        } else {
+            caster.playSound(SoundTypes.ENTITY_WITCH_HURT, caster.getPosition(), 2);
         }
     }
 

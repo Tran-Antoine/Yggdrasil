@@ -53,6 +53,7 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer, SimpleTextDispl
         items.addAll(Arrays.asList(
                 new AdvancedMovementItem(this),
                 new InstantHealItem(this),
+                new ControlModeSwitchItem(this),
 
                 new SpellTriggerItem(this, this),
                 new FireElementItem(this, this),
@@ -81,7 +82,12 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer, SimpleTextDispl
                 new PhoenixArrowCaster(),
                 new IncendiaCaster(),
                 new CounterVelocityCaster(this),
-                new WaterPrisonCaster()
+                new WaterPrisonCaster(),
+                new MistCaster(),
+                new FreezingCaster(),
+                new LevitationCaster(),
+                new EarthTowerCaster(this),
+                new SimplePlatformCaster(this)
         ));
     }
 

@@ -1,15 +1,15 @@
 package net.akami.yggdrasil;
 
 import com.google.inject.Inject;
-import net.akami.yggdrasil.api.game.events.CancelledEventsListener;
-import net.akami.yggdrasil.api.game.events.DamageEventListener;
-import net.akami.yggdrasil.api.game.task.GameItemClock;
-import net.akami.yggdrasil.api.game.task.YggdrasilScheduler;
-import net.akami.yggdrasil.api.input.ItemInteractionsListener;
-import net.akami.yggdrasil.api.input.PlayerConnectionListener;
 import net.akami.yggdrasil.api.player.AbstractYggdrasilPlayer;
 import net.akami.yggdrasil.api.player.AbstractYggdrasilPlayerManager;
+import net.akami.yggdrasil.api.task.AbstractGameItemClock;
 import net.akami.yggdrasil.commands.RebirthCommand;
+import net.akami.yggdrasil.game.events.CancelledEventsListener;
+import net.akami.yggdrasil.game.events.DamageEventListener;
+import net.akami.yggdrasil.game.events.ItemInteractionsListener;
+import net.akami.yggdrasil.game.events.PlayerConnectionListener;
+import net.akami.yggdrasil.game.task.YggdrasilScheduler;
 import net.akami.yggdrasil.player.YggdrasilPlayerManager;
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -37,7 +37,7 @@ public class YggdrasilMain {
         AbstractYggdrasilPlayerManager playerManager = new YggdrasilPlayerManager();
         List<AbstractYggdrasilPlayer> players = playerManager.getPlayers();
 
-        GameItemClock clock = YggdrasilScheduler.scheduleItemClock(this);
+        AbstractGameItemClock clock = YggdrasilScheduler.scheduleItemClock(this);
         YggdrasilScheduler.scheduleManaRestoring(this, players);
         YggdrasilScheduler.scheduleFoodRestoring(this, players);
 
@@ -68,5 +68,9 @@ public class YggdrasilMain {
     @Listener
     public void onServerStop(GameStoppedServerEvent event) {
         logger.info("Plugin successfully stopped");
+    }
+
+    public static Object getPlugin() {
+        return Sponge.getPluginManager().getPlugin("yggdrasil").get();
     }
 }
