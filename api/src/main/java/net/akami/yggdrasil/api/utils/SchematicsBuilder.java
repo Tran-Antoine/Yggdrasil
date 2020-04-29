@@ -11,7 +11,7 @@ import org.spongepowered.api.world.schematic.Schematic;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class StructureBuilder implements Consumer<Task> {
+public class SchematicsBuilder implements Consumer<Task> {
 
     private Schematic schematic;
     private Location<World> startLocation;
@@ -19,7 +19,7 @@ public class StructureBuilder implements Consumer<Task> {
     private int currentX, currentY, currentZ;
     private Function<BlockState, SoundType> soundFunction;
 
-    public StructureBuilder(Schematic blocks, Location<World> startLocation, int speed, Function<BlockState, SoundType> soundFunction) {
+    public SchematicsBuilder(Schematic blocks, Location<World> startLocation, int speed, Function<BlockState, SoundType> soundFunction) {
         this.schematic = blocks;
         this.startLocation = startLocation;
         this.speed = speed;
@@ -27,7 +27,7 @@ public class StructureBuilder implements Consumer<Task> {
         reset();
     }
 
-    public StructureBuilder(Schematic blocks, Location<World> startLocation, int speed) {
+    public SchematicsBuilder(Schematic blocks, Location<World> startLocation, int speed) {
         this(blocks, startLocation, speed, SOUND_PLACE);
     }
 
