@@ -10,16 +10,16 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
-public class LevitationCaster extends AbstractSpellCaster {
+public class AirBulletCaster extends AbstractSpellCaster {
+
     @Override
     protected Supplier<Spell> loadGenerator() {
-        return LevitationSpell::new;
+        return AirBulletSpell::new;
     }
 
     @Override
     protected List<ElementType> loadSequence() {
         return Arrays.asList(
-                ElementType.AIR,
                 ElementType.AIR,
                 ElementType.FIRE
         );
