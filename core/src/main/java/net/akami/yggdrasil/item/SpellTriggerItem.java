@@ -111,12 +111,14 @@ public class SpellTriggerItem extends InteractiveAimingItem {
             ManaDrainTask manaDrain = caster.scheduleConstantLoss(user, tier);
             spell.cast(user, location, tier, manaDrain);
         });
-        playSound(worked);
+        if(!worked) {
+            playFailSound();
+        }
     }
 
-    private void playSound(boolean worked) {
+    private void playFailSound() {
         Player player = Sponge.getServer().getPlayer(user.getUUID()).get();
-        SoundType sound = worked ? SoundTypes.ENTITY_EXPERIENCE_ORB_PICKUP : SoundTypes.ITEM_BOTTLE_FILL_DRAGONBREATH;
+        SoundType sound = SoundTypes.ITEM_BOTTLE_FILL_DRAGONBREATH;
         player.playSound(sound, player.getPosition(), 1);
     }
 

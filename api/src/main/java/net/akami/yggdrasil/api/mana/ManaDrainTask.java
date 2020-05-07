@@ -31,7 +31,9 @@ public class ManaDrainTask implements Consumer<Task> {
         if(!mana.hasEnoughMana(cost) || cost == 0
                 || (cancelPredicate != null && cancelPredicate.get())) {
             task.cancel();
-            if(onCancelled != null) onCancelled.run();
+            if(onCancelled != null) {
+                onCancelled.run();
+            }
             return;
         }
         mana.use(cost);
