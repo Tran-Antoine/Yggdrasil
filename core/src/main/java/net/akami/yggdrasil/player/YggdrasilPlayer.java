@@ -38,7 +38,7 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer, SimpleTextDispl
         this.id = id;
         this.spellHandler = spellHandler;
         this.sequence = new ArrayList<>();
-        this.mana = new PlayerManaContainer(100, 4f, this);
+        this.mana = new PlayerManaContainer(100, 1f, this);
         this.life = new PlayerLifeComponent(3, 50, this);
         this.excludedTypes = new ArrayList<>();
         this.spells = new ArrayList<>();
@@ -85,9 +85,10 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer, SimpleTextDispl
                 new WaterPrisonCaster(),
                 new MistCaster(),
                 new FreezingCaster(),
-                new LevitationCaster(),
+                new LevitationCaster(this),
                 new EarthTowerCaster(this),
-                new SimplePlatformCaster(this)
+                new SimplePlatformCaster(this),
+                new AirBulletCaster(this)
         ));
     }
 

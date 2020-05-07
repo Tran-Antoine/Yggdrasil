@@ -2,6 +2,8 @@ package net.akami.yggdrasil.api.item;
 
 import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.task.AbstractGameItemClock;
+import net.akami.yggdrasil.api.utils.ItemUtils;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.ItemStackComparators;
 
@@ -47,8 +49,18 @@ public interface InteractiveItemHandler {
             call.accept(result);
             if(result.isDestroyed()) {
                 getItems().remove(result);
+                result.onDestroy();
             }
         }
+    }
+
+    default void remove(InteractiveItem item) {
+        getItems().remove(item);
+    }
+
+    default void completeRemove(InteractiveItem item, Player target) {
+        remove(item);
+        ItemUtils.removeItem(target, item.matchingItem());
     }
 
     default boolean hasItem(InteractiveItem item) {

@@ -1,13 +1,14 @@
 package net.akami.yggdrasil.item;
 
 import com.flowpowered.math.vector.Vector3d;
+import net.akami.yggdrasil.api.display.SimpleTextDisplayer;
 import net.akami.yggdrasil.api.input.CancellableEvent;
 import net.akami.yggdrasil.api.item.InteractiveAimingItem;
+import net.akami.yggdrasil.api.mana.ManaDrainTask;
 import net.akami.yggdrasil.api.spell.MagicUser;
 import net.akami.yggdrasil.api.spell.Spell;
 import net.akami.yggdrasil.api.spell.SpellCastContext;
 import net.akami.yggdrasil.api.spell.SpellCaster;
-import net.akami.yggdrasil.api.display.SimpleTextDisplayer;
 import net.akami.yggdrasil.api.task.AbstractGameItemClock;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
@@ -107,10 +108,17 @@ public class SpellTriggerItem extends InteractiveAimingItem {
     private void castSpell(SpellCaster caster, Vector3d location, int tier) {
         boolean worked = user.getMana().ifEnoughMana(caster.getCastingCost(tier), () -> {
             Spell spell = caster.createSpell();
-            spell.cast(user, location, tier);
+            ManaDrainTask manaDrain = caster.scheduleConstantLoss(user, tier);
+            spell.cast(user, location, tier, manaDrain);
         });
+        if(!worked) {
+            playFailSound();
+        }
+    }
+
+    private void playFailSound() {
         Player player = Sponge.getServer().getPlayer(user.getUUID()).get();
-        SoundType sound = worked ? SoundTypes.ENTITY_EXPERIENCE_ORB_PICKUP : SoundTypes.ITEM_BOTTLE_FILL_DRAGONBREATH;
+        SoundType sound = SoundTypes.ITEM_BOTTLE_FILL_DRAGONBREATH;
         player.playSound(sound, player.getPosition(), 1);
     }
 

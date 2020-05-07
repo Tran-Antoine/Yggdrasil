@@ -6,11 +6,14 @@ import net.akami.yggdrasil.api.spell.SpellTier;
 import net.akami.yggdrasil.api.spell.SpellTimeTier;
 import org.spongepowered.api.entity.living.player.Player;
 
+import java.util.concurrent.TimeUnit;
+
 public class SimplePlatformBaseTier implements SpellTier<SimplePlatformLauncher> {
 
     @Override
     public void definePreLaunchProperties(Player caster, SpellCreationData<SimplePlatformLauncher> data) {
         new SpellTimeTier<SimplePlatformLauncher>(5).definePreLaunchProperties(caster, data);
         new SpellRadiusTier<SimplePlatformLauncher>(2).definePreLaunchProperties(caster, data);
+        data.setProperty("time_unit", TimeUnit.SECONDS);
     }
 }

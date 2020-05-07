@@ -1,6 +1,11 @@
 package net.akami.yggdrasil.api.spell;
 
+import net.akami.yggdrasil.api.mana.ManaDrainTask;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.scheduler.Task;
+
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
@@ -40,6 +45,17 @@ public class SpellCaster {
 
     public boolean canCreateSpell(float currentMana, int tier) {
         return currentMana >= manaUsage.apply(0f, tier);
+    }
+
+    public ManaDrainTask scheduleConstantLoss(MagicUser user, int tier) {
+
+        ManaDrainTask task = new ManaDrainTask(user, (time) -> manaUsage.apply(time, tier));
+        Task.builder()
+                .delay(100, TimeUnit.MILLISECONDS)
+                .interval(100, TimeUnit.MILLISECONDS)
+                .execute(task)
+                .submit(Sponge.getPluginManager().getPlugin("yggdrasil").get());
+        return task;
     }
 
     public boolean requiresLocation(int tier) {
