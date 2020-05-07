@@ -18,6 +18,10 @@ public class ManaContainer {
 
     public void use(float used) {
         currentMana -= used;
+        if(currentMana < 0) {
+            System.err.print("Warning : a ManaContainer has been registered to have negative mana");
+            currentMana = 0;
+        }
     }
 
     public void remove() {}

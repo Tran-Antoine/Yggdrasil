@@ -1,5 +1,6 @@
 package net.akami.yggdrasil.spell;
 
+import net.akami.yggdrasil.api.item.InteractiveItemHandler;
 import net.akami.yggdrasil.api.spell.Spell;
 import net.akami.yggdrasil.api.spell.SpellTier;
 
@@ -8,11 +9,16 @@ import java.util.List;
 
 public class LevitationSpell implements Spell<LevitationSpellLauncher> {
 
-    // TODO : Give item to manually cancel, + non instant cost function
+    private InteractiveItemHandler handler;
+
+    public LevitationSpell(InteractiveItemHandler handler) {
+        this.handler = handler;
+    }
+
     @Override
     public List<SpellTier<LevitationSpellLauncher>> getTiers() {
         return Arrays.asList(
-                new LevitationBaseTier(0.2),
+                new LevitationBaseTier(0.2, handler),
                 new LevitationBaseTier(0.3),
                 new LevitationBaseTier(0.4),
                 new LevitationBaseTier(0.5),

@@ -50,4 +50,13 @@ public class ItemUtils {
                 ? HandTypes.OFF_HAND
                 : null;
     }
+
+    public static void removeItem(Player target, ItemStack item) {
+        for(Slot slot : target.getInventory().<Slot>slots()) {
+            if(slot.contains(item)) {
+                slot.clear();
+                return;
+            }
+        }
+    }
 }

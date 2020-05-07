@@ -1,6 +1,5 @@
 package net.akami.yggdrasil.spell;
 
-import com.flowpowered.math.GenericMath;
 import com.flowpowered.math.vector.Vector2i;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
@@ -149,7 +148,7 @@ public class EarthTowerLauncher implements SpellLauncher<EarthTowerLauncher> {
             Vector3d dir = YggdrasilMath.headRotationToDirection(caster.getHeadRotation());
             Vector3d flatDir = new Vector3d(dir.getX(), 0, dir.getZ());
 
-            if (flatDir.length() < GenericMath.DBL_EPSILON) {
+            if (flatDir.length() < 0.1) {
                 return Optional.empty();
             }
 

@@ -20,4 +20,5 @@ public interface InteractiveItem {
     default void disableExpertMode() { }
 
     default void onReady() { }
+    default void onDestroy() { }
 }
