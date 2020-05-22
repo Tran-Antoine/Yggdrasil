@@ -24,6 +24,34 @@ public class ManaContainer {
         }
     }
 
+    public void setPreciseAmount(float amount) {
+        currentMana = amount > maxMana ? maxMana : amount;
+    }
+
+    public void setPreciseMaxMana(float maxMana) {
+        this.maxMana = maxMana;
+    }
+
+    public void enhanceRegeneration(float additionalGainPerSecond) {
+        this.gainPerSecond += additionalGainPerSecond;
+    }
+
+    public void slowdownRegeneration(float slowDownValue) {
+        this.gainPerSecond -= slowDownValue > gainPerSecond ? gainPerSecond : slowDownValue;
+    }
+
+    public void setPreciseRegeneration(float gainPerSecond) {
+        this.gainPerSecond = gainPerSecond;
+    }
+
+    public void addMaxMana(float value) {
+        this.maxMana += value;
+    }
+
+    public void removeMaxMana(float value) {
+        this.maxMana -= value;
+    }
+
     public void remove() {}
 
     public boolean ifEnoughMana(float cost, Runnable action) {

@@ -19,14 +19,11 @@ public class MistCaster extends AbstractSpellCaster {
 
     @Override
     protected List<ElementType> loadSequence() {
-        /*return Arrays.asList(
+        return Arrays.asList(
                 ElementType.AIR,
                 ElementType.WATER,
                 ElementType.FIRE,
                 ElementType.WATER,
-                ElementType.FIRE
-        );*/
-        return Arrays.asList(
                 ElementType.FIRE
         );
     }

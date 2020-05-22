@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import net.akami.yggdrasil.api.player.AbstractYggdrasilPlayer;
 import net.akami.yggdrasil.api.player.AbstractYggdrasilPlayerManager;
 import net.akami.yggdrasil.api.task.AbstractGameItemClock;
+import net.akami.yggdrasil.commands.ManaManagementCommand;
 import net.akami.yggdrasil.commands.RebirthCommand;
 import net.akami.yggdrasil.game.events.CancelledEventsListener;
 import net.akami.yggdrasil.game.events.DamageEventListener;
@@ -48,6 +49,7 @@ public class YggdrasilMain {
                 new DamageEventListener(players));
 
         registerCommand(Sponge.getCommandManager(), new RebirthCommand(playerManager), "rebirth");
+        registerCommand(Sponge.getCommandManager(), new ManaManagementCommand(players).loadSpec(), "mana");
     }
 
     private void registerListeners(EventManager manager, Object... listeners) {
@@ -57,11 +59,16 @@ public class YggdrasilMain {
     }
 
     private void registerCommand(CommandManager manager, CommandExecutor executor, String... aliases) {
-        manager.register(this, CommandSpec
+        registerCommand(manager, CommandSpec
                 .builder()
                 .permission("yggdrasil.commands")
                 .executor(executor)
                 .build(), aliases);
+
+    }
+
+    private void registerCommand(CommandManager manager, CommandSpec spec, String... aliases) {
+        manager.register(this, spec, aliases);
 
     }
 

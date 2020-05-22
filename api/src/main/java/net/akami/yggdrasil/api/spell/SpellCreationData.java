@@ -49,6 +49,11 @@ public class SpellCreationData<T extends SpellLauncher<T>> {
             return null;
         }
 
+        public <R> R getNonNullProperty(String name, Class<R> type) {
+            return Optional.ofNullable(getProperty(name, type))
+                    .orElseThrow(() -> new IllegalStateException("The retrieved property is not allowed to be null"));
+        }
+
         public <R> R getPropertyOrElse(String name, R orElse) {
             Object result = getProperty(name);
             return result != null ? (R) result : orElse;

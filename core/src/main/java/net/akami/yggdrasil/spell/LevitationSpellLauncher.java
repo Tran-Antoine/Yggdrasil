@@ -27,7 +27,7 @@ public class LevitationSpellLauncher implements SpellLauncher<LevitationSpellLau
     @Override
     public LaunchResult commonLaunch(SpellCreationData<LevitationSpellLauncher> data, Player caster) {
 
-        if (Math.abs(caster.getVelocity().getY()) > 0.4) {
+        if (Math.abs(caster.getVelocity().getY()) > 0.6) {
             return LaunchResult.FAIL;
         }
 
