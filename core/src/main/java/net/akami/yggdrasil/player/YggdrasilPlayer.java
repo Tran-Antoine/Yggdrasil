@@ -88,7 +88,8 @@ public class YggdrasilPlayer implements AbstractYggdrasilPlayer, SimpleTextDispl
                 new LevitationCaster(this),
                 new EarthTowerCaster(this),
                 new SimplePlatformCaster(this),
-                new AirBulletCaster(this)
+                new AirBulletCaster(this),
+                new GlassShieldCaster(this)
         ));
     }
 
